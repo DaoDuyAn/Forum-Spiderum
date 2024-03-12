@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="DTOs\" />
+    <Folder Include="Infrastructure\Handler\Account\Command\" />
+    <Folder Include="Infrastructure\Handler\Account\Queries\" />
+    <Folder Include="Infrastructure\Handler\Category\Command\" />
+    <Folder Include="Infrastructure\Handler\Category\Queries\" />
+    <Folder Include="Infrastructure\Handler\Post\Command\" />
+    <Folder Include="Infrastructure\Handler\Post\Queries\" />
+    <Folder Include="Infrastructure\Handler\User\Command\" />
+    <Folder Include="Infrastructure\Handler\User\Queries\" />
+    <Folder Include="Infrastructure\Mapper\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SocialNetwork.Infrastructure\SocialNetwork.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
