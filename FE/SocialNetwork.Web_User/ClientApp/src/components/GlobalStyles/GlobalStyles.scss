@@ -6,15 +6,22 @@
     --primary: #429ad7;
     --black: #000;
     --white: #fff;
+    --blue: #3398d4;
     --red: #fe2c55;
-    --text-menu-color: #666;
+    --gray: #969696;
 
-     // Default layout
+    --text-menu-color: #161616;
+    --username-color: #46b7fe;
+
+    --boder-color: #e2e8f0;
+    --filter-border-color: #f2f6fc;
+
+    // Default layout
     //  --default-layout-header-height: 70px;
     --default-layout-header-height: 140px;
 
-     --default-layout-width: 1230px;
-     --default-layout-horizontal-spacer: 40px;
+    --default-layout-width: 1230px;
+    --default-layout-horizontal-spacer: 40px;
 }
 
 * {
@@ -64,4 +71,3 @@ body {
         color: rgba(84, 84, 84, 0.92);
     }
 }
-

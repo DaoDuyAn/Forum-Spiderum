@@ -1,0 +1,42 @@
+.filter {
+    margin-top: 50px;
+    padding-bottom: 50px;
+
+    &__bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 8px;
+
+        overflow: hidden;
+    }
+
+    &__sort {
+        display: flex;
+        align-items: center;
+        position: relative;
+        border-bottom: 1px solid var(--filter-border-color);
+
+        &-item {
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+            justify-content: center;
+            font-weight: 500;
+            padding: 0 0.75rem;
+            margin-right: 20px;
+            border-bottom: 3px solid transparent;
+
+            &.active {
+                border-bottom: 3px solid #3398d4;
+            }
+        }
+
+        &-text {
+            font-size: 15px;
+            color: var(--text-menu-color);
+        }
+    }
+
+    
+}

@@ -5,17 +5,19 @@ import App from './App';
 import './index.css';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import { StyledEngineProvider } from '@mui/material/styles';
 import GlobalStyles from './components/GlobalStyles';
-
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 
 root.render(
     <React.StrictMode>
-      <GlobalStyles>
-        <App />
-      </GlobalStyles>
+        <StyledEngineProvider injectFirst>
+            <GlobalStyles>
+                <App />
+            </GlobalStyles>
+        </StyledEngineProvider>
     </React.StrictMode>,
 );
 

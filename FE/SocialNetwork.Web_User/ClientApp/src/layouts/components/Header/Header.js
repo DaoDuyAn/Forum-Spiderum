@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -14,6 +14,9 @@ import { faEnvelope, faBookmark, faBell } from '@fortawesome/free-regular-svg-ic
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { Link } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Tabs, { tabsClasses } from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import config from '~/config';
 import Button from '~/components/Button';
@@ -22,17 +25,27 @@ import Menu from '~/components/Popper/Menu';
 import Image from '~/components/Image';
 import Search from '../Search';
 
+import { styled } from '@mui/system';
+
+const CustomTab = styled(Tab)({
+    fontSize: '1.25rem',
+});
+
 const cx = classNames.bind(styles);
 
 function Header() {
     const currentUser = true;
 
+    const [value, setValue] = useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
     // Handle logic
     const handleMenuChange = (menuItem) => {
         // console.log(menuItem);
     };
-
 
     const listRef = useRef(null);
 
@@ -101,7 +114,7 @@ function Header() {
                                     <span className={cx('badge')}>12</span>
                                 </button>
                             </Tippy>
-                            
+
                             <Button className={'ml-3'} outline leftIcon={<FontAwesomeIcon icon={faUserPen} />}>
                                 Viết bài
                             </Button>
@@ -128,83 +141,106 @@ function Header() {
                 </div>
             </div>
             {currentUser ? (
-                 <div className={cx('header__menu')}>
-                 <div className={cx('header__menu-category')}>
-                     <div className={cx('header__menu-category-wrapper')}>
-                         <div className={cx('header__menu-category-icon', 'left')} onClick={scrollLeft}>
-                             <FontAwesomeIcon icon={faChevronLeft} />
-                         </div>
-                         <div className={cx('header__menu-navbar')} ref={listRef}>
-                             {/* <ul className="header__menu-list" ref={listRef}>
-                       {categorise.data.map((e, i) => (
-                         <li key={i._id} className="header__menu-item">
-                           <Link
-                             to={`/category/${e.slug}`}
-                             className="header__menu-link"
-                           >
-                             {e.name}
-                           </Link>
-                         </li>
-                       ))}
-                     </ul> */}
-                             <ul className={cx('header__menu-list')}>
-                                 <li className={cx('header__menu-item')}>
-                                     <Link to={`/category`} className={cx('header__menu-link')}>
-                                         QUAN ĐIỂM - TRANH LUẬN
-                                     </Link>
-                                 </li>
-                                 <li className={cx('header__menu-item')}>
-                                     <Link to={`/category`} className={cx('header__menu-link')}>
-                                         KHOA HỌC - CÔNG NGHỆ
-                                     </Link>
-                                 </li>
-                                 <li className={cx('header__menu-item')}>
-                                     <Link to={`/category`} className={cx('header__menu-link')}>
-                                         TÀI CHÍNH
-                                     </Link>
-                                 </li>
-                                 <li className={cx('header__menu-item')}>
-                                     <Link to={`/category`} className={cx('header__menu-link')}>
-                                         THỂ THAO
-                                     </Link>
-                                 </li>
-                                 <li className={cx('header__menu-item')}>
-                                     <Link to={`/category`} className={cx('header__menu-link')}>
-                                         QUAN ĐIỂM - TRANH LUẬN
-                                     </Link>
-                                 </li>
-                                 <li className={cx('header__menu-item')}>
-                                     <Link to={`/category`} className={cx('header__menu-link')}>
-                                         KHOA HỌC - CÔNG NGHỆ
-                                     </Link>
-                                 </li>
-                                 <li className={cx('header__menu-item')}>
-                                     <Link to={`/category`} className={cx('header__menu-link')}>
-                                         TÀI CHÍNH
-                                     </Link>
-                                 </li>
-                                 <li className={cx('header__menu-item')}>
-                                     <Link to={`/category`} className={cx('header__menu-link')}>
-                                         THỂ THAO
-                                     </Link>
-                                 </li>
-                                 <li className={cx('header__menu-item')}>
-                                     <Link to={`/category`} className={cx('header__menu-link')}>
-                                         TÀI CHÍNH
-                                     </Link>
-                                 </li>
-                             </ul>
-                         </div>
-                         <div className={cx('header__menu-category-icon', 'right')} onClick={scrollRight }>
-                             <FontAwesomeIcon icon={faChevronRight} />
-                         </div>
-                     </div>
-                 </div>
-             </div>
+                // <div className={cx('header__menu')}>
+                //     <div className={cx('header__menu-category')}>
+                //         <div className={cx('header__menu-category-wrapper')}>
+                //             <div className={cx('header__menu-category-icon', 'left')} onClick={scrollLeft}>
+                //                 <FontAwesomeIcon icon={faChevronLeft} />
+                //             </div>
+                //             <div className={cx('header__menu-navbar')} ref={listRef}>
+                //                 {/* <ul className="header__menu-list" ref={listRef}>
+                //        {categorise.data.map((e, i) => (
+                //          <li key={i._id} className="header__menu-item">
+                //            <Link
+                //              to={`/category/${e.slug}`}
+                //              className="header__menu-link"
+                //            >
+                //              {e.name}
+                //            </Link>
+                //          </li>
+                //        ))}
+                //      </ul> */}
+                //                 <ul className={cx('header__menu-list')}>
+                //                     <li className={cx('header__menu-item')}>
+                //                         <Link to={`/category`} className={cx('header__menu-link')}>
+                //                             QUAN ĐIỂM - TRANH LUẬN
+                //                         </Link>
+                //                     </li>
+                //                     <li className={cx('header__menu-item')}>
+                //                         <Link to={`/category`} className={cx('header__menu-link')}>
+                //                             KHOA HỌC - CÔNG NGHỆ
+                //                         </Link>
+                //                     </li>
+                //                     <li className={cx('header__menu-item')}>
+                //                         <Link to={`/category`} className={cx('header__menu-link')}>
+                //                             TÀI CHÍNH
+                //                         </Link>
+                //                     </li>
+                //                     <li className={cx('header__menu-item')}>
+                //                         <Link to={`/category`} className={cx('header__menu-link')}>
+                //                             THỂ THAO
+                //                         </Link>
+                //                     </li>
+                //                     <li className={cx('header__menu-item')}>
+                //                         <Link to={`/category`} className={cx('header__menu-link')}>
+                //                             QUAN ĐIỂM - TRANH LUẬN
+                //                         </Link>
+                //                     </li>
+                //                     <li className={cx('header__menu-item')}>
+                //                         <Link to={`/category`} className={cx('header__menu-link')}>
+                //                             KHOA HỌC - CÔNG NGHỆ
+                //                         </Link>
+                //                     </li>
+                //                     <li className={cx('header__menu-item')}>
+                //                         <Link to={`/category`} className={cx('header__menu-link')}>
+                //                             TÀI CHÍNH
+                //                         </Link>
+                //                     </li>
+                //                     <li className={cx('header__menu-item')}>
+                //                         <Link to={`/category`} className={cx('header__menu-link')}>
+                //                             THỂ THAO
+                //                         </Link>
+                //                     </li>
+                //                     <li className={cx('header__menu-item')}>
+                //                         <Link to={`/category`} className={cx('header__menu-link')}>
+                //                             TÀI CHÍNH
+                //                         </Link>
+                //                     </li>
+                //                 </ul>
+                //             </div>
+                //             <div className={cx('header__menu-category-icon', 'right')} onClick={scrollRight}>
+                //                 <FontAwesomeIcon icon={faChevronRight} />
+                //             </div>
+                //         </div>
+                //     </div>
+                // </div>
+
+                <div className={cx('header__menu')}>
+                    <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        variant="scrollable"
+                        scrollButtons
+                        aria-label="visible arrows tabs example"
+                        sx={{
+                            [`& .${tabsClasses.scrollButtons}`]: {
+                                '&.Mui-disabled': { opacity: 0.3 },
+                            },
+                        }}
+                    >
+                        <CustomTab label="TÀI CHÍNH" />
+                        <CustomTab label="QUAN ĐIỂM TRANH LUẬN" />
+                        <CustomTab label="KHOA HỌC - CÔNG NGHỆ" />
+                        <CustomTab label="THỂ THAO" />
+                        <CustomTab label="TÀI CHÍNH" />
+                        <CustomTab label="QUAN ĐIỂM TRANH LUẬN" />
+                        <CustomTab label="KHOA HỌC - CÔNG NGHỆ" />
+                        <CustomTab label="THỂ THAO" />
+                    </Tabs>
+                </div>
             ) : (
                 <></>
-            ) }
-           
+            )}
         </header>
     );
 }
