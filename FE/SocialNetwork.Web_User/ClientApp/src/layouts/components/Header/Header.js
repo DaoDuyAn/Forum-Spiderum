@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -7,14 +7,11 @@ import {
     faGear,
     faPenToSquare,
     faUserPen,
-    faChevronLeft,
-    faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope, faBookmark, faBell } from '@fortawesome/free-regular-svg-icons';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { Link } from 'react-router-dom';
-import Box from '@mui/material/Box';
 import Tabs, { tabsClasses } from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
@@ -47,19 +44,19 @@ function Header() {
         // console.log(menuItem);
     };
 
-    const listRef = useRef(null);
+    // const listRef = useRef(null);
 
-    const scrollLeft = () => {
-        if (listRef.current) {
-            listRef.current.scrollLeft -= 100;
-        }
-    };
+    // const scrollLeft = () => {
+    //     if (listRef.current) {
+    //         listRef.current.scrollLeft -= 100;
+    //     }
+    // };
 
-    const scrollRight = () => {
-        if (listRef.current) {
-            listRef.current.scrollLeft += 100;
-        }
-    };
+    // const scrollRight = () => {
+    //     if (listRef.current) {
+    //         listRef.current.scrollLeft += 100;
+    //     }
+    // };
 
     const userMenu = [
         {

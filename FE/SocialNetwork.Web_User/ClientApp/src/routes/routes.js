@@ -16,8 +16,8 @@ import Search from '~/pages/Search'
 const publicRoutes = [
     { path: config.routes.home, component: Home },
     { path: config.routes.user, component: User },
-    { path: config.routes.login, component: Login },
-    { path: config.routes.register, component: Register },
+    { path: config.routes.login, component: Login, layout: null },
+    { path: config.routes.register, component: Register, layout: null },
     { path: config.routes.settings, component: UserSettings },
     { path: config.routes.create, component: CreatePost },
     { path: config.routes.edit, component: EditPost },
