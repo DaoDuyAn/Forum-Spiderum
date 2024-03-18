@@ -5,6 +5,7 @@ import Home from '~/pages/Home';
 import User from '~/pages/User'
 import Login from '~/pages/Login'
 import Register from '~/pages/Register'
+import AuthRegister from '~/pages/AuthRegister';
 import UserSettings from '~/pages/UserSettings';
 import CreatePost from '~/pages/CreatePost'
 import EditPost from '~/pages/EditPost'
@@ -18,6 +19,7 @@ const publicRoutes = [
     { path: config.routes.user, component: User },
     { path: config.routes.login, component: Login, layout: null },
     { path: config.routes.register, component: Register, layout: null },
+    { path: config.routes.auth_register, component: AuthRegister, layout: null },
     { path: config.routes.settings, component: UserSettings },
     { path: config.routes.create, component: CreatePost },
     { path: config.routes.edit, component: EditPost },

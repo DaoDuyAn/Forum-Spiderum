@@ -2,6 +2,7 @@ const routes = {
     home: '/',
     login: '/login',
     register: '/register',
+    auth_register: '/auth_register',
     user: '/user/:username',
     settings: '/user/settings',
     search: '/search',

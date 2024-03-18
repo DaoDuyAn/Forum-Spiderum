@@ -88,6 +88,8 @@ function Header() {
     ];
 
     return (
+
+        
         <header className={cx('wrapper', currentUser ? 'height1' : 'height2')}>
             <div className={cx('inner')}>
                 <Link to={config.routes.home} className={cx('logo-link')}>
