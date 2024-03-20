@@ -2,14 +2,16 @@ import { useState } from 'react';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import Pagination from '@mui/material/Pagination';
+import { styled } from '@mui/system';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFire, faStar, faComments, faFlag } from '@fortawesome/free-solid-svg-icons';
 
 import PostItem from '../PostItem';
-import styles from './Filter.module.scss';
-import { styled } from '@mui/system';
+import styles from './FilterCate.module.scss';
 
 const StyledPagination = styled(Pagination)({
     '& .MuiPaginationItem-root': {
-        fontSize: '1.5rem', 
+        fontSize: '1.5rem',
     },
 });
 const cx = classNames.bind(styles);
@@ -25,24 +27,24 @@ function Filter() {
 
     const fitterList = [
         {
-            displayName: 'DÀNH CHO BẠN',
-            path: '/',
+            displayName: 'THỊNH HÀNH',
+            path: '/category/a/?sort=hot',
+            icon: <FontAwesomeIcon  className={cx('filter__sort-icon')} icon={faFire} />,
         },
         {
-            displayName: 'THEO TÁC GIẢ',
-            path: '/',
-        },
-        {
-            displayName: 'MỚI NHẤT',
-            path: '/?sort=news',
+            displayName: 'MỚI',
+            path: '/category/a/?sort=new',
+            icon: <FontAwesomeIcon  className={cx('filter__sort-icon')} icon={faStar} />,
         },
         {
             displayName: 'SÔI NỔI',
-            path: '/?sort=controversial',
+            path: '/category/a/?sort=controversial',
+            icon: <FontAwesomeIcon  className={cx('filter__sort-icon')} icon={faComments} />,
         },
         {
-            displayName: 'ĐÁNH GIÁ CAO NHẤT',
-            path: '/?sort=top',
+            displayName: 'TOP',
+            path: '/category/a/?sort=top',
+            icon: <FontAwesomeIcon  className={cx('filter__sort-icon')} icon={faFlag} />,
         },
     ];
 
@@ -54,6 +56,9 @@ function Filter() {
         <section className={cx('filter')}>
             <div className={cx('filter__wrapper')}>
                 <div className={cx('filter__bar')}>
+                    <div className={cx('title')}>
+                        <span>DÀNH CHO BẠN</span>
+                    </div>
                     <div className={cx('filter__sort')}>
                         {fitterList.map((e, i) => (
                             <Link
@@ -62,7 +67,8 @@ function Filter() {
                                 className={cx('filter__sort-item', { active: filterActive === i })}
                                 onClick={() => handleFilterActive(i)}
                             >
-                                <span className={cx('filter__sort-text', { active: filterActive === i })}>
+                                {e.icon}
+                                <span className={cx('filter__sort-text', 'ml-[6px]', { active: filterActive === i })}>
                                     {e.displayName}
                                 </span>
                             </Link>
@@ -89,7 +95,7 @@ function Filter() {
                 </div>
 
                 <div className={cx('flex', 'justify-center')}>
-                    <StyledPagination count={10} variant="outlined" color="primary" size="large" boundaryCount={2}/>
+                    <StyledPagination count={10} variant="outlined" color="primary" size="large" boundaryCount={2} />
                 </div>
             </div>
         </section>

@@ -8,6 +8,13 @@
         justify-content: space-between;
         padding-bottom: 24px;
         overflow: hidden;
+
+        & .title {
+            padding-left: 16px;
+            border-left: 4px solid #3199d5;
+            font-size: 19px;
+            font-weight: bold;
+        }
     }
 
     &__sort {
@@ -17,17 +24,27 @@
         border-bottom: 1px solid var(--filter-border-color);
 
         &-item {
-            display: flex;
-            align-items: center;
             text-transform: uppercase;
-            justify-content: center;
-            font-weight: 500;
+            color: var(--gray);
             padding: 0 0.75rem;
             margin-right: 20px;
             border-bottom: 3px solid transparent;
 
             &.active {
                 border-bottom: 3px solid #3398d4;
+
+                & .filter__sort-icon,
+                .filter__sort-text {
+                    color: #3398d4;
+                }
+            }
+
+            &:hover {
+                color: var(--gray);
+
+                & .filter__sort-text {
+                    color: #7b8097;
+                }
             }
         }
 
