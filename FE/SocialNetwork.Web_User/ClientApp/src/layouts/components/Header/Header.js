@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faUser,
-    faSignOut,
-    faGear,
-    faPenToSquare,
-    faUserPen,
-} from '@fortawesome/free-solid-svg-icons';
+import { faUser, faSignOut, faGear, faPenToSquare, faUserPen } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope, faBookmark, faBell } from '@fortawesome/free-regular-svg-icons';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
@@ -88,8 +82,6 @@ function Header() {
     ];
 
     return (
-
-        
         <header className={cx('wrapper', currentUser ? 'height1' : 'height2')}>
             <div className={cx('inner')}>
                 <Link to={config.routes.home} className={cx('logo-link')}>
