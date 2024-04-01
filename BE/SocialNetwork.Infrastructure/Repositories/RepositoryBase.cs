@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SocialNetwork.Infrastructure.Repositories
 {
-    public interface IPostRepository
+    internal class RepositoryBase
     {
     }
 }

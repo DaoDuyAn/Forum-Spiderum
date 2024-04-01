@@ -18,7 +18,7 @@ function CategoryItem() {
     };
 
     return (
-        <main>
+        <main className={cx('mt-[20px]')}>
             <header className={cx('category__header')}>
                 <div
                     className={cx('category__header-background')}

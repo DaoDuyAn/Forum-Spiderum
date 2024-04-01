@@ -32,7 +32,7 @@ function PostItem({ post }) {
         <div className={cx('row', 'mb', 'post')}>
             <div className={cx('lg:w-1/3', 'sm:w-full')}>
                 <div className={cx('filter__content-img')}>
-                    <Link to={`/post/`} className={cx('filter__content-img')}>
+                    <Link to={`/post/baiviet`} className={cx('filter__content-img')}>
                         <img
                             src={
                                 'https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-thumbnails/defaultthumbnail.png'
@@ -47,7 +47,7 @@ function PostItem({ post }) {
                 <div className={cx('filter__content-container')}>
                     <div className={cx('filter__content-heading')}>
                         <div>
-                            <Link to={`/category/`}>
+                            <Link to={`/category/phat-trien-ban-than`}>
                                 <span className={cx('title-category')}>PHÁT TRIỂN BẢN THÂN</span>
                             </Link>
                         </div>
@@ -67,7 +67,7 @@ function PostItem({ post }) {
                         </Link>
                     </div>
                     <div className={cx('filter__content-main')}>
-                        <Link to={`/post/`}>
+                        <Link to={`/post/baiviet2`}>
                             <h3 className={cx('title-post')}>
                                 Đánh giá Dune phần Đánh giá Dune phần 1Đánh giá Dune phần 1Đánh giá Dune phần 1Đánh giá
                                 Dune phần 11
@@ -84,7 +84,7 @@ function PostItem({ post }) {
                     <div className={cx('filter__content-author')}>
                         <div className={cx('filter__content-author-user')}>
                             <div className={cx('post-avt')}>
-                                <Link to={`/user/`}>
+                                <Link to={`/user/duyan`}>
                                     <img
                                         className={cx('post-avt')}
                                         src={
@@ -95,7 +95,7 @@ function PostItem({ post }) {
                                 </Link>
                             </div>
                             <div className={cx('post-author')}>
-                                <Link to={`/user/`}>
+                                <Link to={`/user/duyan`}>
                                     <p className={cx('post-username')}>Đào Duy An</p>
                                 </Link>
                                 <DatePost date={d}></DatePost>

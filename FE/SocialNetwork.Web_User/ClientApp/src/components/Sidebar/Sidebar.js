@@ -67,12 +67,12 @@ function Sidebar() {
                             </Link>
                         </div>
                         <div className={cx('adv__widget-user')}>
-                            <Link to={`/post/`}>
+                            <Link to={`/post/baiviet`}>
                                 <div className={cx('post-title')}>
                                     Sự nghiệp Sơn Tùng trong 10 bài hát Sự nghiệp Sơn Tùng trong 10 bài hát
                                 </div>
                             </Link>
-                            <Link to={`/user/ `}>
+                            <Link to={`/user/an `}>
                                 <span className={cx('username')}>Duy An</span>
                             </Link>
                             <DatePost date={d}></DatePost>
@@ -131,7 +131,7 @@ function Sidebar() {
                 <ul className={cx('adv__about-list')}>
                     <li className={cx('adv__about-item')}>
                         <Link to="/" className={cx('adv__about-link')}>
-                            <span className={cx('adv__about-text')}>Về Speirum</span>
+                            <span className={cx('adv__about-text')}>Về Spiderum</span>
                         </Link>
                     </li>
                     <li className={cx('adv__about-item')}>

@@ -91,7 +91,7 @@ function TrendingPosts({ posts, slidesToShow, slice }) {
                                 </Link>
                                 <Link to={`/user/${post.author.userName}`}>
                                     <p className={cx('post-username', 'mt-[10px]')}>
-                                        Bùi Xuân Hiếu
+                                        Anh Liêm
                                     </p>
                                 </Link>
                             </div>
@@ -99,7 +99,7 @@ function TrendingPosts({ posts, slidesToShow, slice }) {
                     ))} */}
                         <div key={1}>
                             <div className={cx('pom__content-details')}>
-                                <Link to="/post/a">
+                                <Link to="/post/baiviet3">
                                     <div className={cx('mt-[10px]')}>
                                         <img
                                             className={cx('border-img', 'trending-img')}
@@ -110,7 +110,7 @@ function TrendingPosts({ posts, slidesToShow, slice }) {
                                         />
                                     </div>
                                 </Link>
-                                <Link to={`/category/quandiem`}>
+                                <Link to={`/category/quan-diem-tranh-luan`}>
                                     <p className={cx('title-category', 'mt-[10px]')}>QUAN ĐIỂM - TRANH LUẬN</p>
                                 </Link>
                                 <Link to={`/post/xung-ho`}>
@@ -118,8 +118,8 @@ function TrendingPosts({ posts, slidesToShow, slice }) {
                                         Xưng hô trong tiếng Việt - lắm nghịch lý và kỳ thị Xưng hô trong tiếng Việt - lắm nghịch lý và kỳ thị
                                     </p>
                                 </Link>
-                                <Link to={`/user/xunhiu`}>
-                                    <p className={cx('post-username', 'mt-[10px]')}>Bùi Xuân Hiếu</p>
+                                <Link to={`/user/liemkhiet`}>
+                                    <p className={cx('post-username', 'mt-[10px]')}>Anh Liêm</p>
                                 </Link>
                             </div>
                         </div>
@@ -136,7 +136,7 @@ function TrendingPosts({ posts, slidesToShow, slice }) {
                                         />
                                     </div>
                                 </Link>
-                                <Link to={`/category/quandiem`}>
+                                <Link to={`/category/quan-diem`}>
                                     <p className={cx('title-category', 'mt-[10px]')}>QUAN ĐIỂM - TRANH LUẬN</p>
                                 </Link>
                                 <Link to={`/post/xung-ho`}>
@@ -144,8 +144,8 @@ function TrendingPosts({ posts, slidesToShow, slice }) {
                                         Xưng hô trong tiếng Việt - lắm nghịch lý và kỳ thị
                                     </p>
                                 </Link>
-                                <Link to={`/user/xunhiu`}>
-                                    <p className={cx('post-username', 'mt-[10px]')}>Bùi Xuân Hiếu</p>
+                                <Link to={`/user/liemkhiet`}>
+                                    <p className={cx('post-username', 'mt-[10px]')}>Anh Liêm</p>
                                 </Link>
                             </div>
                         </div>
@@ -162,7 +162,7 @@ function TrendingPosts({ posts, slidesToShow, slice }) {
                                         />
                                     </div>
                                 </Link>
-                                <Link to={`/category/quandiem`}>
+                                <Link to={`/category/quan-diem`}>
                                     <p className={cx('title-category', 'mt-[10px]')}>QUAN ĐIỂM - TRANH LUẬN</p>
                                 </Link>
                                 <Link to={`/post/xung-ho`}>
@@ -170,8 +170,8 @@ function TrendingPosts({ posts, slidesToShow, slice }) {
                                         Xưng hô trong tiếng Việt - lắm nghịch lý và kỳ thị
                                     </p>
                                 </Link>
-                                <Link to={`/user/xunhiu`}>
-                                    <p className={cx('post-username', 'mt-[10px]')}>Bùi Xuân Hiếu</p>
+                                <Link to={`/user/liemkhiet`}>
+                                    <p className={cx('post-username', 'mt-[10px]')}>Anh Liêm</p>
                                 </Link>
                             </div>
                         </div>
@@ -188,7 +188,7 @@ function TrendingPosts({ posts, slidesToShow, slice }) {
                                         />
                                     </div>
                                 </Link>
-                                <Link to={`/category/quandiem`}>
+                                <Link to={`/category/quan-diem`}>
                                     <p className={cx('title-category', 'mt-[10px]')}>QUAN ĐIỂM - TRANH LUẬN</p>
                                 </Link>
                                 <Link to={`/post/xung-ho`}>
@@ -196,8 +196,8 @@ function TrendingPosts({ posts, slidesToShow, slice }) {
                                         Xưng hô trong tiếng Việt - lắm nghịch lý và kỳ thị
                                     </p>
                                 </Link>
-                                <Link to={`/user/xunhiu`}>
-                                    <p className={cx('post-username', 'mt-[10px]')}>Bùi Xuân Hiếu</p>
+                                <Link to={`/user/liemkhiet`}>
+                                    <p className={cx('post-username', 'mt-[10px]')}>Anh Liêm</p>
                                 </Link>
                             </div>
                         </div>
@@ -214,7 +214,7 @@ function TrendingPosts({ posts, slidesToShow, slice }) {
                                         />
                                     </div>
                                 </Link>
-                                <Link to={`/category/quandiem`}>
+                                <Link to={`/category/quan-diem`}>
                                     <p className={cx('title-category', 'mt-[10px]')}>QUAN ĐIỂM - TRANH LUẬN</p>
                                 </Link>
                                 <Link to={`/post/xung-ho`}>
@@ -222,8 +222,8 @@ function TrendingPosts({ posts, slidesToShow, slice }) {
                                         Xưng hô trong tiếng Việt - lắm nghịch lý và kỳ thị
                                     </p>
                                 </Link>
-                                <Link to={`/user/xunhiu`}>
-                                    <p className={cx('post-username', 'mt-[10px]')}>Bùi Xuân Hiếu</p>
+                                <Link to={`/user/liemkhiet`}>
+                                    <p className={cx('post-username', 'mt-[10px]')}>Anh Liêm</p>
                                 </Link>
                             </div>
                         </div>

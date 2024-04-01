@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocialNetwork.Infrastructure.Entities
+namespace SocialNetwork.Domain.Entities
 {
     [Table("Roles")]
     public class RoleEntity : BaseEntity

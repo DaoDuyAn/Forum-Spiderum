@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SocialNetwork.Infrastructure.Entities;
+using SocialNetwork.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;

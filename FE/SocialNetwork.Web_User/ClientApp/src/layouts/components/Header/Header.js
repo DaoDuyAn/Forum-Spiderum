@@ -26,7 +26,6 @@ const cx = classNames.bind(styles);
 
 function Header() {
     const currentUser = true;
-
     const [value, setValue] = useState(0);
 
     const handleChange = (event, newValue) => {
@@ -56,27 +55,27 @@ function Header() {
         {
             icon: <FontAwesomeIcon icon={faUser} />,
             title: 'Xem trang cá nhân',
-            to: '/@hoaa',
+            to: '/user/an',
         },
         {
             icon: <FontAwesomeIcon icon={faPenToSquare} />,
             title: 'Bài viết của tôi',
-            to: '/settings',
+            to: '/user/duyan?tab=createdPosts',
         },
         {
             icon: <FontAwesomeIcon icon={faBookmark} />,
             title: 'Đã lưu',
-            to: '/feedack',
+            to: '/user/duyan?tab=savedPosts',
         },
         {
             icon: <FontAwesomeIcon icon={faGear} />,
             title: 'Tùy chỉnh tài khoản',
-            to: '/feedack',
+            to: '/user/settings',
         },
         {
             icon: <FontAwesomeIcon icon={faSignOut} />,
             title: 'Đăng xuất',
-            to: '/logout',
+            to: '/login',
             separate: true,
         },
     ];
@@ -106,9 +105,11 @@ function Header() {
                                 </button>
                             </Tippy>
 
-                            <Button className={'ml-3'} outline leftIcon={<FontAwesomeIcon icon={faUserPen} />}>
-                                Viết bài
-                            </Button>
+                            <Link to={config.routes.create}>
+                                <Button className={'ml-3'} outline leftIcon={<FontAwesomeIcon icon={faUserPen} />}>
+                                    Viết bài
+                                </Button>
+                            </Link>
                         </>
                     ) : (
                         <>
@@ -219,14 +220,14 @@ function Header() {
                             },
                         }}
                     >
-                        <CustomTab label="TÀI CHÍNH" />
-                        <CustomTab label="QUAN ĐIỂM TRANH LUẬN" />
-                        <CustomTab label="KHOA HỌC - CÔNG NGHỆ" />
-                        <CustomTab label="THỂ THAO" />
-                        <CustomTab label="TÀI CHÍNH" />
-                        <CustomTab label="QUAN ĐIỂM TRANH LUẬN" />
-                        <CustomTab label="KHOA HỌC - CÔNG NGHỆ" />
-                        <CustomTab label="THỂ THAO" />
+                        <CustomTab label="TÀI CHÍNH" component={Link} to="/category/tai-chinh" />
+                        <CustomTab label="QUAN ĐIỂM TRANH LUẬN" component={Link} to="/category/quan-diem-tranh-luan" />
+                        <CustomTab label="KHOA HỌC - CÔNG NGHỆ" component={Link} to="/category/khoa-hoc-cong-nghe" />
+                        <CustomTab label="THỂ THAO" component={Link} to="/category/the-thao" />
+                        <CustomTab label="TÀI CHÍNH" component={Link} to="/category/tai-chinh" />
+                        <CustomTab label="QUAN ĐIỂM TRANH LUẬN" component={Link} to="/category/quan-diem-tranh-luan" />
+                        <CustomTab label="KHOA HỌC - CÔNG NGHỆ" component={Link} to="/category/khoa-hoc-cong-nghe" />
+                        <CustomTab label="THỂ THAO" component={Link} to="/category/the-thao" />
                     </Tabs>
                 </div>
             ) : (

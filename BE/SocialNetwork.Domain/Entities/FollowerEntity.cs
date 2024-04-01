@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocialNetwork.Infrastructure.Entities
+namespace SocialNetwork.Domain.Entities
 {
-    [Table("Followings")]
-    public class FollowingEntity : BaseEntity
+    [Table("Followers")]
+    public class FollowerEntity : BaseEntity
     {
         public UserEntity User { get; set; }
-        public UserEntity Following { get; set; }
+        public UserEntity Follower { get; set; }
     }
 }

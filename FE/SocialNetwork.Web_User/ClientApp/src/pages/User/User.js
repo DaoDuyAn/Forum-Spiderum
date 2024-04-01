@@ -178,9 +178,9 @@ function User() {
                                         <div className={cx('user__profile-tabs-tab')}>
                                             <Link
                                                 className={cx('user__profile-tabs-link', {
-                                                    active: !tab,
+                                                    active: tab === 'createdPosts',
                                                 })}
-                                                to={`/user/duyan`}
+                                                to={`/user/duyan?tab=createdPosts`}
                                             >
                                                 <FontAwesomeIcon
                                                     className={cx('user__profile-tabs-icon')}

@@ -69,7 +69,7 @@ function Sidebar() {
                     {/* {posts.data.slice(0, 5).map((post) => (
                         <div className={cx('adv__widget-content-details')}>
                             <div className={cx('adv__widget-avt')}>
-                                <Link to={`/user/${post.author.userName}`}>
+                                <Link to={`/user/an{post.author.userName}`}>
                                     <img
                                         src={
                                             post.author.avatar
@@ -81,10 +81,10 @@ function Sidebar() {
                                 </Link>
                             </div>
                             <div className={cx('adv__widget-user')}>
-                                <Link to={`/post/${post.slug} `}>
+                                <Link to={`/post/baiviet${post.slug} `}>
                                     <p className={cx('post-title')}>{post.title}</p>
                                 </Link>
-                                <Link to={`/user/${post.author.userName} `}>
+                                <Link to={`/user/an${post.author.userName} `}>
                                     <span className={cx('username')}>
                                         {post.author.displayName ? post.author.displayName : post.author.userName}{' '}
                                     </span>
@@ -105,12 +105,12 @@ function Sidebar() {
                             </Link>
                         </div>
                         <div className={cx('adv__widget-user')}>
-                            <Link to={`/post/`}>
+                            <Link to={`/post/baiviet`}>
                                 <div className={cx('post-title')}>
                                     Sự nghiệp Sơn Tùng trong 10 bài hát Sự nghiệp Sơn Tùng trong 10 bài hát
                                 </div>
                             </Link>
-                            <Link to={`/user/ `}>
+                            <Link to={`/user/an`}>
                                 <span className={cx('username')}>Duy An</span>
                             </Link>
                             <DatePost date={d}></DatePost>
@@ -118,7 +118,7 @@ function Sidebar() {
                     </div>
                     <div className={cx('adv__widget-content-details')}>
                         <div className={cx('adv__widget-avt')}>
-                            <Link to={`/user/an`}>
+                            <Link to={`/user/ann`}>
                                 <img
                                     src={
                                         'https://www.gravatar.com/avatar/262cfa0997548c39953a9607a56f27da?d=wavatar&f=y'
@@ -128,12 +128,12 @@ function Sidebar() {
                             </Link>
                         </div>
                         <div className={cx('adv__widget-user')}>
-                            <Link to={`/post/`}>
+                            <Link to={`/post/baiviet`}>
                                 <div className={cx('post-title')}>
                                     Sự nghiệp Sơn Tùng trong 10 bài hát Sự nghiệp Sơn Tùng trong 10 bài hát
                                 </div>
                             </Link>
-                            <Link to={`/user/ `}>
+                            <Link to={`/user/an`}>
                                 <span className={cx('username')}>Duy An</span>
                             </Link>
                             <DatePost date={d}></DatePost>
@@ -141,7 +141,7 @@ function Sidebar() {
                     </div>
                     <div className={cx('adv__widget-content-details')}>
                         <div className={cx('adv__widget-avt')}>
-                            <Link to={`/user/an`}>
+                            <Link to={`/user/ann`}>
                                 <img
                                     src={
                                         'https://www.gravatar.com/avatar/262cfa0997548c39953a9607a56f27da?d=wavatar&f=y'
@@ -151,12 +151,12 @@ function Sidebar() {
                             </Link>
                         </div>
                         <div className={cx('adv__widget-user')}>
-                            <Link to={`/post/`}>
+                            <Link to={`/post/baiviet`}>
                                 <div className={cx('post-title')}>
                                     Sự nghiệp Sơn Tùng trong 10 bài hát Sự nghiệp Sơn Tùng trong 10 bài hát
                                 </div>
                             </Link>
-                            <Link to={`/user/ `}>
+                            <Link to={`/user/an`}>
                                 <span className={cx('username')}>Duy An</span>
                             </Link>
                             <DatePost date={d}></DatePost>

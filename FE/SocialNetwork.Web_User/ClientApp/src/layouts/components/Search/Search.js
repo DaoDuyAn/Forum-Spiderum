@@ -4,13 +4,14 @@ import { faCircleXmark, faSpinner, faMagnifyingGlass } from '@fortawesome/free-s
 import classNames from 'classnames/bind';
 
 // import * as searchServices from '~/services/searchService';
+import config from '~/config';
 import styles from './Search.module.scss';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function Search() {
     const [searchValue, setSearchValue] = useState('');
-  
 
     const [loading, setLoading] = useState(false);
 
@@ -34,7 +35,7 @@ function Search() {
 
     const handleClear = () => {
         setSearchValue('');
-        
+
         inputRef.current.focus();
     };
 
@@ -63,9 +64,11 @@ function Search() {
                     </button>
                 )}
                 {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
-                <button className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()}>
-                <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </button>
+                <Link to="/search?q=null&type=post">
+                    <button className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()}>
+                        <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </button>
+                </Link>
             </div>
         </div>
     );

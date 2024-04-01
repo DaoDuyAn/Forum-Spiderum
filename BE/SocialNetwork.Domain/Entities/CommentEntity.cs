@@ -5,17 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocialNetwork.Infrastructure.Entities
+namespace SocialNetwork.Domain.Entities
 {
-    [Table("Likes")]
-    public class LikeEntity : BaseEntity
+    [Table("Comments")]
+    public class CommentEntity : BaseEntity
     {
-        public Guid UserId { get; set; }
-        [ForeignKey("UserId")]
         public UserEntity User { get; set; }
-
-        public Guid PostId { get; set; }
-        [ForeignKey("PostId")]
         public PostEntity Post { get; set; }
+        public string Text { get; set; }
+        public Guid RepliedCommentId { get; set; }
     }
 }

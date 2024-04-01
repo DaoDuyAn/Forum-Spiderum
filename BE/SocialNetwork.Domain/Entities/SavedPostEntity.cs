@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocialNetwork.Infrastructure.Entities
+namespace SocialNetwork.Domain.Entities
 {
-    [Table("Images")]
-    public class ImageEntity : BaseEntity
+    [Table("SavedPosts")]
+    public class SavedPostEntity
     {
-        public string ImagePath { get; set; } = "";
-        public Guid PostId{ get; set; }
+        public Guid UserId { get; set; }
+        [ForeignKey("UserId")]
+        public UserEntity User { get; set; }
+
+        public Guid PostId { get; set; }
         [ForeignKey("PostId")]
         public PostEntity Post { get; set; }
     }

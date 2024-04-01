@@ -26,11 +26,11 @@ function Filter() {
     const fitterList = [
         {
             displayName: 'DÀNH CHO BẠN',
-            path: '/',
+            path: '/?sort=hot',
         },
         {
             displayName: 'THEO TÁC GIẢ',
-            path: '/',
+            path: '/?sort=follow',
         },
         {
             displayName: 'MỚI NHẤT',

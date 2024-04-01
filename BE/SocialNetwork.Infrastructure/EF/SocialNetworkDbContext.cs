@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SocialNetwork.Domain.Entities;
 using SocialNetwork.Infrastructure.Configurations;
-using SocialNetwork.Infrastructure.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocialNetwork.Infrastructure.EF
+namespace SocialNetwork.Domain.EF
 {
     public class SocialNetworkDbContext : DbContext
     {

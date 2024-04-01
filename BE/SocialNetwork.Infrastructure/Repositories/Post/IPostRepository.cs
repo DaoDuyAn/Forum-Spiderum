@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocialNetwork.Domain.Dapper
+namespace SocialNetwork.Infrastructure.Repositories.Post
 {
-    public class DapperContext
+    public interface IPostRepository
     {
     }
 }
