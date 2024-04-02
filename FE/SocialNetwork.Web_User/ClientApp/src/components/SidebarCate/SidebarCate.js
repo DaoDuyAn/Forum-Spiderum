@@ -169,7 +169,7 @@ function Sidebar() {
                 <ul className={cx('adv__about-list')}>
                     <li className={cx('adv__about-item')}>
                         <Link to="/" className={cx('adv__about-link')}>
-                            <span className={cx('adv__about-text')}>Về Speirum</span>
+                            <span className={cx('adv__about-text')}>Về Spiderum</span>
                         </Link>
                     </li>
                     <li className={cx('adv__about-item')}>

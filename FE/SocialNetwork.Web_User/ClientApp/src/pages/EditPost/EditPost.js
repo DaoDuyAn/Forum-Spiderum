@@ -1,42 +1,105 @@
 import { useCallback, useRef, useState, useEffect } from 'react';
 import EditorJS from '@editorjs/editorjs';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
 
-import config from './tools';
+import { Config } from './tools';
 import styles from '../CreatePost/CreatePost.module.scss';
 
 const cx = classNames.bind(styles);
 
-function CreatePost() {
+function EditPost() {
     const refEdit = useRef();
-    const [editor, seteditor] = useState({});
+    const [editor, setEditor] = useState({});
     const [visible, setVisible] = useState(false);
     const [data, setData] = useState({});
+    const [content, setContent] = useState(null);
+    const [isEditorInitialized, setIsEditorInitialized] = useState(false);
+
     // const [dataPost, setDataPost] = useState({});
     const [dataPost, setDataPost] = useState({
-        title: "Title", 
-        description: "Description", 
+        title: 'Title',
+        description: 'Description',
         category: {
-            _id: "1",
-            name: "Category" 
-        }
+            _id: '1',
+            name: 'Category',
+        },
     });
 
-    const [content, setContent] = useState('');
+    useEffect(() => {
+        const postData = {
+            blocks: [
+                {
+                    type: 'header',
+                    data: {
+                        text: 'Your header text here',
+                        level: 2,
+                    },
+                },
+                {
+                    type: 'image',
+                    data: {
+                        file: {
+                            url: 'https://images.spiderum.com/sp-images/6551d740e46b11eeb07a0149184cedb1.png',
+                        },
+                        caption: 'Caption 1',
+                        withBorder: false,
+                        withBackground: false,
+                        stretched: false,
+                    },
+                },
+                {
+                    type: 'paragraph',
+                    data: {
+                        text: 'Your post content here',
+                    },
+                },
+                {
+                    type: 'image',
+                    data: {
+                        file: {
+                            url: 'https://images.spiderum.com/sp-images/0fe61000efec11ee8536970f721d609f.png',
+                        },
+                        caption: 'Caption 2',
+                        withBorder: false,
+                        withBackground: false,
+                        stretched: false,
+                    },
+                },
+            ],
+        };
+
+        setContent(postData);
+    }, []);
 
     useEffect(() => {
         if (content) {
             const editor = new EditorJS({
                 holder: 'editorjs',
+                placeholder: 'Nội dung bài viết',
                 readOnly: false,
-                tools: config,
+                tools: Config,
                 data: content,
             });
-            seteditor(editor);
+
+            setEditor(editor);
+            setIsEditorInitialized(false);
         }
+
+        setIsEditorInitialized(true);
     }, [content]);
+
+    useEffect(() => {
+        if (isEditorInitialized) {
+            const editorContainer = document.getElementById('editorjs');
+
+            if (editorContainer && editorContainer.children.length >= 2) {
+                editorContainer.removeChild(editorContainer.children[1]);
+            }
+        }
+    }, [isEditorInitialized]);
 
     const handleVisibleModal = useCallback((e) => {
         e.preventDefault();
@@ -52,128 +115,107 @@ function CreatePost() {
     });
 
     return (
-        <div clasName={cx('mt-80')}>
-            <div clasName={cx('post')}>
-                <form action="" method="POST" onSubmit={onSubmit}>
-                    <div clasName={cx('post__container')}>
-                        <div
-                            suppressContentEditableWarning
-                            clasName={cx('post__title')}
-                            ref={refEdit}
-                            value={dataPost.title}
-                            onInput={(e) => setData({ ...data, title: e.currentTarget.textContent })}
-                        >
-                            {dataPost.title}
-                        </div>
-                        <div clasName={cx('post__content')}>
-                            <div id="editorjs" />
-                        </div>
-                        <div clasName={cx('post__button')}>
-                            <button clasName={cx('post__button-main', 'border', 'save')}>Lưu nháp</button>
-                            <button clasName={cx('post__button-main', 'border', 'next')} onClick={handleVisibleModal}>
-                                Bước tiếp theo
-                            </button>
-                        </div>
+        <div className={cx('post')}>
+            <form action="" method="POST" onSubmit={onSubmit}>
+                <div className={cx('post__container')}>
+                    <div
+                        suppressContentEditableWarning
+                        className={cx('post__title')}
+                        ref={refEdit}
+                        value={dataPost.title}
+                        onInput={(e) => setData({ ...data, title: e.currentTarget.textContent })}
+                    >
+                        {dataPost.title}
                     </div>
-                    {visible && (
-                        <div clasName={cx('modal')}>
-                            <div clasName={cx('modal__container')}>
-                                <div clasName={cx('modal__content')}>
-                                    <div clasName={cx('modal__desc')}>
-                                        <p clasName={cx('modal__title')}>
-                                            Mô tả bài viết
-                                            <em clasName={cx('modal__title-sub')}> (không bắt buộc)</em>
-                                        </p>
-                                        <textarea
-                                            clasName={cx('modal__desc-input')}
-                                            onChange={(e) => setData({ ...data, description: e.target.value })}
+                    <div className={cx('post__content')}>
+                        <div id="editorjs" />
+                    </div>
+                    <div className={cx('post__button')}>
+                        <button className={cx('post__button-main', 'border', 'next')} onClick={handleVisibleModal}>
+                            Bước tiếp theo
+                        </button>
+                    </div>
+                </div>
+                {visible && (
+                    <div className={cx('modal')}>
+                        <div className={cx('modal__container')}>
+                            <div className={cx('modal__content')}>
+                                <div className={cx('modal__desc')}>
+                                    <p className={cx('modal__title')}>
+                                        Mô tả bài viết
+                                        <em className={cx('modal__title-sub')}> (không bắt buộc)</em>
+                                    </p>
+                                    <textarea
+                                        className={cx('modal__desc-input')}
+                                        onChange={(e) => setData({ ...data, description: e.target.value })}
+                                    >
+                                        {dataPost.description}
+                                    </textarea>
+                                </div>
+
+                                <div className={cx('modal__category')}>
+                                    <p className={cx('modal__title')}>Chọn danh mục</p>
+                                    <div className={cx('modal__category-container')}>
+                                        <select
+                                            id="selected-id"
+                                            className={cx('modal__category-select')}
+                                            onChange={(e) => setData({ ...data, category: e.target.value })}
                                         >
-                                            {dataPost.description}
-                                        </textarea>
-                                    </div>
-                                    <div clasName={cx('modal__tagname')}>
-                                        <p clasName={cx('modal__title')}>
-                                            Thêm thẻ tag
-                                            <em clasName={cx('modal__title-sub')}> (tối đa 5 thẻ)</em>
-                                        </p>
-                                        <div clasName={cx('modal__tagname-container')}>
-                                            <div clasName={cx('tagname__search')}>
-                                                <i clasName={cx('tagname__search-icon', 'bx', 'bx-search')}></i>
-                                                <input
-                                                    type="text"
-                                                    clasName={cx('tagname__search-input')}
-                                                    placeholder="Tìm thẻ tag..."
-                                                />
-                                            </div>
-                                            <div clasName={cx('tagname__selected')}>
-                                                <div clasName={cx('tagname__selected-container')}>
-                                                    <span clasName={cx('tagname__selected-content', 'name')}>
-                                                        KHOA HỌC
-                                                    </span>
-                                                    <span clasName={cx('tagname__selected-content', 'quantity')}>
-                                                        1102
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div clasName={cx('modal__category')}>
-                                        <p clasName={cx('modal__title')}>Chọn danh mục</p>
-                                        <div clasName={cx('modal__category-container')}>
-                                            <select
-                                                id="selected-id"
-                                                clasName={cx('modal__category-select')}
-                                                onChange={(e) => setData({ ...data, category: e.target.value })}
-                                            >
-                                                <option
-                                                    clasName={cx('modal__category-option')}
+                                            {/* <option
+                                                    className={cx('modal__category-option')}
                                                     value={dataPost.category._id}
                                                     key={dataPost.category._id}
                                                 >
                                                     {dataPost.category.name}
-                                                </option>
-                                                {/* {categorise.data.map((e, i) => (
+                                                </option> */}
+                                            <option value={1} key={1} className={cx('modal__category-option')}>
+                                                Thể thao
+                                            </option>
+                                            {/* {categorise.data.map((e, i) => (
                                                     <option
                                                         value={e._id}
                                                         key={e._id}
-                                                        clasName={cx('modal__category-option')}
+                                                        className={cx('modal__category-option')}
                                                     >
                                                         {e.name}
                                                     </option>
                                                 ))} */}
-                                            </select>
-                                            <div clasName={cx('modal__category-icon')}>
-                                                <i
-                                                    clasName={cx('modal__category-icon-down', 'bx', 'bxs-chevron-down')}
-                                                ></i>
-                                            </div>
+                                            <option value={2} key={2} className={cx('modal__category-option')}>
+                                                Chính trị
+                                            </option>
+                                        </select>
+                                        <div className={cx('modal__category-icon')}>
+                                            <FontAwesomeIcon
+                                                icon={faChevronDown}
+                                                className={cx('modal__category-icon-down')}
+                                            />
                                         </div>
                                     </div>
-                                    <div clasName={cx('modal__button')}>
+                                </div>
+                                <div className={cx('modal__button')}>
+                                    <button
+                                        className={cx('modal__button-content', 'back')}
+                                        onClick={handleVisibleModal}
+                                    >
+                                        Quay lại
+                                    </button>
+                                    <Link to="/">
                                         <button
-                                            clasName={cx('modal__button-content', 'back')}
-                                            onClick={handleVisibleModal}
+                                            onClick={onSave}
+                                            type="submit"
+                                            className={cx('modal__button-content', 'create')}
                                         >
-                                            Quay lại
+                                            Cập nhật
                                         </button>
-                                        <Link to="/">
-                                            <button
-                                                onClick={onSave}
-                                                type="submit"
-                                                clasName={cx('modal__button-content', 'create')}
-                                            >
-                                                Cập nhật
-                                            </button>
-                                        </Link>
-                                    </div>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
-                    )}
-                </form>
-            </div>
+                    </div>
+                )}
+            </form>
         </div>
     );
 }
 
-export default CreatePost;
+export default EditPost;

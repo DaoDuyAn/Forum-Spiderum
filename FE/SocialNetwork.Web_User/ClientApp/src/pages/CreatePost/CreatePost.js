@@ -16,7 +16,6 @@ function CreatePost() {
 
     const [isEditorInitialized, setIsEditorInitialized] = useState(false);
 
-
     const [editor, setEditor] = useState(null);
     const [error, setError] = useState(null);
     const [visible, setVisible] = useState(false);
@@ -28,6 +27,13 @@ function CreatePost() {
         category: '123a123',
     });
 
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+        });
+    }, []);
+
     const onSubmit = useCallback((e) => {
         e.preventDefault();
     }, []);
@@ -35,10 +41,10 @@ function CreatePost() {
     useEffect(() => {
         const editorInstance = new EditorJS(config());
         setEditor(editorInstance);
-    
+
         setIsEditorInitialized(true);
     }, []);
-    
+
     useEffect(() => {
         if (isEditorInitialized) {
             const editorContainer = document.getElementById('editorjs');
@@ -48,7 +54,7 @@ function CreatePost() {
             }
         }
     }, [isEditorInitialized]);
-    
+
     const handleVisibleModal = useCallback(
         (e) => {
             setError(null);

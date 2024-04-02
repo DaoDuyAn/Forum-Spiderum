@@ -16,50 +16,44 @@ import Delimiter from '@editorjs/delimiter';
 import InlineCode from '@editorjs/inline-code';
 import SimpleImage from '@editorjs/simple-image';
 
-const Config = () => {
-    return {
-        embed: Embed,
-        table: Table,
-        marker: Marker,
-        list: List,
-        warning: Warning,
-        code: Code,
-        linkTool: LinkTool,
-        image: {
-            class: ImageTool,
-            config: {
-                endpoints: {
-                    byFile: 'http://localhost:44435/posts/upload',
+export const Config = {
+    embed: Embed,
+    table: Table,
+    marker: Marker,
+    list: List,
+    warning: Warning,
+    code: Code,
+    linkTool: LinkTool,
+    image: {
+        class: ImageTool,
+        config: {
+            uploader: {
+                uploadByFile(file) {
+                    const blob = new Blob([file], { type: file.type });
+                    const blobUrl = URL.createObjectURL(blob);
+
+                    return {
+                        success: 1,
+                        file: {
+                            url: blobUrl,
+                        },
+                    };
                 },
-                uploader: {
-                    async uploadByFile(file) {
-                        const data = new FormData();
-                        data.append('file', file);
-                        data.append('name', 'file');
-                        const uploadResponse = await axios.post('http://localhost:44435/posts/upload', data, {
-                            headers: {
-                                'Content-Type': 'multipart/form-data',
-                            },
-                        });
-                        return uploadResponse.data;
-                    },
-                },
-            },
-            initData: null,
-            data: {
-                withBorder: false,
-                withBackground: false,
-                stretched: true,
+              
             },
         },
-        raw: Raw,
-        header: Header,
-        quote: Quote,
-        checklist: CheckList,
-        delimiter: Delimiter,
-        inlineCode: InlineCode,
-        simpleImage: SimpleImage,
-    };
+        initData: null,
+        data: {
+            withBorder: false,
+            withBackground: false,
+            stretched: false,
+        },
+    },
+    raw: Raw,
+    header: Header,
+    quote: Quote,
+    checklist: CheckList,
+    delimiter: Delimiter,
+    inlineCode: InlineCode,
+    simpleImage: SimpleImage,
 };
-
-export default Config;

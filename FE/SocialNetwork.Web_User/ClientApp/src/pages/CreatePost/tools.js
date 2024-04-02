@@ -27,12 +27,12 @@ const Config = () => {
             list: List,
             warning: Warning,
             code: Code,
-            linkTool: LinkTool,
+            // linkTool: LinkTool,
             image: {
                 class: ImageTool,
                 config: {
                     uploader: {
-                        async uploadByFile(file) {
+                        uploadByFile(file) {
                             const blob = new Blob([file], { type: file.type });
                             const blobUrl = URL.createObjectURL(blob);
 

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as regularHeart, faBookmark as regularBookmark } from '@fortawesome/free-regular-svg-icons';
@@ -38,6 +38,14 @@ function Post() {
         speed: 500,
         lazyLoad: true,
     };
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+        });
+    }, []);
+
 
     const handleClickDelete = () => setVisiable(!visiable);
 
@@ -112,7 +120,7 @@ function Post() {
                         </div>
                         {isUser ? (
                             <div className={cx('btn-user')}>
-                                <Link to={`/post/update/hehe`}>
+                                <Link to={`/post/edit/bai-viet`}>
                                     <span className={cx('button-data', 'edit')}>Sửa</span>
                                 </Link>
                                 <button className={cx('btn-delete')} onClick={handleClickDelete}>

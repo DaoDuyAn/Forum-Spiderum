@@ -132,6 +132,7 @@ function Header() {
                     </Menu>
                 </div>
             </div>
+
             {currentUser ? (
                 // <div className={cx('header__menu')}>
                 //     <div className={cx('header__menu-category')}>
@@ -217,6 +218,7 @@ function Header() {
                         sx={{
                             [`& .${tabsClasses.scrollButtons}`]: {
                                 '&.Mui-disabled': { opacity: 0.3 },
+                                '& .MuiSvgIcon-root': { fontSize: '2rem' },
                             },
                         }}
                     >
