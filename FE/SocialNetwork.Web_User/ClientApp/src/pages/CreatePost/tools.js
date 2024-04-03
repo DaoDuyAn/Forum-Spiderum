@@ -42,8 +42,18 @@ const Config = () => {
                     stretched: true,
                 },
             },
-            header: Header,
-            quote: Quote,
+            header: {
+                class: Header,
+                shortcut: 'CMD+SHIFT+H',
+                config: {
+                    defaultLevel: 1,
+                },
+            },
+            quote: {
+                class: Quote,
+                inlineToolbar: true,
+                shortcut: 'CMD+SHIFT+O',
+            },
             delimiter: Delimiter,
             inlineCode: InlineCode,
             simpleImage: SimpleImage,

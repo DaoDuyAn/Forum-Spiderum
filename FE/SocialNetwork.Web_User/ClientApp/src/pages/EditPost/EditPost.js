@@ -34,7 +34,7 @@ function EditPost() {
                 {
                     type: 'header',
                     data: {
-                        text: 'Your header text here',
+                        text: "nội <b>dung</b>",
                         level: 2,
                     },
                 },
@@ -47,7 +47,7 @@ function EditPost() {
                         caption: 'Caption 1',
                         withBorder: false,
                         withBackground: false,
-                        stretched: false,
+                        stretched: true,
                     },
                 },
                 {
@@ -65,7 +65,7 @@ function EditPost() {
                         caption: 'Caption 2',
                         withBorder: false,
                         withBackground: false,
-                        stretched: false,
+                        stretched: true,
                     },
                 },
             ],
@@ -96,7 +96,7 @@ function EditPost() {
             const editorContainer = document.getElementById('editorjs');
 
             if (editorContainer && editorContainer.children.length >= 2) {
-                editorContainer.removeChild(editorContainer.children[1]);
+                editorContainer.removeChild(editorContainer.children[0]);
             }
         }
     }, [isEditorInitialized]);
@@ -110,9 +110,11 @@ function EditPost() {
         e.preventDefault();
     }, []);
 
-    const onSave = useCallback(async (e) => {
+  
+    const onSave = (e) => {
         e.preventDefault();
-    });
+        console.log('content: ' + data);
+    };
 
     return (
         <div className={cx('post')}>

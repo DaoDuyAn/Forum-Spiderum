@@ -38,12 +38,22 @@ export const Config = {
         data: {
             withBorder: false,
             withBackground: false,
-            stretched: false,
+            stretched: true,
         },
     },
 
-    header: Header,
-    quote: Quote,
+    header: {
+        class: Header,
+        shortcut: 'CMD+SHIFT+H',
+        config: {
+            defaultLevel: 1,
+        },
+    },
+    quote: {
+        class: Quote,
+        inlineToolbar: true,
+        shortcut: 'CMD+SHIFT+O',
+    },
     delimiter: Delimiter,
     inlineCode: InlineCode,
     simpleImage: SimpleImage,

@@ -50,27 +50,37 @@ function CreatePost() {
             const editorContainer = document.getElementById('editorjs');
 
             if (editorContainer && editorContainer.children.length >= 2) {
-                editorContainer.removeChild(editorContainer.children[1]);
+                editorContainer.removeChild(editorContainer.children[0]);
             }
         }
     }, [isEditorInitialized]);
 
     const handleVisibleModal = useCallback(
         (e) => {
+            e.preventDefault();
             setError(null);
-            e.preventDefault();
 
-            setVisible(!visible);
+            if (editor) {
+                editor
+                    .save()
+                    .then((outputData) => {
+                        setData({ ...data, content: outputData });
+                        console.log('Dữ liệu content:', outputData);
+                        setVisible(!visible);
+                    })
+                    .catch((error) => {
+                        console.log('Saving failed: ', error);
+                   
+                    });
+            }
         },
-        [visible, editor, data],
+        [visible, editor, data]
     );
 
-    const onSave = useCallback(
-        (e) => {
-            e.preventDefault();
-        },
-        [data],
-    );
+    const onSave = async (e) => {
+        e.preventDefault();
+        console.dir(data);
+    };
 
     useEffect(() => {
         document.title = 'Viết bài mới...';
