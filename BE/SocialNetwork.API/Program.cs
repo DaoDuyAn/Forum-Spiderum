@@ -1,11 +1,30 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using SocialNetwork.API.Extensions;
+using SocialNetwork.Infrastructure.EF;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddDbContext<SocialNetworkDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SocialNetworkConnectionString"));
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// CORS
+builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>
+{
+    build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
+
+builder.Services.AddScoped<ISocialNetworkDbContext, SocialNetworkDbContext>();
+
 
 var app = builder.Build();
 
@@ -17,6 +36,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("MyCors");
 
 app.UseAuthorization();
 

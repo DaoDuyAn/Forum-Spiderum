@@ -24,7 +24,7 @@ namespace SocialNetwork.Infrastructure.Configurations
                 },
                 new AccountEntity
                 {
-                    Id = new Guid("7a2346c5-45b6-48f2-9dbd-aae06a701701"),
+                    Id = new Guid("7a2346c5-45b6-48f2-9dbd-aae06a701702"),
                     UserName = "buihieu",
                     Password = "123123",
                     RoleId = new Guid("a02a928b-425c-45dc-9441-82cae13dc44a"),

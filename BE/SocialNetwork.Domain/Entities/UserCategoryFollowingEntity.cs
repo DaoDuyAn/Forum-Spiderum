@@ -10,7 +10,11 @@ namespace SocialNetwork.Domain.Entities
     [Table("UserCategoryFollowings")]
     public class UserCategoryFollowingEntity : BaseEntity
     {
+        public Guid UserId { get; set; }
+        [ForeignKey("UserId")]
         public UserEntity User { get; set; }
+        public Guid CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
         public CategoryEntity Category { get; set; }
     }
 }

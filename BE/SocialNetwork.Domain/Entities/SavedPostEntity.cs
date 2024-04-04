@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SocialNetwork.Domain.Entities
 {
     [Table("SavedPosts")]
-    public class SavedPostEntity
+    public class SavedPostEntity : BaseEntity
     {
         public Guid UserId { get; set; }
         [ForeignKey("UserId")]

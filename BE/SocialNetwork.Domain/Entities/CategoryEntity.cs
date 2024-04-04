@@ -15,6 +15,7 @@ namespace SocialNetwork.Domain.Entities
         [Required]
         public string CategoryName { get; set; }
         public string ContentAllowed { get; set; } = "";
+        public string CoverImagePath { get; set; } = "";
 
         public ICollection<PostEntity> Posts { get; set; }
     }
