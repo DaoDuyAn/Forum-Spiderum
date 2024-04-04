@@ -24,6 +24,8 @@ function UserSettings() {
     const [text, setText] = useState('');
 
     const [dataUser, setDataUser] = useState({});
+    const [checked, setChecked] = useState(dataUser.gender ?? 0);
+
     const [dataPassword, setDataPassword] = useState({
         oldPassword: '',
         password: '',
@@ -44,8 +46,10 @@ function UserSettings() {
             setPreviewCover(undefined);
             return;
         }
+
         const objectUrl = URL.createObjectURL(selectedFileCover);
         setPreviewCover(objectUrl);
+
         return () => URL.revokeObjectURL(objectUrl);
     }, [selectedFileCover]);
 
@@ -148,6 +152,11 @@ function UserSettings() {
 
             return stateObj;
         });
+    };
+
+    const handleGenderChange = (gender) => {
+        setChecked(gender);
+        setDataUser({ ...dataUser, gender: checked });
     };
 
     const handelChangeData = (e) => {
@@ -324,6 +333,8 @@ function UserSettings() {
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div className={cx('settings__flex')}>
                                                 <div className={cx('settings__flex-item')}>
                                                     <label className={cx('settings__name')}>NGÀY SINH</label>
                                                     <input
@@ -337,83 +348,59 @@ function UserSettings() {
                                                             })
                                                         }
                                                     />
-                                                    {/* <div className={cx('settings__date')}>
-                                                        <div className={cx('settings__date-container')}>
-                                                            <select
-                                                                className={cx('settings__date-select')}
-                                                                onChange={(e) =>
-                                                                    setDataUser({
-                                                                        ...dataUser,
-                                                                        dateOfBirth: e.target.value,
-                                                                    })
-                                                                }
+                                                </div>
+                                                <div className={cx('settings__flex-item')}>
+                                                    <label className={cx('settings__name')}>GIỚI TÍNH</label>
+                                                    <div className={cx('flex', 'flex-wrap', 'p-[12px]')}>
+                                                        <div className={cx('flex', 'items-center', 'mb-4', 'mr-7')}>
+                                                            <input
+                                                                type="radio"
+                                                                className={cx('hidden')}
+                                                                checked={checked === 1}
+                                                            />
+                                                            <label
+                                                                className={cx('flex', 'items-center', 'cursor-pointer')}
+                                                                onClick={() => handleGenderChange(1)}
                                                             >
-                                                                <option value="null">Ngày</option>
-                                                                {Array.from({ length: 31 }, (_, i) => {
-                                                                    const day = i + 1;
-                                                                    return (
-                                                                        <option
-                                                                            key={day}
-                                                                            value={day}
-                                                                            selected={dataUser.dateOfBirth === day}
-                                                                        >
-                                                                            {day}
-                                                                        </option>
-                                                                    );
-                                                                })}
-                                                            </select>
+                                                                <span
+                                                                    className={cx(
+                                                                        'w-6',
+                                                                        'h-6',
+                                                                        'inline-block',
+                                                                        'mr-2',
+                                                                        'rounded-full',
+                                                                        'border',
+                                                                        'border-grey',
+                                                                    )}
+                                                                ></span>
+                                                                Nam
+                                                            </label>
                                                         </div>
-                                                        <div className={cx('settings__date-container')}>
-                                                            <select
-                                                                className={cx('settings__date-select')}
-                                                                onChange={(e) =>
-                                                                    setDataUser({
-                                                                        ...dataUser,
-                                                                        monthOfBirth: e.target.value,
-                                                                    })
-                                                                }
+                                                        <div className={cx('flex', 'items-center', 'mb-4', 'mr-5')}>
+                                                            <input
+                                                                type="radio"
+                                                                className={cx('hidden')}
+                                                                checked={checked === 0}
+                                                            />
+                                                            <label
+                                                                className={cx('flex', 'items-center', 'cursor-pointer')}
+                                                                onClick={() => handleGenderChange(0)}
                                                             >
-                                                                <option value="null">Tháng</option>
-
-                                                                {Array.from({ length: 12 }, (_, i) => {
-                                                                    const month = i + 1;
-                                                                    return (
-                                                                        <option
-                                                                            key={month}
-                                                                            value={month}
-                                                                            selected={dataUser.monthOfBirth === month}
-                                                                        >
-                                                                            {month}
-                                                                        </option>
-                                                                    );
-                                                                })}
-                                                            </select>
+                                                                <span
+                                                                    className={cx(
+                                                                        'w-6',
+                                                                        'h-6',
+                                                                        'inline-block',
+                                                                        'mr-2',
+                                                                        'rounded-full',
+                                                                        'border',
+                                                                        'border-grey',
+                                                                    )}
+                                                                ></span>
+                                                                Nữ
+                                                            </label>
                                                         </div>
-                                                        <div className={cx('settings__date-container')}>
-                                                            <select
-                                                                className={cx('settings__date-select')}
-                                                                onChange={(e) =>
-                                                                    setDataUser({
-                                                                        ...dataUser,
-                                                                        yearOfBirth: e.target.value,
-                                                                    })
-                                                                }
-                                                            >
-                                                                <option value="null">Năm</option>
-                                                                {Array.from({ length: 85 }, (_, i) => {
-                                                                    return (
-                                                                        <option
-                                                                            key={i}
-                                                                            value={i + 1939}
-                                                                            selected={dataUser.yearOfBirth === i + 1940}
-                                                                        >
-                                                                            {i + 1940}
-                                                                        </option>
-                                                                    );
-                                                                })}
-                                                            </select>
-                                                        </div>
-                                                    </div> */}
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className={cx('settings__form')}>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark as regularBookmark } from '@fortawesome/free-regular-svg-icons';
@@ -32,6 +32,13 @@ function User() {
     const handelUnFollow = (e) => {};
 
     const handelFollow = (e) => {};
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+        });
+    }, []);
 
     return (
         <div className={cx('main')}>
