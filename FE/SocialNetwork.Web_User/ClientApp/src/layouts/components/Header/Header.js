@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignOut, faGear, faPenToSquare, faUserPen } from '@fortawesome/free-solid-svg-icons';
@@ -26,7 +27,8 @@ const cx = classNames.bind(styles);
 
 function Header() {
     const currentUser = true;
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(-1);
+    const [categories, setCategories] = useState([]);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -36,20 +38,6 @@ function Header() {
     const handleMenuChange = (menuItem) => {
         // console.log(menuItem);
     };
-
-    // const listRef = useRef(null);
-
-    // const scrollLeft = () => {
-    //     if (listRef.current) {
-    //         listRef.current.scrollLeft -= 100;
-    //     }
-    // };
-
-    // const scrollRight = () => {
-    //     if (listRef.current) {
-    //         listRef.current.scrollLeft += 100;
-    //     }
-    // };
 
     const userMenu = [
         {
@@ -80,10 +68,25 @@ function Header() {
         },
     ];
 
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get(`https://localhost:44379/api/v1/Category`);
+                const data = response.data;
+
+                setCategories(data);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
     return (
         <header className={cx('wrapper', currentUser ? 'height1' : 'height2')}>
             <div className={cx('inner')}>
-                <Link to={config.routes.home} className={cx('logo-link')}>
+                <Link to={config.routes.home} className={cx('logo-link')} onClick={() => setValue(-1)}>
                     <img src="https://spiderum.com/assets/icons/wideLogo.png" alt="spiderum" width="140" />
                 </Link>
 
@@ -134,80 +137,6 @@ function Header() {
             </div>
 
             {currentUser ? (
-                // <div className={cx('header__menu')}>
-                //     <div className={cx('header__menu-category')}>
-                //         <div className={cx('header__menu-category-wrapper')}>
-                //             <div className={cx('header__menu-category-icon', 'left')} onClick={scrollLeft}>
-                //                 <FontAwesomeIcon icon={faChevronLeft} />
-                //             </div>
-                //             <div className={cx('header__menu-navbar')} ref={listRef}>
-                //                 {/* <ul className="header__menu-list" ref={listRef}>
-                //        {categorise.data.map((e, i) => (
-                //          <li key={i._id} className="header__menu-item">
-                //            <Link
-                //              to={`/category/${e.slug}`}
-                //              className="header__menu-link"
-                //            >
-                //              {e.name}
-                //            </Link>
-                //          </li>
-                //        ))}
-                //      </ul> */}
-                //                 <ul className={cx('header__menu-list')}>
-                //                     <li className={cx('header__menu-item')}>
-                //                         <Link to={`/category`} className={cx('header__menu-link')}>
-                //                             QUAN ĐIỂM - TRANH LUẬN
-                //                         </Link>
-                //                     </li>
-                //                     <li className={cx('header__menu-item')}>
-                //                         <Link to={`/category`} className={cx('header__menu-link')}>
-                //                             KHOA HỌC - CÔNG NGHỆ
-                //                         </Link>
-                //                     </li>
-                //                     <li className={cx('header__menu-item')}>
-                //                         <Link to={`/category`} className={cx('header__menu-link')}>
-                //                             TÀI CHÍNH
-                //                         </Link>
-                //                     </li>
-                //                     <li className={cx('header__menu-item')}>
-                //                         <Link to={`/category`} className={cx('header__menu-link')}>
-                //                             THỂ THAO
-                //                         </Link>
-                //                     </li>
-                //                     <li className={cx('header__menu-item')}>
-                //                         <Link to={`/category`} className={cx('header__menu-link')}>
-                //                             QUAN ĐIỂM - TRANH LUẬN
-                //                         </Link>
-                //                     </li>
-                //                     <li className={cx('header__menu-item')}>
-                //                         <Link to={`/category`} className={cx('header__menu-link')}>
-                //                             KHOA HỌC - CÔNG NGHỆ
-                //                         </Link>
-                //                     </li>
-                //                     <li className={cx('header__menu-item')}>
-                //                         <Link to={`/category`} className={cx('header__menu-link')}>
-                //                             TÀI CHÍNH
-                //                         </Link>
-                //                     </li>
-                //                     <li className={cx('header__menu-item')}>
-                //                         <Link to={`/category`} className={cx('header__menu-link')}>
-                //                             THỂ THAO
-                //                         </Link>
-                //                     </li>
-                //                     <li className={cx('header__menu-item')}>
-                //                         <Link to={`/category`} className={cx('header__menu-link')}>
-                //                             TÀI CHÍNH
-                //                         </Link>
-                //                     </li>
-                //                 </ul>
-                //             </div>
-                //             <div className={cx('header__menu-category-icon', 'right')} onClick={scrollRight}>
-                //                 <FontAwesomeIcon icon={faChevronRight} />
-                //             </div>
-                //         </div>
-                //     </div>
-                // </div>
-
                 <div className={cx('header__menu')}>
                     <Tabs
                         value={value}
@@ -222,14 +151,17 @@ function Header() {
                             },
                         }}
                     >
-                        <CustomTab label="TÀI CHÍNH" component={Link} to="/category/tai-chinh" />
+                        {categories.map((category, index) => (
+                              <CustomTab key={index} label={category.categoryName} component={Link} to={`/category/${category.slug}`} />
+                        ))}
+                        {/* <CustomTab label="TÀI CHÍNH" component={Link} to="/category/tai-chinh" />
                         <CustomTab label="QUAN ĐIỂM TRANH LUẬN" component={Link} to="/category/quan-diem-tranh-luan" />
                         <CustomTab label="KHOA HỌC - CÔNG NGHỆ" component={Link} to="/category/khoa-hoc-cong-nghe" />
                         <CustomTab label="THỂ THAO" component={Link} to="/category/the-thao" />
                         <CustomTab label="TÀI CHÍNH" component={Link} to="/category/tai-chinh" />
                         <CustomTab label="QUAN ĐIỂM TRANH LUẬN" component={Link} to="/category/quan-diem-tranh-luan" />
                         <CustomTab label="KHOA HỌC - CÔNG NGHỆ" component={Link} to="/category/khoa-hoc-cong-nghe" />
-                        <CustomTab label="THỂ THAO" component={Link} to="/category/the-thao" />
+                        <CustomTab label="THỂ THAO" component={Link} to="/category/the-thao" /> */}
                     </Tabs>
                 </div>
             ) : (

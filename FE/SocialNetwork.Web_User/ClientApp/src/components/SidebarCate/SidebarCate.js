@@ -9,19 +9,18 @@ import styles from './SidebarCate.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Sidebar() {
+function Sidebar({category}) {
     const d = new Date();
     const [isFollow, setIsFollow] = useState(false);
 
     return (
         <div className={cx('adv')}>
             <div className={cx('adv__policy', 'box-shadow')}>
-                <div className={cx('adv__policy-title')}>QUAN ĐIỂM - TRANH LUẬN</div>
+                <div className={cx('adv__policy-title')}>{category.categoryName}</div>
                 <div className={cx('adv__policy-content')}>
                     <p className={cx('widget-title')}>Nội dung cho phép</p>
                     <p className={cx('widget-content')}>
-                        Các nội dung thể hiện góc nhìn, quan điểm đa chiều về các vấn đề kinh tế, văn hoá – xã hội trong
-                        và ngoài nước.
+                       {category.contentAllowed}
                     </p>
                     <p className={cx('widget-title')}>Quy định</p>
                     <ul className={cx('sidebar__policy-menu')}>
