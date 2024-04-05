@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocialNetwork.Infrastructure.Repositories.Post
+namespace SocialNetwork.Infrastructure.Repositories.Category
 {
-    public interface IPostRepository : IAsyncRepository<PostEntity>
+    public interface ICategoryRepository : IAsyncRepository<CategoryEntity>
     {
     }
 }

@@ -16,6 +16,8 @@ namespace SocialNetwork.Domain.Entities
         public string CategoryName { get; set; }
         public string ContentAllowed { get; set; } = "";
         public string CoverImagePath { get; set; } = "";
+        [RegularExpression(@"^[a-z0-9-]*$")]
+        public string Slug { set; get; } = "";
 
         public ICollection<PostEntity> Posts { get; set; }
     }
