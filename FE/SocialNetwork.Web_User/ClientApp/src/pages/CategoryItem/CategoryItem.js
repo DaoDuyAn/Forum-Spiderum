@@ -20,7 +20,7 @@ function CategoryItem() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get(`https://localhost:44379/api/v1/Category/${slug}`);
+                const response = await axios.get(`https://localhost:44379/api/v1/Category/slug/${slug}`);
                 const data = response.data;
 
                 setCategory(data);
@@ -40,10 +40,9 @@ function CategoryItem() {
     return (
         <main className={cx('mt-[20px]')}>
             <header className={cx('category__header')}>
-                <div
-                    className={cx('category__header-background')}
-                    style={{ backgroundImage: `url("https://spiderum.com/assets/images/categories/laptop-min.jpg")` }}
-                ></div>
+                <div>
+                    <img className={cx('category__header-background')} src={category.coverImagePath} alt="?"></img>
+                </div>
                 <div className={cx('category__header-container')}>
                     <div className={cx('category__header-info')}>
                         <p className={cx('category__header-title')}>{category.categoryName}</p>

@@ -83,10 +83,10 @@ function Filter() {
                                 <div className={cx('filter__content-details')}>
                                     <div className={cx('grid')}>
                                         <PostItem key={1} />
-                                        <PostItem key={1} />
-                                        <PostItem key={1} />
-                                        <PostItem key={1} />
-                                        <PostItem key={1} />
+                                        <PostItem key={2} />
+                                        <PostItem key={3} />
+                                        <PostItem key={4} />
+                                        <PostItem key={5} />
                                     </div>
                                 </div>
                             </div>

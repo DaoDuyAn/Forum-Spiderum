@@ -27,8 +27,21 @@ const cx = classNames.bind(styles);
 
 function Header() {
     const currentUser = true;
-    const [value, setValue] = useState(-1);
+    const [value, setValue] = useState(parseInt(localStorage.getItem('activeTab')) ?? -1);
     const [categories, setCategories] = useState([]);
+
+    
+    // useEffect(() => {
+    //     const storedValue = localStorage.getItem('activeTab');
+    //     console.log(storedValue);
+    //     if (storedValue !== null) {
+    //         setValue(parseInt(storedValue));
+    //     }
+    // }, []);
+
+    useEffect(() => {
+        localStorage.setItem('activeTab', JSON.stringify(value));
+    }, [value]);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -154,14 +167,7 @@ function Header() {
                         {categories.map((category, index) => (
                               <CustomTab key={index} label={category.categoryName} component={Link} to={`/category/${category.slug}`} />
                         ))}
-                        {/* <CustomTab label="TÀI CHÍNH" component={Link} to="/category/tai-chinh" />
-                        <CustomTab label="QUAN ĐIỂM TRANH LUẬN" component={Link} to="/category/quan-diem-tranh-luan" />
-                        <CustomTab label="KHOA HỌC - CÔNG NGHỆ" component={Link} to="/category/khoa-hoc-cong-nghe" />
-                        <CustomTab label="THỂ THAO" component={Link} to="/category/the-thao" />
-                        <CustomTab label="TÀI CHÍNH" component={Link} to="/category/tai-chinh" />
-                        <CustomTab label="QUAN ĐIỂM TRANH LUẬN" component={Link} to="/category/quan-diem-tranh-luan" />
-                        <CustomTab label="KHOA HỌC - CÔNG NGHỆ" component={Link} to="/category/khoa-hoc-cong-nghe" />
-                        <CustomTab label="THỂ THAO" component={Link} to="/category/the-thao" /> */}
+                        
                     </Tabs>
                 </div>
             ) : (
