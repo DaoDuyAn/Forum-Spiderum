@@ -14,9 +14,11 @@ namespace SocialNetwork.Infrastructure.Repositories
     public class RepositoryBase<T> : IAsyncRepository<T> where T : class
     {
         private readonly DbSet<T> _dbSet;
+        private readonly SocialNetworkDbContext _dbContext;
 
         public RepositoryBase(SocialNetworkDbContext dbContext)
         {
+            _dbContext = dbContext;
             _dbSet = dbContext.Set<T>();
         }
 
@@ -24,15 +26,17 @@ namespace SocialNetwork.Infrastructure.Repositories
         public async Task<T> AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
 
             return entity;
         }
 
-        public Task<bool> DeleteAsync(T entity)
+        public async Task<bool> DeleteAsync(T entity)
         {
-            _dbSet.Remove(entity);
+             _dbSet.Remove(entity);
+            await _dbContext.SaveChangesAsync();
 
-            return Task.FromResult(true);
+            return await Task.FromResult(true);
         }
         public async Task<List<T>> ListAsync(Expression<Func<T, bool>> expression)
         {
@@ -52,6 +56,7 @@ namespace SocialNetwork.Infrastructure.Repositories
         public async Task<T> UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
+            _dbContext.SaveChangesAsync();
             return await Task.FromResult(entity);
         }
     }

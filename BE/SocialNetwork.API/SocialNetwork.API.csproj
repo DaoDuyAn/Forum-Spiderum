@@ -11,12 +11,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
+    <ProjectReference Include="..\SocialNetwork.Domain\SocialNetwork.Domain.csproj" />
+    <ProjectReference Include="..\SocialNetwork.Infrastructure\SocialNetwork.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SocialNetwork.Domain\SocialNetwork.Domain.csproj" />
-    <ProjectReference Include="..\SocialNetwork.Infrastructure\SocialNetwork.Infrastructure.csproj" />
+    <Folder Include="wwwroot\images\categories\" />
   </ItemGroup>
 
 </Project>
