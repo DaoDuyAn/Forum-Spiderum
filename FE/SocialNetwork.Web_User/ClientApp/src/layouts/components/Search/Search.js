@@ -2,17 +2,16 @@ import { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faSpinner, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
+import { Link } from 'react-router-dom';
 
 // import * as searchServices from '~/services/searchService';
 import config from '~/config';
 import styles from './Search.module.scss';
-import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function Search() {
     const [searchValue, setSearchValue] = useState('');
-
     const [loading, setLoading] = useState(false);
 
     const inputRef = useRef();
@@ -46,6 +45,16 @@ function Search() {
         }
     };
 
+    const handleSearch = () => {
+        window.location.href = `/search?q=${encodeURIComponent(searchValue)}&type=post`;
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
     return (
         // Using a wrapper <div> or <span> tag around the reference element solves this
         // by creating a new parentNode context.
@@ -57,6 +66,7 @@ function Search() {
                     placeholder="Tìm kiếm theo chủ đề hoặc tên người dùng"
                     spellCheck={false}
                     onChange={handleChange}
+                    onKeyDown={handleKeyDown}
                 />
                 {!!searchValue && !loading && (
                     <button className={cx('clear')} onClick={handleClear}>
@@ -64,7 +74,7 @@ function Search() {
                     </button>
                 )}
                 {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
-                <Link to="/search?q=null&type=post">
+                <Link to={`/search?q=${encodeURIComponent(searchValue)}&type=post`}>
                     <button className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()}>
                         <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </button>

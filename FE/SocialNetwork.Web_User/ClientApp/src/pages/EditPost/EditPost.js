@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState, useEffect } from 'react';
+import axios from 'axios';
 import EditorJS from '@editorjs/editorjs';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,7 +13,9 @@ const cx = classNames.bind(styles);
 
 function EditPost() {
     const refEdit = useRef();
+
     const [editor, setEditor] = useState({});
+    const [categories, setCategories] = useState([]);
     const [visible, setVisible] = useState(false);
     const [data, setData] = useState({});
     const [content, setContent] = useState(null);
@@ -20,13 +23,27 @@ function EditPost() {
 
     // const [dataPost, setDataPost] = useState({});
     const [dataPost, setDataPost] = useState({
-        title: 'Title',
-        description: 'Description',
+        title: 'NHẬP MÔN CHO NGƯỜI MỚI ĐẠP XE',
+        description: 'Từ trải nghiệm của một người đạp được 1000 km',
         category: {
-            _id: '1',
-            name: 'Category',
+            id: 'a7b7fd22-97f7-4ae0-8f11-7fe83c22d812',
         },
     });
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get(`https://localhost:44379/api/v1/Category`);
+                const data = response.data;
+
+                setCategories(data);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     useEffect(() => {
         const postData = {
@@ -34,17 +51,17 @@ function EditPost() {
                 {
                     type: 'header',
                     data: {
-                        text: "nội <b>dung</b>",
-                        level: 2,
+                        text: '1, Những thứ mình cần',
+                        level: 1,
                     },
                 },
                 {
                     type: 'image',
                     data: {
                         file: {
-                            url: 'https://images.spiderum.com/sp-images/6551d740e46b11eeb07a0149184cedb1.png',
+                            url: 'https://images.spiderum.com/sp-images/8390ed30807b11eeb970ebf53e81c32f.jpeg',
                         },
-                        caption: 'Caption 1',
+                        caption: 'Cre: Pinterest',
                         withBorder: false,
                         withBackground: false,
                         stretched: true,
@@ -53,7 +70,7 @@ function EditPost() {
                 {
                     type: 'paragraph',
                     data: {
-                        text: 'Your post content here',
+                        text: '- Đương nhiên đầu tiên là một chiếc xe đạp rồi ^^. Hmm có đa dạng thể loại mà bạn có thể chọn mua với phân khúc giá khác nhau, tùy vào nhu cầu và tài chính của bạn. Mình thì chọn xe tầm 5 triệu là phù hợp với mình. ',
                     },
                 },
                 {
@@ -63,6 +80,17 @@ function EditPost() {
                             url: 'https://images.spiderum.com/sp-images/0fe61000efec11ee8536970f721d609f.png',
                         },
                         caption: 'Caption 2',
+                        withBorder: false,
+                        withBackground: false,
+                        stretched: true,
+                    },
+                }, {
+                    type: 'image',
+                    data: {
+                        file: {
+                            url: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
+                        },
+                        caption: 'Caption 3',
                         withBorder: false,
                         withBackground: false,
                         stretched: true,
@@ -110,7 +138,6 @@ function EditPost() {
         e.preventDefault();
     }, []);
 
-  
     const onSave = (e) => {
         e.preventDefault();
         console.log('content: ' + data);
@@ -163,28 +190,16 @@ function EditPost() {
                                             className={cx('modal__category-select')}
                                             onChange={(e) => setData({ ...data, category: e.target.value })}
                                         >
-                                            {/* <option
+                                            {categories.map((e, i) => (
+                                                <option
+                                                    value={e.id}
+                                                    key={e.i}
                                                     className={cx('modal__category-option')}
-                                                    value={dataPost.category._id}
-                                                    key={dataPost.category._id}
+                                                    selected={e.id === dataPost.category.id ? 'selected' : ''}
                                                 >
-                                                    {dataPost.category.name}
-                                                </option> */}
-                                            <option value={1} key={1} className={cx('modal__category-option')}>
-                                                Thể thao
-                                            </option>
-                                            {/* {categorise.data.map((e, i) => (
-                                                    <option
-                                                        value={e._id}
-                                                        key={e._id}
-                                                        className={cx('modal__category-option')}
-                                                    >
-                                                        {e.name}
-                                                    </option>
-                                                ))} */}
-                                            <option value={2} key={2} className={cx('modal__category-option')}>
-                                                Chính trị
-                                            </option>
+                                                    {e.categoryName}
+                                                </option>
+                                            ))}
                                         </select>
                                         <div className={cx('modal__category-icon')}>
                                             <FontAwesomeIcon

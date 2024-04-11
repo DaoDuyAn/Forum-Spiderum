@@ -1,12 +1,12 @@
-import { useState, useCallback } from 'react';
+    import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 
-import styles from './AuthRegister.module.scss';
+import styles from '../AuthRegister/AuthRegister.module.scss';
 
 const cx = classNames.bind(styles);
 
-function AuthRegister() {
+function ForgotPassword() {
     const [email, setEMail] = useState({});
     const [visible, setVisible] = useState(true);
     const [messages, setMessages] = useState(null);
@@ -28,15 +28,15 @@ function AuthRegister() {
     return (
         <>
             {messages ? (
-                <div className={cx('alert-auth')}>
+                <div className={cx('alert-container')}>
                     <div className={cx('alert-mess', err ? 'err' : '')}>
-                        <div>{messages} </div>
+                        <div>{messages}</div>
                     </div>
                 </div>
             ) : (
                 <></>
             )}
-
+            
             <div className={cx('auth')}>
                 <div className={cx('auth__container')}>
                     <div className={cx('auth__content')}>
@@ -50,7 +50,7 @@ function AuthRegister() {
                         </div>
 
                         <div className={cx('auth__register')}>
-                            <p className={cx('auth__register-title')}>Đăng ký bằng email</p>
+                            <p className={cx('auth__register-tilte')}>Vui lòng nhập địa chỉ email của bạn để được cấp lại mật khẩu</p>
                             <form className={cx('auth__register-email')} onSubmit={handleSubmit}>
                                 <div className={cx('auth__register-email-sending')}>
                                     <input
@@ -64,7 +64,7 @@ function AuthRegister() {
                                     <div className={cx('auth__register-email-send-otp')}>
                                         <p>Thư xác nhận sẽ được gửi vào hòm thư của bạn</p>
                                         <button
-                                            className={cx('btn__form')}
+                                            className={cx('btn__form', 'ml-auto')}
                                             type="submit"
                                             value="Gửi"
                                             onClick={handleAuthMail}
@@ -75,38 +75,9 @@ function AuthRegister() {
                                 </div>
                             </form>
 
-                            {visible ? (
-                                <form action="" onSubmit={handleSubmit}>
-                                    <div className={cx('otp')}>
-                                        <input
-                                            className={cx('auth__register-email-input')}
-                                            value={otp.otp}
-                                            onChange={(e) => setOtp({ ...otp, otp: e.target.value })}
-                                            type="text"
-                                            placeholder="Nhập mã OTP tại đây..."
-                                            required
-                                        />
-                                        <button
-                                            className={cx('btn__form', 'mt-[7px]')}
-                                            type="submit"
-                                            onClick={handleSubmitOTP}
-                                        >
-                                            Xác nhận
-                                        </button>
-                                    </div>
-                                </form>
-                            ) : (
-                                <></>
-                            )}
+                           
                         </div>
-                        <div className={cx('auth__back')}>
-                            <p>
-                                <span className={cx('auth__register-tilte')}>Đã có tài khoản? </span>
-                                <Link to="/login" className={cx('auth__back-login')}>
-                                    Đăng nhập
-                                </Link>
-                            </p>
-                        </div>
+             
                     </div>
                 </div>
             </div>
@@ -114,4 +85,4 @@ function AuthRegister() {
     );
 }
 
-export default AuthRegister;
+export default ForgotPassword;

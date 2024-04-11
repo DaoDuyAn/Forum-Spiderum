@@ -15,6 +15,8 @@ import EditPost from '~/pages/EditPost'
 import CategoryItem from '~/pages/CategoryItem'
 import Post from '~/pages/Post'
 import Search from '~/pages/Search'
+import ForgotPassword from '~/pages/ForgotPassword';
+import ResetPassword from '~/pages/ResetPassword';
 
 // Public routes
 const publicRoutes = [
@@ -23,6 +25,8 @@ const publicRoutes = [
     { path: config.routes.login, component: Login, layout: null },
     { path: config.routes.register, component: Register, layout: null },
     { path: config.routes.auth_register, component: AuthRegister, layout: null },
+    { path: config.routes.forgot_password, component: ForgotPassword, layout: null },
+    { path: config.routes.reset_password, component: ResetPassword, layout: null },
     { path: config.routes.settings, component: UserSettings },
     { path: config.routes.create, component: CreatePost, layout: HeaderOnly },
     { path: config.routes.edit, component: EditPost, layout: HeaderOnly },

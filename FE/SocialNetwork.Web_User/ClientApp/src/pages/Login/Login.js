@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import classNames from 'classnames/bind';
 
+import config from '~/config';
 import styles from './Login.module.scss';
 
 const cx = classNames.bind(styles);
@@ -33,6 +34,7 @@ function Login() {
                             name="userName"
                             className={cx('login__form-input')}
                             value={data.userName}
+                            required
                             onChange={(e) => setData({ ...data, userName: e.target.value })}
                         />
                         <input
@@ -41,11 +43,14 @@ function Login() {
                             name="password"
                             className={cx('login__form-input')}
                             value={data.password}
+                            required
                             onChange={(e) => setData({ ...data, password: e.target.value })}
                         />
-                        <button className={cx('login__form-button', 'bg-button')} type="submit" onClick={onSubmit}>
-                            Đăng nhập
-                        </button>
+                        <Link to={config.routes.home}>
+                            <button className={cx('login__form-button', 'bg-button')} type="submit" onClick={onSubmit}>
+                                Đăng nhập
+                            </button>
+                        </Link>
                     </form>
 
                     <p className={cx('login__text')}>Đăng nhập bằng</p>
@@ -61,7 +66,7 @@ function Login() {
                         <p className={cx('login__text', 'link')}>Quên mật khẩu?</p>
                     </Link>
                     <span className={cx('login__text')}>Không có tài khoản?</span>
-                    <Link to="/register">
+                    <Link to="/auth_register">
                         <span className={cx('login__text', 'link')}> Đăng ký ngay</span>
                     </Link>
                 </div>

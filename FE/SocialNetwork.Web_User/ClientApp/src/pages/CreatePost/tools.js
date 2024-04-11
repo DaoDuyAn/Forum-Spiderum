@@ -23,15 +23,21 @@ const Config = () => {
                 config: {
                     uploader: {
                         uploadByFile(file) {
-                            const blob = new Blob([file], { type: file.type });
-                            const blobUrl = URL.createObjectURL(blob);
-
-                            return {
-                                success: 1,
-                                file: {
-                                    url: blobUrl,
-                                },
-                            };
+                            return new Promise((resolve, reject) => {
+                                const reader = new FileReader();
+                                reader.readAsDataURL(file);
+                                reader.onload = () => {
+                                    const base64String = reader.result;
+                                    console.log(base64String);
+                                    resolve({
+                                        success: 1,
+                                        file: {
+                                            url: base64String,
+                                        },
+                                    });
+                                };
+                                reader.onerror = (error) => reject(error);
+                            });
                         },
                     },
                 },

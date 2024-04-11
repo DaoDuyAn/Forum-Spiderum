@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import EditorJS from '@editorjs/editorjs';
 import classNames from 'classnames/bind';
@@ -15,7 +16,7 @@ function CreatePost() {
     const toast = useRef(null);
 
     const [isEditorInitialized, setIsEditorInitialized] = useState(false);
-
+    const [categories, setCategories] = useState([]);
     const [editor, setEditor] = useState(null);
     const [error, setError] = useState(null);
     const [visible, setVisible] = useState(false);
@@ -32,6 +33,21 @@ function CreatePost() {
             top: 0,
             left: 0,
         });
+    }, []);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get(`https://localhost:44379/api/v1/Category`);
+                const data = response.data;
+
+                setCategories(data);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        fetchCategories();
     }, []);
 
     const onSubmit = useCallback((e) => {
@@ -70,11 +86,10 @@ function CreatePost() {
                     })
                     .catch((error) => {
                         console.log('Saving failed: ', error);
-                   
                     });
             }
         },
-        [visible, editor, data]
+        [visible, editor, data],
     );
 
     const onSave = async (e) => {
@@ -143,18 +158,15 @@ function CreatePost() {
                                                 <option className={cx('modal__category-option')}>
                                                     -- Chọn danh mục --
                                                 </option>
-                                                {/* {categorise.data.map((e, i) => (
+                                                {categories.map((e, i) => (
                                                     <option
-                                                        value={e._id}
-                                                        key={e._id}
+                                                        value={e.id}
+                                                        key={e.i}
                                                         className={cx('modal__category-option')}
                                                     >
-                                                        {e.name}
+                                                        {e.categoryName}
                                                     </option>
-                                                ))} */}
-                                                <option value={1} key={1} className={cx('modal__category-option')}>
-                                                    Thể thao
-                                                </option>
+                                                ))}
                                             </select>
                                             <div className={cx('modal__category-icon')}>
                                                 <FontAwesomeIcon
