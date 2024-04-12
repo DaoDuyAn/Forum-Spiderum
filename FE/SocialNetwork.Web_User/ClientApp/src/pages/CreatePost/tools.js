@@ -28,7 +28,7 @@ const Config = () => {
                                 reader.readAsDataURL(file);
                                 reader.onload = () => {
                                     const base64String = reader.result;
-                                    console.log(base64String);
+                                    // console.log(base64String);
                                     resolve({
                                         success: 1,
                                         file: {

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import EditorJS from '@editorjs/editorjs';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,6 +12,7 @@ import styles from './CreatePost.module.scss';
 const cx = classNames.bind(styles);
 
 function CreatePost() {
+    const navigate = useNavigate();
     const refEdit = useRef();
     const toast = useRef(null);
 
@@ -25,7 +26,7 @@ function CreatePost() {
         title: '',
         content: '',
         description: '',
-        category: '123a123',
+        categoryId: '',
     });
 
     useEffect(() => {
@@ -80,8 +81,8 @@ function CreatePost() {
                 editor
                     .save()
                     .then((outputData) => {
-                        setData({ ...data, content: outputData });
-                        console.log('Dữ liệu content:', outputData);
+                        setData({ ...data, content: JSON.stringify(outputData) });
+                        //console.log('Dữ liệu content:', outputData);
                         setVisible(!visible);
                     })
                     .catch((error) => {
@@ -94,7 +95,23 @@ function CreatePost() {
 
     const onSave = async (e) => {
         e.preventDefault();
-        console.dir(data);
+
+        const payload = {
+            ...data,
+            userId: 'bf33c1a4-8330-4c60-ba0b-2a91f6fb95bb',
+        };
+
+        console.log(payload.content);
+
+        axios
+            .post('https://localhost:44379/api/v1/Post', payload)
+            .then((response) => {
+                console.log(response.data);
+                navigate(`/post/${data.slug}`);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     };
 
     useEffect(() => {
@@ -153,15 +170,15 @@ function CreatePost() {
                                             <select
                                                 id="selected-id"
                                                 className={cx('modal__category-select')}
-                                                onChange={(e) => setData({ ...data, category: e.target.value })}
+                                                onChange={(e) => setData({ ...data, categoryId: e.target.value })}
                                             >
-                                                <option className={cx('modal__category-option')}>
+                                                <option key={0} className={cx('modal__category-option')}>
                                                     -- Chọn danh mục --
                                                 </option>
                                                 {categories.map((e, i) => (
                                                     <option
                                                         value={e.id}
-                                                        key={e.i}
+                                                        key={e.id}
                                                         className={cx('modal__category-option')}
                                                     >
                                                         {e.categoryName}
