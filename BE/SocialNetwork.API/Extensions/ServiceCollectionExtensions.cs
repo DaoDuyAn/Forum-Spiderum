@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialNetwork.API.Services.Category;
+using SocialNetwork.API.Services.Post;
 using SocialNetwork.Domain.Interfaces;
 using SocialNetwork.Infrastructure.EF;
 using SocialNetwork.Infrastructure.Repositories;
 using SocialNetwork.Infrastructure.Repositories.Category;
+using SocialNetwork.Infrastructure.Repositories.Post;
 
 namespace SocialNetwork.API.Extensions
 {
@@ -13,7 +15,8 @@ namespace SocialNetwork.API.Extensions
         {
             return services
                 .AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>))
-                .AddScoped<ICategoryRepository, CategoryRepository>();
+                .AddScoped<ICategoryRepository, CategoryRepository>()
+                .AddScoped<IPostRepository, PostRepository>();
         }
 
         public static IServiceCollection AddDatabase(this IServiceCollection services
@@ -27,7 +30,8 @@ namespace SocialNetwork.API.Extensions
            )
         {
             return services
-                .AddScoped<ICategoryService, CategoryService>();
+                .AddScoped<ICategoryService, CategoryService>()
+                .AddScoped<IPostService, PostService>();
         }
     }
 }

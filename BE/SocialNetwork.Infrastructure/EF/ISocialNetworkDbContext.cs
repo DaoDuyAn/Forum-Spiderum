@@ -17,7 +17,6 @@ namespace SocialNetwork.Infrastructure.EF
         DbSet<FollowerEntity> Followers { get; set; }
         DbSet<FollowingEntity> Followings { get; set; }
         DbSet<UserCategoryFollowingEntity> UserCategoryFollowings { get; set; }
-        DbSet<ImageEntity> Images { get; set; }
         DbSet<LikeEntity> Likes { get; set; }
         DbSet<PostEntity> Posts { get; set; }
         DbSet<RoleEntity> Roles { get; set; }

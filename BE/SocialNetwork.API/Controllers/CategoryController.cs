@@ -16,13 +16,11 @@ namespace SocialNetwork.API.Controllers
         private readonly ICategoryService _service;
         private readonly ILogger<CategoryController> _logger;
 
-
         public CategoryController(ILogger<CategoryController> logger
             , ICategoryService service)
         {
             _service = service;
             _logger = logger;
-
         }
 
         [HttpGet]

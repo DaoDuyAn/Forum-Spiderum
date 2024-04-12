@@ -15,6 +15,7 @@ namespace SocialNetwork.Domain.Entities
         public string Content { get; set; } = "";
         public DateTime CreationDate { get; set; }
         public string ThumbnailImagePath { get; set; } = "";
+        public string Slug { get; set; } = "";
 
         public Guid UserId { get; set; }
         [ForeignKey("UserId")]
@@ -27,7 +28,6 @@ namespace SocialNetwork.Domain.Entities
         public int LikesCount { get; set; }
         public int CommentsCount { get; set; }
         public int SavedCount { get; set; }
-        public ICollection<ImageEntity>? Images { get; set; }
 
     }
 }

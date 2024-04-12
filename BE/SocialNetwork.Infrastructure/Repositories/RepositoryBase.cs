@@ -56,7 +56,7 @@ namespace SocialNetwork.Infrastructure.Repositories
         public async Task<T> UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
             return await Task.FromResult(entity);
         }
     }

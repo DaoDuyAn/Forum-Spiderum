@@ -13,9 +13,9 @@ namespace SocialNetwork.API.Services.Category
         private readonly ICategoryRepository categoryRepo;
         private static IWebHostEnvironment? _hostEnvironment;
 
-        public CategoryService(ICategoryRepository roomRepository, IWebHostEnvironment hostEnvironment)
+        public CategoryService(ICategoryRepository categoryRepo, IWebHostEnvironment hostEnvironment)
         {
-            this.categoryRepo = roomRepository;
+            this.categoryRepo = categoryRepo;
             _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException();
         }
 
