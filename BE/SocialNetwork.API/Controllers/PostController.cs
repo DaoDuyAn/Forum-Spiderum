@@ -33,7 +33,28 @@ namespace SocialNetwork.API.Controllers
 
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
+        }
 
+        [HttpGet("slug/{slug}")]
+        public async Task<IActionResult> GetPostBySlug(string slug)
+        {
+            try
+            {
+                var post = await _service.GetPostBySlugAsync(slug);
+
+                if (post == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(post);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting the post by slug.");
+
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

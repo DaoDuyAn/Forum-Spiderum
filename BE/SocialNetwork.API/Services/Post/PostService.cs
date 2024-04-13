@@ -221,5 +221,32 @@ namespace SocialNetwork.API.Services.Post
         {
             throw new NotImplementedException();
         }
+
+        public async Task<PostEntity> GetPostBySlugAsync(string slug)
+        {
+            var post = await postRepo.GetAsync(c => c.Slug == slug);
+
+            post.ThumbnailImagePath = ImageToBase64(post.ThumbnailImagePath);
+
+            var jsonString = post.Content;
+            string pattern = @"(""url"":\s*""([^""]+)"")";
+
+            MatchCollection matches = Regex.Matches(jsonString, pattern);
+
+            for (int i = 0; i < matches.Count; i++)
+            {
+                Match match = matches[i];
+                string originalurl = match.Groups[2].Value;
+
+                string imgpath = ImageToBase64(originalurl);
+
+                jsonString = jsonString.Replace(originalurl, imgpath);
+
+            }
+
+            post.Content = jsonString;
+
+            return post;
+        }
     }
 }

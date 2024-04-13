@@ -7,6 +7,7 @@ namespace SocialNetwork.API.Services.Post
     {
         Task<PostEntity> AddPostAsync(AddPostRequest model);
         Task<PostEntity> UpdatePostAsync(UpdatePostRequest model);
+        Task<PostEntity> GetPostBySlugAsync(string slug);
 
 
     }
