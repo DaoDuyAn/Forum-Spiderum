@@ -31,13 +31,17 @@ namespace SocialNetwork.API.Services.Post
 
             string postSlug = AppUtilities.GenerateSlug(request.Title) + "-" + guidParts[0];
 
-            string folderPath = CreateFolder(postSlug);
-
             string jsonString = request.Content;
             // Define regular expression pattern to match URLs
             string pattern = @"(""url"":\s*""([^""]+)"")";
 
             MatchCollection matches = Regex.Matches(jsonString, pattern);
+
+            if (matches.Count > 0)
+            {
+                // Tạo thư mục để lưu ảnh cho bài viết
+                string folderPath = CreateFolder(postSlug);
+            }
 
             for (int i = 0; i < matches.Count; i++)
             {
@@ -230,6 +234,13 @@ namespace SocialNetwork.API.Services.Post
             var post = await postRepo.GetAsync(c => c.Id == Id);
             if (post != null)
             {
+                // Xóa thư mục ảnh của bài viết (nếu có)
+                string imagePath = Path.Combine(_hostEnvironment.WebRootPath, "images", "posts", post.Slug);
+                if (Directory.Exists(imagePath))
+                {
+                    Directory.Delete(imagePath, true);
+                }
+
                 return await postRepo.DeleteAsync(post);
             }
 
@@ -273,7 +284,8 @@ namespace SocialNetwork.API.Services.Post
 
             var response = new GetPostBySlugResponse
             {
-                PostInfo = new PostInfo {
+                PostInfo = new PostInfo
+                {
                     Id = post.Id,
                     Title = post.Title,
                     Description = post.Description,
@@ -282,7 +294,7 @@ namespace SocialNetwork.API.Services.Post
                     ThumbnailImagePath = post.ThumbnailImagePath,
                     Slug = post.Slug,
                     LikesCount = post.LikesCount,
-                    CommentsCount =post.CommentsCount,
+                    CommentsCount = post.CommentsCount,
                     SavedCount = post.SavedCount
                 },
                 UserInfo = new UserInfo

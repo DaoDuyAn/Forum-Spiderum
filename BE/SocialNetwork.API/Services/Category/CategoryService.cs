@@ -88,6 +88,13 @@ namespace SocialNetwork.API.Services.Category
             var cate = await categoryRepo.GetAsync(c => c.Id == Id);
             if (cate != null)
             {
+                // Xóa ảnh của danh mục (nếu có)
+                string imagePath = cate.CoverImagePath;
+                if (!string.IsNullOrEmpty(imagePath) && File.Exists(imagePath))
+                {
+                    File.Delete(imagePath);
+                }
+
                 return await categoryRepo.DeleteAsync(cate);
             }
 
