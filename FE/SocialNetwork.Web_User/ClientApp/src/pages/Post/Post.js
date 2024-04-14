@@ -1,26 +1,33 @@
-import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as regularHeart, faBookmark as regularBookmark } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart, faBookmark as solidBookmark, faComments } from '@fortawesome/free-solid-svg-icons';
 import Slider from 'react-slick';
+import EditorJS from '@editorjs/editorjs';
 import classNames from 'classnames/bind';
 
 import Comment from '~/components/Comment';
+import { Config } from './tools';
+import config from '~/config';
 import TrendingPosts from '~/components/TrendingPosts';
 import styles from './Post.module.scss';
 
 const cx = classNames.bind(styles);
 
 function Post() {
+    const { slug } = useParams();
+    const navigate = useNavigate();
+
     const inputCmtRef = useRef(null);
     const toast = useRef(null);
 
-    const [posts, setPosts] = useState(null);
     const [isUser, setIsUser] = useState(true);
     const [active, setActive] = useState(true);
-    const [authPost, setAuthPost] = useState({});
+
     const [isSuccess, setIsSuccess] = useState(null);
+    const [response, setResponse] = useState(null);
     const [visiable, setVisiable] = useState(false);
     // const currentUser =
     const [activeCate, setActiveCate] = useState(false);
@@ -28,8 +35,56 @@ function Post() {
     const [isLike, setLike] = useState(true);
     const [likeCount, setLikeCount] = useState(100);
 
+    const [posts, setPosts] = useState(null);
+    const [dataPost, setDataPost] = useState({});
+    const [content, setContent] = useState('');
+    const [authPost, setAuthPost] = useState({});
+    const [categoryPost, setCategoryPost] = useState({});
+
     const [dataComment, setDataComment] = useState({});
     const [comments, setComments] = useState([]);
+
+    useEffect(() => {
+        const fetchPost = async () => {
+            try {
+                const response = await axios.get(`https://localhost:44379/api/v1/Post/slug/${slug}`);
+                const data = response.data;
+
+                setDataPost(data.postInfo);
+                setAuthPost(data.userInfo);
+                setCategoryPost(data.postCategoryInfo);
+                console.log(data);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        fetchPost();
+    }, []);
+
+    useEffect(() => {
+        if (dataPost.content) {
+            const parsedData = JSON.parse(dataPost.content);
+            setContent(parsedData);
+        }
+    }, [dataPost]);
+
+    useEffect(() => {
+        if (content) {
+            const editor = new EditorJS({
+                holder: 'editorjs',
+                readOnly: true,
+                tools: Config,
+                data: content,
+            });
+        }
+    }, [dataPost, content]);
+
+    useEffect(() => {
+        if (dataPost) {
+            document.title = dataPost.title;
+        }
+    }, [dataPost]);
 
     const sliderSettings = {
         slidesToShow: 3,
@@ -45,7 +100,6 @@ function Post() {
             left: 0,
         });
     }, []);
-
 
     const handleClickDelete = () => setVisiable(!visiable);
 
@@ -67,7 +121,28 @@ function Post() {
 
     const handleSubmitComment = (e) => {};
 
-    const handleDelete = (e) => {};
+    const handleDelete = useCallback(
+        async (e) => {
+            e.preventDefault();
+            // const token = localStorage.getItem('token');
+            const option = {
+                method: 'delete',
+                url: `https://localhost:44379/api/v1/Post/id/${dataPost.id}`,
+                // headers: {
+                //     authorization: `Bearer ${token}`,
+                // },
+            };
+            const res = await axios(option);
+            setResponse(res.data);
+        },
+        [dataPost.id],
+    );
+
+    useEffect(() => {
+        if (response) {
+            navigate(config.routes.home);
+        }
+    }, [response]);
 
     return (
         <div>
@@ -85,17 +160,14 @@ function Post() {
                 <div className={cx('post__details-auth')}>
                     <div className={cx('post__details-category')}>
                         <Link to={`/category/a`}>
-                            <span className={cx('post__details-category-name')}>Khoa học - Công nghệ</span>
+                            <span className={cx('post__details-category-name')}>{categoryPost.categoryName}</span>
                         </Link>
                     </div>
                     <div className={cx('post__details-title')}>
-                        <h1>FACEBOOK SẬP, KỸ SƯ FACEBOOK LÀM GÌ?</h1>
+                        <h1>{dataPost.title}</h1>
                     </div>
                     <div className={cx('post__details-desc')}>
-                        <p>
-                            Calvin đang ngồi trên xe bus để tới văn phòng. Hôm nay Menlo Park se se lạnh và âm u. Một
-                            ngày thứ 3 buồn tẻ chẳng khác gì thời tiết...
-                        </p>
+                        <p>{dataPost.description}</p>
                     </div>
                     <div className={cx('post__profile')}>
                         <div className={cx('flex')}>
@@ -111,10 +183,10 @@ function Post() {
                             </div>
                             <div className={cx('post-info')}>
                                 <Link to={`/user/an`}>
-                                    <p className={cx('post-username')}>DaoDuyAn</p>
+                                    <p className={cx('post-username')}>{authPost.userName}</p>
                                 </Link>
                                 <div>
-                                    <p className={cx('post-date-created')}>8/8/2024</p>
+                                    <p className={cx('post-date-created')}>{dataPost.creationDate}</p>
                                 </div>
                             </div>
                         </div>
@@ -135,11 +207,7 @@ function Post() {
 
                 <div className={cx('post__details-content')}>
                     <div className={cx('post__details-content-container')}>
-                        Một keyword xuyên suốt trong tất cả các thành công đó là sự kỷ luật. Self-discipline - Kỷ luật
-                        bản thân là khả năng thúc đẩy bản thân tiến về phía trước, duy trì động lực và hành động, bất kể
-                        bạn đang cảm thấy thế nào, về thể chất hay tinh thần. Nghiên cứu khoa học chỉ ra rằng kỷ luật
-                        bản thân giúp bạn thành công trong học tập và cuộc sống. Một lý do chính khiến cho các bạn tuổi
-                        vị thành niên mất đi tiềm năng trí tuệ là do họ không rèn được tính kỷ luật tự giác.
+                        <div id="editorjs" />
                     </div>
                 </div>
 
@@ -155,7 +223,7 @@ function Post() {
                                     )}
                                 </div>
                             </div>
-                            <span className={cx('value')}>{likeCount} lượt thích</span>
+                            <span className={cx('value')}>{dataPost.likesCount} lượt thích</span>
                         </div>
                     </div>
                     <div className={cx('pull-right')}>
@@ -189,9 +257,9 @@ function Post() {
                                 </div>
                                 <div className={cx('name')}>
                                     <Link to={`/user/an`} className={cx('name-main')}>
-                                        Duy An
+                                        {authPost.fullName}
                                     </Link>
-                                    <p className={cx('post__slug')}>@daoduyan</p>
+                                    <p className={cx('post__slug')}>@{authPost.userName}</p>
                                 </div>
                             </div>
                             <div className={cx('sub-container')}>
@@ -209,16 +277,14 @@ function Post() {
                                 )}
                             </div>
                         </div>
-                        <div className={cx('user-desc')}>
-                            Sự cuộn sóng trong dòng chữ phản ánh đại dương nơi tâm hồn
-                        </div>
+                        <div className={cx('user-desc')}>{authPost.description}</div>
                     </div>
                     <div className={cx('category__item')}>
                         <div className={cx('catergory__info')}>
                             <Link className={cx('name-main')} to={`/category/a`}>
-                                <span>Khoa học - Công nghệ</span>
+                                <span>{categoryPost.categoryName}</span>
                             </Link>
-                            <p className={cx('post__slug')}>/khoa-hoc-cong-nghe</p>
+                            <p className={cx('post__slug')}>/{categoryPost.slug}</p>
                         </div>
                         {activeCate ? (
                             <button className={cx('btn-fl', 'followed')} onClick={handleUnFollowCategory}>
@@ -310,7 +376,7 @@ function Post() {
                                 Sẽ không có cách nào hoàn tác lại hành động này. Bạn có chắc chắn muốn xóa bài viết?
                             </main>
                             <footer className={cx('modal__delete-footer')}>
-                            <button onClick={handleClickDelete} className={cx('modal__delete-button', 'cancel')}>
+                                <button onClick={handleClickDelete} className={cx('modal__delete-button', 'cancel')}>
                                     Hủy
                                 </button>
                                 <button onClick={handleDelete} className={cx('modal__delete-button', 'delete')}>
