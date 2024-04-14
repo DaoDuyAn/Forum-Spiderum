@@ -107,7 +107,7 @@ function CreatePost() {
             .post('https://localhost:44379/api/v1/Post', payload)
             .then((response) => {
                 console.log(response.data);
-                navigate(`/post/${data.slug}`);
+                navigate(`/post/${response.data.slug}`);
             })
             .catch((error) => {
                 console.error(error);

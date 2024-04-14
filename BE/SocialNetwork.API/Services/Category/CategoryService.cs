@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
-using SocialNetwork.API.DTOs;
 using SocialNetwork.Domain.Entities;
 using SocialNetwork.Infrastructure.Repositories.Category;
 using SocialNetwork.API.Utilities;
 using System;
+using SocialNetwork.API.DTOs;
 
 namespace SocialNetwork.API.Services.Category
 {

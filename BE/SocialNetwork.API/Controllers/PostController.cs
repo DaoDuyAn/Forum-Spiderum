@@ -40,7 +40,8 @@ namespace SocialNetwork.API.Controllers
         {
             try
             {
-                var post = await _service.GetPostBySlugAsync(slug);
+                var request = new GetPostBySlugRequest { Slug = slug };
+                var post = await _service.GetPostBySlugAsync(request);
 
                 if (post == null)
                 {
@@ -55,6 +56,12 @@ namespace SocialNetwork.API.Controllers
 
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
+        }
+
+        [HttpDelete("id/{Id}")]
+        public async Task<bool> DeletePostById(string Id)
+        {
+            return await _service.DeletePostAsync(Guid.Parse(Id));
         }
     }
 }

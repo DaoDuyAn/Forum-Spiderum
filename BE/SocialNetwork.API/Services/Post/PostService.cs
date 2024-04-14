@@ -3,6 +3,7 @@ using SocialNetwork.API.DTOs;
 using SocialNetwork.API.Utilities;
 using SocialNetwork.Domain.Entities;
 using SocialNetwork.Infrastructure.Repositories.Category;
+using SocialNetwork.Infrastructure.Repositories.Data;
 using SocialNetwork.Infrastructure.Repositories.Post;
 using System.Text.RegularExpressions;
 
@@ -11,26 +12,28 @@ namespace SocialNetwork.API.Services.Post
     public class PostService : IPostService
     {
         private readonly IPostRepository postRepo;
+        private readonly IDataContext dataContext;
         private static IWebHostEnvironment? _hostEnvironment;
 
-        public PostService(IPostRepository postRepo, IWebHostEnvironment hostEnvironment)
+        public PostService(IPostRepository postRepo, IDataContext dataContext, IWebHostEnvironment hostEnvironment)
         {
             this.postRepo = postRepo;
+            this.dataContext = dataContext;
             _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException();
         }
 
-        public async Task<PostEntity> AddPostAsync(AddPostRequest model)
+        public async Task<PostEntity> AddPostAsync(AddPostRequest request)
         {
             string thumbnailImagePath = "";
 
             Guid guid = Guid.NewGuid();
             string[] guidParts = guid.ToString().Split('-');
 
-            string postSlug = AppUtilities.GenerateSlug(model.Title) + "-" + guidParts[0];
+            string postSlug = AppUtilities.GenerateSlug(request.Title) + "-" + guidParts[0];
 
             string folderPath = CreateFolder(postSlug);
 
-            string jsonString = model.Content;
+            string jsonString = request.Content;
             // Define regular expression pattern to match URLs
             string pattern = @"(""url"":\s*""([^""]+)"")";
 
@@ -54,12 +57,12 @@ namespace SocialNetwork.API.Services.Post
             // Tạo entity mới
             var newPost = new PostEntity
             {
-                Title = model.Title,
+                Title = request.Title,
                 Content = jsonString,
                 Slug = postSlug,
-                Description = model.Description,
-                UserId = Guid.Parse(model.UserId),
-                CategoryId = Guid.Parse(model.CategoryId),
+                Description = request.Description,
+                UserId = Guid.Parse(request.UserId),
+                CategoryId = Guid.Parse(request.CategoryId),
                 CreationDate = DateTime.Now,
                 ThumbnailImagePath = thumbnailImagePath
             };
@@ -217,16 +220,38 @@ namespace SocialNetwork.API.Services.Post
 
         #endregion
 
-        public async Task<PostEntity> UpdatePostAsync(UpdatePostRequest model)
+        public async Task<PostEntity> UpdatePostAsync(UpdatePostRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<PostEntity> GetPostBySlugAsync(string slug)
+        public async Task<bool> DeletePostAsync(Guid Id)
         {
-            var post = await postRepo.GetAsync(c => c.Slug == slug);
+            var post = await postRepo.GetAsync(c => c.Id == Id);
+            if (post != null)
+            {
+                return await postRepo.DeleteAsync(post);
+            }
 
-            post.ThumbnailImagePath = ImageToBase64(post.ThumbnailImagePath);
+            return false;
+        }
+
+        public async Task<GetPostBySlugResponse> GetPostBySlugAsync(GetPostBySlugRequest request)
+        {
+            var post = await postRepo.GetAsync(p => p.Slug == request.Slug);
+            var cate = await dataContext.CategoryRepo.GetAsync(c => c.Id == post.CategoryId);
+            var user = await dataContext.UserRepo.GetAsync(u => u.Id == post.UserId);
+
+
+            if (post.ThumbnailImagePath != "")
+            {
+                post.ThumbnailImagePath = ImageToBase64(post.ThumbnailImagePath);
+            }
+
+            if (user.AvatarImagePath != "")
+            {
+                user.AvatarImagePath = ImageToBase64(user.AvatarImagePath);
+            }
 
             var jsonString = post.Content;
             string pattern = @"(""url"":\s*""([^""]+)"")";
@@ -246,7 +271,35 @@ namespace SocialNetwork.API.Services.Post
 
             post.Content = jsonString;
 
-            return post;
+            var response = new GetPostBySlugResponse
+            {
+                PostInfo = new PostInfo {
+                    Id = post.Id,
+                    Title = post.Title,
+                    Description = post.Description,
+                    Content = post.Content,
+                    CreationDate = post.CreationDate.ToString("dd/MM/yyyy"),
+                    ThumbnailImagePath = post.ThumbnailImagePath,
+                    Slug = post.Slug,
+                    LikesCount = post.LikesCount,
+                    CommentsCount =post.CommentsCount,
+                    SavedCount = post.SavedCount
+                },
+                UserInfo = new UserInfo
+                {
+                    UserName = user.UserName,
+                    FullName = user.FullName,
+                    Description = user.Description,
+                    AvatarImagePath = user.AvatarImagePath
+                },
+                PostCategoryInfo = new PostCategoryInfo
+                {
+                    CategoryName = cate.CategoryName,
+                    Slug = cate.Slug,
+                }
+            };
+
+            return response;
         }
     }
 }

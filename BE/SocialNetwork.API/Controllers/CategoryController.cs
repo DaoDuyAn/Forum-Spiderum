@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
-using SocialNetwork.API.DTOs;
 using SocialNetwork.API.Services.Category;
 using SocialNetwork.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
+using SocialNetwork.API.DTOs;
 
 namespace SocialNetwork.API.Controllers
 {

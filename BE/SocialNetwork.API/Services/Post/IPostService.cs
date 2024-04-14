@@ -5,10 +5,10 @@ namespace SocialNetwork.API.Services.Post
 {
     public interface IPostService
     {
-        Task<PostEntity> AddPostAsync(AddPostRequest model);
-        Task<PostEntity> UpdatePostAsync(UpdatePostRequest model);
-        Task<PostEntity> GetPostBySlugAsync(string slug);
-
+        Task<PostEntity> AddPostAsync(AddPostRequest request);
+        Task<PostEntity> UpdatePostAsync(UpdatePostRequest request);
+        Task<GetPostBySlugResponse> GetPostBySlugAsync(GetPostBySlugRequest request);
+        Task<bool> DeletePostAsync(Guid id);
 
     }
 }

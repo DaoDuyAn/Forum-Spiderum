@@ -1,7 +1,7 @@
-﻿namespace SocialNetwork.API.DTOs
+﻿namespace SocialNetwork.API.DTOs.Category
 {
     public class UpdateCategory
     {
-       
+
     }
 }

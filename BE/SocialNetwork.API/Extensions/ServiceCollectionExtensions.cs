@@ -5,7 +5,9 @@ using SocialNetwork.Domain.Interfaces;
 using SocialNetwork.Infrastructure.EF;
 using SocialNetwork.Infrastructure.Repositories;
 using SocialNetwork.Infrastructure.Repositories.Category;
+using SocialNetwork.Infrastructure.Repositories.Data;
 using SocialNetwork.Infrastructure.Repositories.Post;
+using SocialNetwork.Infrastructure.Repositories.User;
 
 namespace SocialNetwork.API.Extensions
 {
@@ -16,7 +18,9 @@ namespace SocialNetwork.API.Extensions
             return services
                 .AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>))
                 .AddScoped<ICategoryRepository, CategoryRepository>()
-                .AddScoped<IPostRepository, PostRepository>();
+                .AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<IPostRepository, PostRepository>()
+                .AddScoped<IDataContext, DataContext>();
         }
 
         public static IServiceCollection AddDatabase(this IServiceCollection services
