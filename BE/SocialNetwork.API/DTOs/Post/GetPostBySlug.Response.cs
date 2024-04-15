@@ -26,6 +26,7 @@ namespace SocialNetwork.API.DTOs
 
     public class UserInfo
     {
+        public Guid Id { get; set; }
         public string UserName { get; set; } = "";
         public string FullName { get; set; } = "";
         public string Description { get; set; } = "";
@@ -34,6 +35,7 @@ namespace SocialNetwork.API.DTOs
 
     public class PostCategoryInfo
     {
+        public Guid Id { get; set; }
         public string CategoryName { get; set; }
         public string Slug { set; get; } = "";
     }

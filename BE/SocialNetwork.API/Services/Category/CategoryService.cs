@@ -5,6 +5,7 @@ using SocialNetwork.Infrastructure.Repositories.Category;
 using SocialNetwork.API.Utilities;
 using System;
 using SocialNetwork.API.DTOs;
+using SocialNetwork.API.DTOs.Category;
 
 namespace SocialNetwork.API.Services.Category
 {
@@ -19,18 +20,24 @@ namespace SocialNetwork.API.Services.Category
             _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException();
         }
 
-        public async Task<CategoryEntity> GetCategoryBySlugAsync(string slug)
+        public async Task<CategoryEntity> GetCategoryBySlugAsync(GetCategoryBySlugRequest request)
         {
-            var cate = await categoryRepo.GetAsync(c => c.Slug == slug);
-            cate.CoverImagePath = ImageToBase64(cate.CoverImagePath);
+            var cate = await categoryRepo.GetAsync(c => c.Slug == request.Slug);
+            if (cate.CoverImagePath != "")
+            {
+                cate.CoverImagePath = ImageToBase64(cate.CoverImagePath);
+            }
 
             return cate;
         }
 
-        public async Task<CategoryEntity> GetCategoryByIdAsync(Guid Id)
+        public async Task<CategoryEntity> GetCategoryByIdAsync(GetCategoryByIdRequest request)
         {
-            var cate = await categoryRepo.GetAsync(c => c.Id == Id);
-            cate.CoverImagePath = ImageToBase64(cate.CoverImagePath);
+            var cate = await categoryRepo.GetAsync(c => c.Id == Guid.Parse(request.Id));
+            if (cate.CoverImagePath != "")
+            {
+                cate.CoverImagePath = ImageToBase64(cate.CoverImagePath);
+            }
 
             return cate;
         }
@@ -43,7 +50,12 @@ namespace SocialNetwork.API.Services.Category
         public async Task<CategoryEntity> AddCategoryAsync(AddCategoryRequest model)
         {
             // Lưu file ảnh và lấy đường dẫn
-            string imagePath = await UploadImage(model.Image);
+            string imagePath = "";
+            if (model.Image != null)
+            {
+                imagePath = await UploadImage(model.Image);
+
+            }
 
             // Tạo slug từ CategoryName
             string slug = AppUtilities.GenerateSlug(model.CategoryName);

@@ -1,4 +1,5 @@
 ﻿using SocialNetwork.API.DTOs;
+using SocialNetwork.API.DTOs.Category;
 using SocialNetwork.Domain.Entities;
 
 namespace SocialNetwork.API.Services.Category
@@ -6,10 +7,10 @@ namespace SocialNetwork.API.Services.Category
     public interface ICategoryService
     {
         Task<List<CategoryEntity>> ListCategoriesAsync();
-        Task<CategoryEntity> GetCategoryBySlugAsync(string slug);
-        Task<CategoryEntity> GetCategoryByIdAsync(Guid Id);
-        Task<CategoryEntity> AddCategoryAsync(AddCategoryRequest model);
-        Task<CategoryEntity> UpdateCategoryAsync(UpdateCategoryRequest model);
+        Task<CategoryEntity> GetCategoryBySlugAsync(GetCategoryBySlugRequest request);
+        Task<CategoryEntity> GetCategoryByIdAsync(GetCategoryByIdRequest request);
+        Task<CategoryEntity> AddCategoryAsync(AddCategoryRequest request);
+        Task<CategoryEntity> UpdateCategoryAsync(UpdateCategoryRequest request);
         Task<bool> DeleteCategoryAsync(Guid id);
     }
 }

@@ -6,10 +6,11 @@ using SocialNetwork.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using SocialNetwork.API.DTOs;
+using SocialNetwork.API.DTOs.Category;
 
 namespace SocialNetwork.API.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -23,18 +24,19 @@ namespace SocialNetwork.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllCategories")]
         public async Task<List<CategoryEntity>> GetAllCategories()
         {
             return await _service.ListCategoriesAsync();
         }
 
-        [HttpGet("slug/{slug}")]
+        [HttpGet("GetCategoryBySlug/slug/{slug}")]
         public async Task<IActionResult> GetCategoryBySlug(string slug)
         {
             try
             {
-                var category = await _service.GetCategoryBySlugAsync(slug);
+                var request = new GetCategoryBySlugRequest { Slug = slug };
+                var category = await _service.GetCategoryBySlugAsync(request);
 
                 if (category == null)
                 {
@@ -51,12 +53,13 @@ namespace SocialNetwork.API.Controllers
             }
         }
 
-        [HttpGet("id/{Id}")]
+        [HttpGet("GetCategoryById/id/{Id}")]
         public async Task<IActionResult> GetCategoryById(string Id)
         {
             try
             {
-                var category = await _service.GetCategoryByIdAsync(Guid.Parse(Id));
+                var request = new GetCategoryByIdRequest { Id = Id };
+                var category = await _service.GetCategoryByIdAsync(request);
 
                 if (category == null)
                 {
@@ -73,7 +76,7 @@ namespace SocialNetwork.API.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("AddCategory")]
         public async Task<IActionResult> AddCategory([FromForm] AddCategoryRequest request)
         {
             try
@@ -90,7 +93,7 @@ namespace SocialNetwork.API.Controllers
 
         }
 
-        [HttpPut()]
+        [HttpPut("UpdateCategory")]
         public async Task<IActionResult> UpdateCategory([FromForm] UpdateCategoryRequest request)
         {
             try
@@ -111,7 +114,7 @@ namespace SocialNetwork.API.Controllers
         }
 
 
-        [HttpDelete("id/{Id}")]
+        [HttpDelete("DeleteCategoryById/id/{Id}")]
         public async Task<bool> DeleteCategoryById(string Id)
         {
             return await _service.DeleteCategoryAsync(Guid.Parse(Id));

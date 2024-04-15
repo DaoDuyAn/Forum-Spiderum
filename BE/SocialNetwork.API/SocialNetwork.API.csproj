@@ -16,7 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\categories\" />
+    <Folder Include="DTOs\Account\" />
+    <Folder Include="DTOs\User\" />
     <Folder Include="wwwroot\images\posts\" />
   </ItemGroup>
 

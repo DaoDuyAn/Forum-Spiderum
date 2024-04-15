@@ -5,7 +5,7 @@ using SocialNetwork.API.Services.Post;
 
 namespace SocialNetwork.API.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/")]
     [ApiController]
     public class PostController : ControllerBase
     {
@@ -19,7 +19,7 @@ namespace SocialNetwork.API.Controllers
             _logger = logger;
         }
 
-        [HttpPost]
+        [HttpPost("AddPost")]
         public async Task<IActionResult> AddPost([FromBody] AddPostRequest request)
         {
             try
@@ -35,7 +35,27 @@ namespace SocialNetwork.API.Controllers
             }
         }
 
-        [HttpGet("slug/{slug}")]
+        [HttpPut("UpdatePost")]
+        public async Task<IActionResult> UpdatePost([FromBody] UpdatePostRequest request)
+        {
+            try
+            {
+                var post = await _service.UpdatePostAsync(request);
+
+                if (post == null)
+                {
+                    return NotFound(StatusCodes.Status404NotFound);
+                }
+
+                return Ok(post);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("GetPostBySlug/slug/{slug}")]
         public async Task<IActionResult> GetPostBySlug(string slug)
         {
             try
@@ -58,7 +78,7 @@ namespace SocialNetwork.API.Controllers
             }
         }
 
-        [HttpDelete("id/{Id}")]
+        [HttpDelete("DeletePostById/id/{Id}")]
         public async Task<bool> DeletePostById(string Id)
         {
             return await _service.DeletePostAsync(Guid.Parse(Id));

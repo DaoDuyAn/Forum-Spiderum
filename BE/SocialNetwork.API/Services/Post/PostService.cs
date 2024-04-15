@@ -226,7 +226,78 @@ namespace SocialNetwork.API.Services.Post
 
         public async Task<PostEntity> UpdatePostAsync(UpdatePostRequest request)
         {
-            throw new NotImplementedException();
+            var post = await postRepo.GetAsync(c => c.Id == Guid.Parse(request.Id));
+            if (post != null)
+            {
+                string thumbnailImagePath = "";
+                string postSlug = post.Slug;
+
+                int lastIndex = post.Slug.LastIndexOf('-');
+                string oldPostSlug = lastIndex != -1 ? post.Slug.Substring(0, lastIndex) : "";
+
+                string newPostSlug = AppUtilities.GenerateSlug(request.Title);
+
+                if (oldPostSlug != newPostSlug)
+                {
+                    Guid guid = Guid.NewGuid();
+                    string[] guidParts = guid.ToString().Split('-');
+
+                    postSlug = AppUtilities.GenerateSlug(request.Title) + "-" + guidParts[0];
+                }
+
+                string jsonString = request.Content;
+                // Define regular expression pattern to match URLs
+                string pattern = @"(""url"":\s*""([^""]+)"")";
+
+                MatchCollection matches = Regex.Matches(jsonString, pattern);
+
+                if (matches.Count > 0)
+                {
+                    // Tạo thư mục để lưu ảnh cho bài viết nếu chưa có
+                    string imagePath = Path.Combine(_hostEnvironment.WebRootPath, "images", "posts", post.Slug);
+                    if (!Directory.Exists(imagePath))
+                    {
+                        string folderPath = CreateFolder(postSlug);
+                    }
+                    else
+                    {
+                        // Lấy danh sách ảnh trong thư mục
+                        string[] files = Directory.GetFiles(imagePath);
+
+                        // Xóa tất cả các ảnh trong danh sách
+                        foreach (string file in files)
+                        {
+                            File.Delete(file);
+                        }
+                    }
+                }
+
+                for (int i = 0; i < matches.Count; i++)
+                {
+                    Match match = matches[i];
+                    string originalUrl = match.Groups[2].Value;
+                    IFormFile formFile = Base64ToImage(originalUrl, postSlug + "_" + i);
+                    string imgPath = await UploadImage(formFile, postSlug);
+
+                    jsonString = jsonString.Replace(originalUrl, imgPath);
+
+                    if (i == 0)
+                    {
+                        thumbnailImagePath = imgPath;
+                    }
+                }
+
+
+                post.Content = jsonString;
+                post.Title = request.Title;
+                post.Description = request.Description;
+                post.CategoryId = Guid.Parse(request.CategoryId);
+                post.Slug = postSlug;
+
+                return await postRepo.UpdateAsync(post);
+            }
+
+            return null;
         }
 
         public async Task<bool> DeletePostAsync(Guid Id)
@@ -299,6 +370,7 @@ namespace SocialNetwork.API.Services.Post
                 },
                 UserInfo = new UserInfo
                 {
+                    Id = user.Id,
                     UserName = user.UserName,
                     FullName = user.FullName,
                     Description = user.Description,
@@ -306,6 +378,7 @@ namespace SocialNetwork.API.Services.Post
                 },
                 PostCategoryInfo = new PostCategoryInfo
                 {
+                    Id = cate.Id,
                     CategoryName = cate.CategoryName,
                     Slug = cate.Slug,
                 }
