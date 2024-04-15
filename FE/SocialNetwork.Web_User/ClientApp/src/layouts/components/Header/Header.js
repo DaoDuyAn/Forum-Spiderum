@@ -84,7 +84,7 @@ function Header() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get(`https://localhost:44379/api/v1/Category`);
+                const response = await axios.get(`https://localhost:44379/api/v1/GetAllCategories`);
                 const data = response.data;
 
                 setCategories(data);

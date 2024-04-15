@@ -39,7 +39,7 @@ function CreatePost() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get(`https://localhost:44379/api/v1/Category`);
+                const response = await axios.get(`https://localhost:44379/api/v1/GetAllCategories`);
                 const data = response.data;
 
                 setCategories(data);
@@ -104,7 +104,7 @@ function CreatePost() {
         console.log(payload.content);
 
         axios
-            .post('https://localhost:44379/api/v1/Post', payload)
+            .post('https://localhost:44379/api/v1/AddPost', payload)
             .then((response) => {
                 console.log(response.data);
                 navigate(`/post/${response.data.slug}`);
@@ -200,15 +200,14 @@ function CreatePost() {
                                         >
                                             Quay lại
                                         </button>
-                                        <Link to="/">
-                                            <button
-                                                onClick={onSave}
-                                                type="submit"
-                                                className={cx('modal__button-content', 'create')}
-                                            >
-                                                Tạo
-                                            </button>
-                                        </Link>
+
+                                        <button
+                                            onClick={onSave}
+                                            type="submit"
+                                            className={cx('modal__button-content', 'create')}
+                                        >
+                                            Tạo
+                                        </button>
                                     </div>
                                 </div>
                             </div>

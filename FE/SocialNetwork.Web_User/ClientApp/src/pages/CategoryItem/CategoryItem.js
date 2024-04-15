@@ -20,7 +20,7 @@ function CategoryItem() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get(`https://localhost:44379/api/v1/Category/slug/${slug}`);
+                const response = await axios.get(`https://localhost:44379/api/v1/GetCategoryBySlug/slug/${slug}`);
                 const data = response.data;
 
                 setCategory(data);

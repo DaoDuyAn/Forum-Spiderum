@@ -18,9 +18,11 @@ export const Config = {
     image: {
         class: ImageTool,
         initData: null,
-        data: {},
-        withBorder: false,
-        withBackground: false,
+        data: {
+            withBorder: false,
+            withBackground: false,
+            stretched: true,
+        },
     },
     header: Header,
     quote: Quote,

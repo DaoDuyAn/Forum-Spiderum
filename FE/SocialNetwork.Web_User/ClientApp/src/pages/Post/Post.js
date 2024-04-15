@@ -47,7 +47,7 @@ function Post() {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const response = await axios.get(`https://localhost:44379/api/v1/Post/slug/${slug}`);
+                const response = await axios.get(`https://localhost:44379/api/v1/GetPostBySlug/slug/${slug}`);
                 const data = response.data;
 
                 setDataPost(data.postInfo);
@@ -127,7 +127,7 @@ function Post() {
             // const token = localStorage.getItem('token');
             const option = {
                 method: 'delete',
-                url: `https://localhost:44379/api/v1/Post/id/${dataPost.id}`,
+                url: `https://localhost:44379/api/v1/DeletePostById/id/${dataPost.id}`,
                 // headers: {
                 //     authorization: `Bearer ${token}`,
                 // },
@@ -192,7 +192,7 @@ function Post() {
                         </div>
                         {isUser ? (
                             <div className={cx('btn-user')}>
-                                <Link to={`/post/edit/bai-viet`}>
+                                <Link to={`/post/edit/${dataPost.slug}`}>
                                     <span className={cx('button-data', 'edit')}>Sửa</span>
                                 </Link>
                                 <button className={cx('btn-delete')} onClick={handleClickDelete}>
