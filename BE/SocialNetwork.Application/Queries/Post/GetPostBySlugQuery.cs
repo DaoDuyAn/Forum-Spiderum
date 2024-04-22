@@ -29,7 +29,7 @@ namespace SocialNetwork.Application.Queries.Post
 
         public async Task<GetPostBySlugResponseDTO> Handle(GetPostBySlugQuery request, CancellationToken cancellationToken)
         {
-            var post = await postRepo.GetAsync(p => p.Slug == request.Slug);
+            var post = await postRepo.GetPostAsync(p => p.Slug == request.Slug);
             var cate = await dataContext.CategoryRepo.GetAsync(c => c.Id == post.CategoryId);
             var user = await dataContext.UserRepo.GetAsync(u => u.Id == post.UserId);
 

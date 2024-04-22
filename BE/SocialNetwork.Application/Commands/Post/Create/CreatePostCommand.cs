@@ -1,12 +1,6 @@
 ﻿using MediatR;
-using SocialNetwork.Application.Commands.Post.Delete;
 using SocialNetwork.Domain.Entities;
 using SocialNetwork.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SocialNetwork.Application.Commands.Post.Create
 {
@@ -44,7 +38,8 @@ namespace SocialNetwork.Application.Commands.Post.Create
                 CreationDate = DateTime.Now,
             };
 
-            return await repo.AddPostAsync(newPost);
+            var post = await repo.AddPostAsync(newPost);
+            return post.Slug;
         }
     }
 }

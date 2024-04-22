@@ -53,11 +53,11 @@ namespace SocialNetwork.Infrastructure.Repositories
             return await _dbSet.FirstOrDefaultAsync(expression);
         }
 
-        public async Task<int> UpdateAsync(T entity)
+        public async Task<T> UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
-            
-            return await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
+            return await Task.FromResult(entity);
         }
     }
 }

@@ -18,8 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Account\" />
-    <Folder Include="DTOs\User\" />
     <Folder Include="wwwroot\images\posts\" />
   </ItemGroup>
 

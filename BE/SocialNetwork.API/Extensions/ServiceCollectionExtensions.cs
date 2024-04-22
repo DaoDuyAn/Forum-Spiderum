@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SocialNetwork.API.Services.Category;
 using SocialNetwork.Domain.Interfaces;
 using SocialNetwork.Infrastructure.EF;
 using SocialNetwork.Infrastructure.Repositories;
@@ -32,8 +31,7 @@ namespace SocialNetwork.API.Extensions
         public static IServiceCollection AddBusinessServices(this IServiceCollection services
            )
         {
-            return services
-                .AddScoped<ICategoryService, CategoryService>();
+            return services;
         }
     }
 }

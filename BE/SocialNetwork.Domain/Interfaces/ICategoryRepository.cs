@@ -10,6 +10,9 @@ namespace SocialNetwork.Domain.Interfaces
 {
     public interface ICategoryRepository : IAsyncRepository<CategoryEntity>
     {
+        Task<string> AddCategoryAsync(CategoryEntity entity);
+        Task<Guid> UpdateCategoryAsync(CategoryEntity request);
+        Task<bool> DeleteCategoryAsync(Guid id);
         Task<CategoryEntity> GetCategoryAsync(Expression<Func<CategoryEntity, bool>> expression);
     }
 }

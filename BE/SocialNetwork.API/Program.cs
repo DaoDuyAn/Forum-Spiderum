@@ -1,10 +1,6 @@
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using SocialNetwork.API.Extensions;
 using SocialNetwork.Application;
 using SocialNetwork.Infrastructure.EF;
-using SocialNetwork.Infrastructure.Repositories.Post;
 
 var builder = WebApplication.CreateBuilder(args);
 

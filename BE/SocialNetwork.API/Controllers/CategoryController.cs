@@ -1,17 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
-using SocialNetwork.API.Services.Category;
-using SocialNetwork.Domain.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using SocialNetwork.API.DTOs;
-using SocialNetwork.API.DTOs.Category;
 using SocialNetwork.Application.DTOs.Category;
 using SocialNetwork.Application.Queries.Category;
-using SocialNetwork.Application.DTOs.Post;
 using System.Net;
-using SocialNetwork.Application.Queries.Post;
+using SocialNetwork.Application.Commands.Category.Delete;
+using SocialNetwork.Application.Commands.Category.Create;
+using SocialNetwork.Application.Commands.Category.Update;
 
 namespace SocialNetwork.API.Controllers
 {
@@ -20,14 +14,12 @@ namespace SocialNetwork.API.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly ICategoryService _service;
         private readonly ILogger<CategoryController> _logger;
 
         public CategoryController(ILogger<CategoryController> logger
-            , ICategoryService service, IMediator mediator)
+           , IMediator mediator)
         {
             _mediator = mediator;
-            _service = service;
             _logger = logger;
         }
 
@@ -55,48 +47,26 @@ namespace SocialNetwork.API.Controllers
             return Ok(cate);
         }
 
-        [HttpPost("AddCategory")]
-        public async Task<IActionResult> AddCategory([FromForm] AddCategoryRequest request)
+        [HttpPost("CreateCategory")]
+        [ProducesDefaultResponseType(typeof(string))]
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryCommand command)
         {
-            try
-            {
-                var category = await _service.AddCategoryAsync(request);
-                return Ok(category);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while adding the category.");
-
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-
+            return Ok(await _mediator.Send(command));
         }
 
         [HttpPut("UpdateCategory")]
-        public async Task<IActionResult> UpdateCategory([FromForm] UpdateCategoryRequest request)
+        [ProducesDefaultResponseType(typeof(Guid))]
+        public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryCommand command)
         {
-            try
-            {
-                var cate = await _service.UpdateCategoryAsync(request);
-
-                if (cate == null)
-                {
-                    return NotFound(StatusCodes.Status404NotFound);
-                }
-
-                return Ok(cate);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
 
 
         [HttpDelete("DeleteCategoryById/id/{Id}")]
         public async Task<bool> DeleteCategoryById(string Id)
         {
-            return await _service.DeleteCategoryAsync(Guid.Parse(Id));
+            return await _mediator.Send(new DeleteCategoryCommand { Id = Id });
         }
     }
 }

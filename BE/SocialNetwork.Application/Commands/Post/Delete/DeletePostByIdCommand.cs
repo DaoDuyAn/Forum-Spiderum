@@ -1,9 +1,4 @@
-﻿using System;
-using MediatR;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
 using SocialNetwork.Domain.Interfaces;
 
 namespace SocialNetwork.Application.Commands.Post.Delete

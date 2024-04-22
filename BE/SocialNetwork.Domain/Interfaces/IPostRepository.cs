@@ -10,8 +10,8 @@ namespace SocialNetwork.Domain.Interfaces
 {
     public interface IPostRepository : IAsyncRepository<PostEntity>
     {
-        Task<string> AddPostAsync(PostEntity entity);
-        Task<int> UpdatePostAsync(PostEntity request);
+        Task<PostEntity> AddPostAsync(PostEntity entity);
+        Task<string> UpdatePostAsync(PostEntity request);
         Task<bool> DeletePostAsync(Guid id);
         Task<PostEntity> GetPostAsync(Expression<Func<PostEntity, bool>> expression);
     }

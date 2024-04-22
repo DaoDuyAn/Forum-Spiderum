@@ -110,7 +110,7 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
             return false;
         }
 
-        public async Task<int> UpdatePostAsync(PostEntity request)
+        public async Task<string> UpdatePostAsync(PostEntity request)
         {
             string thumbnailImagePath = "";
             string jsonString = request.Content;
@@ -155,7 +155,11 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
                 }
             }
 
-            return await UpdateAsync(request);
+            request.Content = jsonString;
+            request.ThumbnailImagePath = thumbnailImagePath;
+
+            var res = await UpdateAsync(request);
+            return res.Slug;
         }
 
         public async Task<PostEntity> GetPostAsync(Expression<Func<PostEntity, bool>> expression)
@@ -187,7 +191,7 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
             return post;
         }
 
-        public async Task<string> AddPostAsync(PostEntity entity)
+        public async Task<PostEntity> AddPostAsync(PostEntity entity)
         {
             string thumbnailImagePath = "";
 
@@ -223,12 +227,12 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
                 }
             }
 
+            entity.Content = jsonString;
             entity.ThumbnailImagePath = thumbnailImagePath;
             entity.Slug = postSlug;
 
-            var postCreate = await AddAsync(entity);
-
-            return postCreate.Id.ToString();
+            var res = await AddAsync(entity);
+            return res;
         }
     }
 }

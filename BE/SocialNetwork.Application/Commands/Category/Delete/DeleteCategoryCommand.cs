@@ -1,12 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using SocialNetwork.Domain.Interfaces;
 
 namespace SocialNetwork.Application.Commands.Category.Delete
 {
-    internal class DeleteCategoryCommand
+    public class DeleteCategoryCommand : IRequest<bool>
     {
+        public string Id { get; set; }
+    }
+
+    public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, bool>
+    {
+        private readonly ICategoryRepository repo;
+
+        public DeleteCategoryCommandHandler(ICategoryRepository repo)
+        {
+            this.repo = repo;
+        }
+
+
+        public async Task<bool> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+        {
+            return await repo.DeleteCategoryAsync(Guid.Parse(request.Id));
+        }
     }
 }
