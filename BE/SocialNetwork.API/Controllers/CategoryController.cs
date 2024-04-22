@@ -3,10 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using SocialNetwork.API.Services.Category;
 using SocialNetwork.Domain.Entities;
-
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SocialNetwork.API.DTOs;
 using SocialNetwork.API.DTOs.Category;
+using SocialNetwork.Application.DTOs.Category;
+using SocialNetwork.Application.Queries.Category;
+using SocialNetwork.Application.DTOs.Post;
+using System.Net;
+using SocialNetwork.Application.Queries.Post;
 
 namespace SocialNetwork.API.Controllers
 {
@@ -14,66 +19,40 @@ namespace SocialNetwork.API.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
+        private readonly IMediator _mediator;
         private readonly ICategoryService _service;
         private readonly ILogger<CategoryController> _logger;
 
         public CategoryController(ILogger<CategoryController> logger
-            , ICategoryService service)
+            , ICategoryService service, IMediator mediator)
         {
+            _mediator = mediator;
             _service = service;
             _logger = logger;
         }
 
         [HttpGet("GetAllCategories")]
-        public async Task<List<CategoryEntity>> GetAllCategories()
+        [ProducesDefaultResponseType(typeof(List<CategoryResponseDTO>))]
+        public async Task<IActionResult> GetAllCategories()
         {
-            return await _service.ListCategoriesAsync();
+           return  Ok(await _mediator.Send(new GetAllCategoriesQuery()));
         }
 
         [HttpGet("GetCategoryBySlug/slug/{slug}")]
+        [ProducesResponseType(typeof(CategoryResponseDTO), (int)HttpStatusCode.OK)]
+
         public async Task<IActionResult> GetCategoryBySlug(string slug)
         {
-            try
-            {
-                var request = new GetCategoryBySlugRequest { Slug = slug };
-                var category = await _service.GetCategoryBySlugAsync(request);
-
-                if (category == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(category);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while getting the category by slug.");
-
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            var cate = await _mediator.Send(new GetCategoryBySlugQuery { Slug = slug });
+            return Ok(cate);
         }
 
         [HttpGet("GetCategoryById/id/{Id}")]
+        [ProducesResponseType(typeof(CategoryResponseDTO), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetCategoryById(string Id)
         {
-            try
-            {
-                var request = new GetCategoryByIdRequest { Id = Id };
-                var category = await _service.GetCategoryByIdAsync(request);
-
-                if (category == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(category);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while getting the category by Id.");
-
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            var cate = await _mediator.Send(new GetCategoryByIdQuery { Id = Id });
+            return Ok(cate);
         }
 
         [HttpPost("AddCategory")]

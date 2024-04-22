@@ -10,7 +10,7 @@ namespace SocialNetwork.API.Services.Category
         Task<CategoryEntity> GetCategoryBySlugAsync(GetCategoryBySlugRequest request);
         Task<CategoryEntity> GetCategoryByIdAsync(GetCategoryByIdRequest request);
         Task<CategoryEntity> AddCategoryAsync(AddCategoryRequest request);
-        Task<CategoryEntity> UpdateCategoryAsync(UpdateCategoryRequest request);
+        Task<int> UpdateCategoryAsync(UpdateCategoryRequest request);
         Task<bool> DeleteCategoryAsync(Guid id);
     }
 }

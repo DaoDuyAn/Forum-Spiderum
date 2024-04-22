@@ -43,7 +43,7 @@ namespace SocialNetwork.Infrastructure.Repositories
             return await _dbSet.Where(expression).ToListAsync();
         }
 
-        public async Task<List<T>> ListAsync()
+        public async Task<List<T>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
         }
@@ -53,11 +53,11 @@ namespace SocialNetwork.Infrastructure.Repositories
             return await _dbSet.FirstOrDefaultAsync(expression);
         }
 
-        public async Task<T> UpdateAsync(T entity)
+        public async Task<int> UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
-            await _dbContext.SaveChangesAsync();
-            return await Task.FromResult(entity);
+            
+            return await _dbContext.SaveChangesAsync();
         }
     }
 }

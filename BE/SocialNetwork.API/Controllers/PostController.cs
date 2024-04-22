@@ -1,7 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.API.DTOs;
-using SocialNetwork.API.Services.Post;
+using MediatR;
+using SocialNetwork.Application.Commands.Post.Delete;
+using System.Net;
+using SocialNetwork.Application.Queries.Post;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using SocialNetwork.Application.Commands.Post.Update;
+using SocialNetwork.Application.Commands.Post.Create;
+using SocialNetwork.Application.DTOs.Post;
 
 namespace SocialNetwork.API.Controllers
 {
@@ -9,79 +16,43 @@ namespace SocialNetwork.API.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        private readonly IPostService _service;
+        private readonly IMediator _mediator;
         private readonly ILogger<PostController> _logger;
 
         public PostController(ILogger<PostController> logger
-            , IPostService service)
+            , IMediator mediator)
         {
-            _service = service;
+            _mediator = mediator;
             _logger = logger;
         }
 
-        [HttpPost("AddPost")]
-        public async Task<IActionResult> AddPost([FromBody] AddPostRequest request)
+        [HttpPost("CreatePost")]
+        [ProducesDefaultResponseType(typeof(int))]
+        public async Task<IActionResult> CreatePost([FromBody] CreatePostCommand command)
         {
-            try
-            {
-                var post = await _service.AddPostAsync(request);
-                return Ok(post);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while adding the post.");
-
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            return Ok(await _mediator.Send(command));
         }
 
         [HttpPut("UpdatePost")]
-        public async Task<IActionResult> UpdatePost([FromBody] UpdatePostRequest request)
+        [ProducesDefaultResponseType(typeof(int))]
+        public async Task<IActionResult> UpdatePost([FromBody] UpdatePostCommand command)
         {
-            try
-            {
-                var post = await _service.UpdatePostAsync(request);
-
-                if (post == null)
-                {
-                    return NotFound(StatusCodes.Status404NotFound);
-                }
-
-                return Ok(post);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
 
         [HttpGet("GetPostBySlug/slug/{slug}")]
+        [ProducesResponseType(typeof(GetPostBySlugResponseDTO), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetPostBySlug(string slug)
         {
-            try
-            {
-                var request = new GetPostBySlugRequest { Slug = slug };
-                var post = await _service.GetPostBySlugAsync(request);
-
-                if (post == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(post);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while getting the post by slug.");
-
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            var post = await _mediator.Send(new GetPostBySlugQuery { Slug = slug });
+            return Ok(post);
         }
 
         [HttpDelete("DeletePostById/id/{Id}")]
         public async Task<bool> DeletePostById(string Id)
         {
-            return await _service.DeletePostAsync(Guid.Parse(Id));
+            return await _mediator.Send(new DeletePostByIdCommand { Id = Id });
         }
     }
 }

@@ -1,7 +1,10 @@
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SocialNetwork.API.Extensions;
+using SocialNetwork.Application;
 using SocialNetwork.Infrastructure.EF;
+using SocialNetwork.Infrastructure.Repositories.Post;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDatabase(builder.Configuration)
                 .AddRepositories()
                 .AddBusinessServices();
+
+// Include Application Dependency
+builder.Services.AddApplicationServices();
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

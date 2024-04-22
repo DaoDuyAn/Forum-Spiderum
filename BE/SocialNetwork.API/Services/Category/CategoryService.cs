@@ -6,6 +6,7 @@ using SocialNetwork.API.Utilities;
 using System;
 using SocialNetwork.API.DTOs;
 using SocialNetwork.API.DTOs.Category;
+using SocialNetwork.Domain.Interfaces;
 
 namespace SocialNetwork.API.Services.Category
 {
@@ -44,7 +45,8 @@ namespace SocialNetwork.API.Services.Category
 
         public async Task<List<CategoryEntity>> ListCategoriesAsync()
         {
-            return await categoryRepo.ListAsync();
+            //return await categoryRepo.ListAsync();
+            return null;
         }
 
         public async Task<CategoryEntity> AddCategoryAsync(AddCategoryRequest model)
@@ -72,7 +74,7 @@ namespace SocialNetwork.API.Services.Category
             return await categoryRepo.AddAsync(newCategory);
         }
 
-        public async Task<CategoryEntity> UpdateCategoryAsync(UpdateCategoryRequest model)
+        public async Task<int> UpdateCategoryAsync(UpdateCategoryRequest model)
         {
             var cate = await categoryRepo.GetAsync(c => c.Id == Guid.Parse(model.Id));
 
@@ -89,10 +91,10 @@ namespace SocialNetwork.API.Services.Category
                 cate.Slug = slug;
                 cate.CoverImagePath = imagePath;
 
-                return await categoryRepo.UpdateAsync(cate);
+                //return await categoryRepo.UpdateAsync(cate);
             }
 
-            return null;
+            return 0;
         }
 
         public async Task<bool> DeleteCategoryAsync(Guid Id)

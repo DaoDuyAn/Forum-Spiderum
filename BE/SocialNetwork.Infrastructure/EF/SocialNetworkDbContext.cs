@@ -36,7 +36,6 @@ namespace SocialNetwork.Infrastructure.EF
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<CommentEntity> Comments { get; set; }
         public DbSet<FollowerEntity> Followers { get; set; }
-        public DbSet<FollowingEntity> Followings { get; set; }
         public DbSet<UserCategoryFollowingEntity> UserCategoryFollowings { get; set; }
         public DbSet<LikeEntity> Likes { get; set; }
         public DbSet<PostEntity> Posts { get; set; }
@@ -55,7 +54,6 @@ namespace SocialNetwork.Infrastructure.EF
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new PostConfiguration());
             modelBuilder.ApplyConfiguration(new FollowerConfiguration());
-            modelBuilder.ApplyConfiguration(new FollowingConfiguration());
             modelBuilder.ApplyConfiguration(new UserCategoryFollowingConfiguration());
             modelBuilder.ApplyConfiguration(new CommentConfiguration());
             modelBuilder.ApplyConfiguration(new LikeConfiguration());

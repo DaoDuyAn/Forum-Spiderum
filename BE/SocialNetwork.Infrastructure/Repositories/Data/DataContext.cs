@@ -1,4 +1,5 @@
-﻿using SocialNetwork.Infrastructure.Repositories.Category;
+﻿using SocialNetwork.Domain.Interfaces;
+using SocialNetwork.Infrastructure.Repositories.Category;
 using SocialNetwork.Infrastructure.Repositories.Post;
 using SocialNetwork.Infrastructure.Repositories.User;
 using System;

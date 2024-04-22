@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialNetwork.API.Services.Category;
-using SocialNetwork.API.Services.Post;
 using SocialNetwork.Domain.Interfaces;
 using SocialNetwork.Infrastructure.EF;
 using SocialNetwork.Infrastructure.Repositories;
@@ -34,8 +33,7 @@ namespace SocialNetwork.API.Extensions
            )
         {
             return services
-                .AddScoped<ICategoryService, CategoryService>()
-                .AddScoped<IPostService, PostService>();
+                .AddScoped<ICategoryService, CategoryService>();
         }
     }
 }
