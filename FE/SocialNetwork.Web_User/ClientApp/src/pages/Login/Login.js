@@ -66,7 +66,7 @@ function Login() {
                         <p className={cx('login__text', 'link')}>Quên mật khẩu?</p>
                     </Link>
                     <span className={cx('login__text')}>Không có tài khoản?</span>
-                    <Link to="/auth_register">
+                    <Link to={config.routes.auth_register}>
                         <span className={cx('login__text', 'link')}> Đăng ký ngay</span>
                     </Link>
                 </div>

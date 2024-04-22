@@ -29,6 +29,7 @@ function Post() {
     const [isSuccess, setIsSuccess] = useState(null);
     const [response, setResponse] = useState(null);
     const [visiable, setVisiable] = useState(false);
+    const [isEditorInitialized, setIsEditorInitialized] = useState(false);
     // const currentUser =
     const [activeCate, setActiveCate] = useState(false);
     const [isBookmark, setIsBookmark] = useState(true);
@@ -77,8 +78,20 @@ function Post() {
                 tools: Config,
                 data: content,
             });
+
+            setIsEditorInitialized(true);
         }
     }, [dataPost, content]);
+
+    useEffect(() => {
+        if (isEditorInitialized) {
+            const editorContainer = document.getElementById('editorjs');
+
+            if (editorContainer && editorContainer.children.length >= 2) {
+                editorContainer.removeChild(editorContainer.children[0]);
+            }
+        }
+    }, [isEditorInitialized]);
 
     useEffect(() => {
         if (dataPost) {

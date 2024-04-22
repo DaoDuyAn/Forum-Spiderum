@@ -104,10 +104,10 @@ function CreatePost() {
         console.log(payload.content);
 
         axios
-            .post('https://localhost:44379/api/v1/AddPost', payload)
+            .post('https://localhost:44379/api/v1/CreatePost', payload)
             .then((response) => {
                 console.log(response.data);
-                navigate(`/post/${response.data.slug}`);
+                navigate(`/post/${response.data}`);
             })
             .catch((error) => {
                 console.error(error);

@@ -193,7 +193,7 @@ function EditPost() {
             .put('https://localhost:44379/api/v1/UpdatePost', payload)
             .then((response) => {
                 console.log(response.data);
-                navigate(`/post/${response.data.slug}`);
+                navigate(`/post/${response.data}`);
             })
             .catch((error) => {
                 console.error(error);
