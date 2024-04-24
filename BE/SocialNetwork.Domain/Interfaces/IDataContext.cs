@@ -11,5 +11,6 @@ namespace SocialNetwork.Domain.Interfaces
         ICategoryRepository CategoryRepo { get; }
         IPostRepository PostRepo { get; }
         IUserRepository UserRepo { get; }
+        IRefreshTokenRepository RefreshTokenRepo { get; }
     }
 }

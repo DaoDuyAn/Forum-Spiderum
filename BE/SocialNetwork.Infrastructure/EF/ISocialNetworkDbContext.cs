@@ -20,5 +20,6 @@ namespace SocialNetwork.Infrastructure.EF
         DbSet<PostEntity> Posts { get; set; }
         DbSet<RoleEntity> Roles { get; set; }
         DbSet<SavedPostEntity> SavedPosts { get; set; }
+        DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     }
 }

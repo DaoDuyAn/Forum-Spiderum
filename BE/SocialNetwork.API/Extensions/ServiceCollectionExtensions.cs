@@ -2,9 +2,11 @@
 using SocialNetwork.Domain.Interfaces;
 using SocialNetwork.Infrastructure.EF;
 using SocialNetwork.Infrastructure.Repositories;
+using SocialNetwork.Infrastructure.Repositories.Account;
 using SocialNetwork.Infrastructure.Repositories.Category;
 using SocialNetwork.Infrastructure.Repositories.Data;
 using SocialNetwork.Infrastructure.Repositories.Post;
+using SocialNetwork.Infrastructure.Repositories.RefreshToken;
 using SocialNetwork.Infrastructure.Repositories.User;
 
 namespace SocialNetwork.API.Extensions
@@ -18,6 +20,8 @@ namespace SocialNetwork.API.Extensions
                 .AddScoped<ICategoryRepository, CategoryRepository>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IPostRepository, PostRepository>()
+                .AddScoped<IAccountRepository, AccountRepository>()
+                .AddScoped<IRefreshTokenRepository, RefreshTokenRepository>()
                 .AddScoped<IDataContext, DataContext>();
         }
 
@@ -31,7 +35,7 @@ namespace SocialNetwork.API.Extensions
         public static IServiceCollection AddBusinessServices(this IServiceCollection services
            )
         {
-            return services;
+            return services.AddSingleton<SocialNetwork.Infrastructure.Dapper.DapperContext>(); ;
         }
     }
 }

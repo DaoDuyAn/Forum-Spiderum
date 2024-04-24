@@ -41,6 +41,7 @@ namespace SocialNetwork.Infrastructure.EF
         public DbSet<PostEntity> Posts { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
         public DbSet<SavedPostEntity> SavedPosts { get; set; }
+        public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
         #endregion
 
 
@@ -58,6 +59,7 @@ namespace SocialNetwork.Infrastructure.EF
             modelBuilder.ApplyConfiguration(new CommentConfiguration());
             modelBuilder.ApplyConfiguration(new LikeConfiguration());
             modelBuilder.ApplyConfiguration(new SavedPostConfiguration());
+            modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
         }
 
     }
