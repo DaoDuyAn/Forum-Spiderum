@@ -253,14 +253,16 @@ namespace SocialNetwork.Infrastructure.Repositories.Account
             }
         }
 
-        public async Task<int> AddAccountAsync(string username, string pass, string fullname, string phone, Guid roleId)
+        public async Task<int> AddAccountAsync(string username, string pass, string fullname, string phone, string roleName)
         {
+            var role = _dataContext.RoleRepo.GetAsync(r => r.RoleName == roleName);
+
             var parameters = new DynamicParameters();
 
             parameters.Add("@UserName", username);
             parameters.Add("@FullName", fullname);
             parameters.Add("@Phone", phone);
-            parameters.Add("@RoleId", roleId);
+            parameters.Add("@RoleId", role.Id);
             parameters.Add("@Password", pass);
             parameters.Add("@Result", dbType: DbType.Int32, direction: ParameterDirection.Output);
 

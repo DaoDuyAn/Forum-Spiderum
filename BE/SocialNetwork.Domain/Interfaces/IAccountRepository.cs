@@ -13,7 +13,7 @@ namespace SocialNetwork.Domain.Interfaces
     {
         Task<ApiResponse> LoginAsync(string username, string pass);
         Task<ApiResponse> RenewTokenAsync(Guid userId, string username, string accessToken, string refreshToken);
-        Task<int> AddAccountAsync(string username, string pass, string fullname, string phone, Guid roleId);
+        Task<int> AddAccountAsync(string username, string pass, string fullname, string phone, string roleName);
 
        
     }

@@ -7,6 +7,7 @@ using SocialNetwork.Infrastructure.Repositories.Category;
 using SocialNetwork.Infrastructure.Repositories.Data;
 using SocialNetwork.Infrastructure.Repositories.Post;
 using SocialNetwork.Infrastructure.Repositories.RefreshToken;
+using SocialNetwork.Infrastructure.Repositories.Role;
 using SocialNetwork.Infrastructure.Repositories.User;
 
 namespace SocialNetwork.API.Extensions
@@ -22,6 +23,7 @@ namespace SocialNetwork.API.Extensions
                 .AddScoped<IPostRepository, PostRepository>()
                 .AddScoped<IAccountRepository, AccountRepository>()
                 .AddScoped<IRefreshTokenRepository, RefreshTokenRepository>()
+                .AddScoped<IRoleRepository, RoleRepository>()
                 .AddScoped<IDataContext, DataContext>();
         }
 

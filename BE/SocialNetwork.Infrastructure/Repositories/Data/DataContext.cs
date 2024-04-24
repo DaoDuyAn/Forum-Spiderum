@@ -18,13 +18,16 @@ namespace SocialNetwork.Infrastructure.Repositories.Data
 
         public IUserRepository UserRepo { get; set; }
         public IRefreshTokenRepository RefreshTokenRepo { get; set; }
+        public IRoleRepository RoleRepo { get; set; }
 
-        public DataContext(ICategoryRepository categoryRepo, IPostRepository postRepo, IUserRepository userRepo, IRefreshTokenRepository refreshTokenRepo)
+
+        public DataContext(ICategoryRepository categoryRepo, IPostRepository postRepo, IUserRepository userRepo, IRefreshTokenRepository refreshTokenRepo, IRoleRepository roleRepo)
         {
             CategoryRepo = categoryRepo;
             PostRepo = postRepo;
             UserRepo = userRepo;
             RefreshTokenRepo = refreshTokenRepo;
+            RoleRepo = roleRepo;
         }
     }
 }

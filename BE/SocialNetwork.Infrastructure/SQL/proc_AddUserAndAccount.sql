@@ -20,8 +20,6 @@ begin
 			set @Result = -1;
 			return;
 		end
-		
-	
 
 	if(exists(select * from Accounts as a where a.UserName = @UserName))
 		begin
@@ -41,8 +39,8 @@ begin
 			@AccountId uniqueidentifier = NEWID();
 
 
-	insert into Users(Id, UserName, FullName, Phone)
-	values (@UserId, @UserName, @FullName, @Phone)
+	insert into Users(Id, UserName, FullName, Phone, BirthDate, Gender, Description, Email, Address, AvatarImagePath, CoverImagePath, ToltalFollower, TotalFollowing, TotalPost)
+	values (@UserId, @UserName, @FullName, @Phone, GETDATE(), 1, '', '', '' , '', '', 0, 0, 0)
 
 	insert into Accounts(Id, UserName, Password, RoleId, UserId)
 	values(@AccountId, @UserName, @Password, @RoleId, @UserId)

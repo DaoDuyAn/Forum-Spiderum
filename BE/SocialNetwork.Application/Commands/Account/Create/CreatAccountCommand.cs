@@ -18,7 +18,7 @@ namespace SocialNetwork.Application.Commands.Account.Create
         public string FullName { get; set; }    
         public string Password { get; set; }
         public string Phone { get; set; }
-        public string RoleId { get; set; }
+        public string RoleName { get; set; }
     }
 
     public class CreatAccountCommandHandler : IRequestHandler<CreatAccountCommand, int>
@@ -32,7 +32,7 @@ namespace SocialNetwork.Application.Commands.Account.Create
 
         public async Task<int> Handle(CreatAccountCommand request, CancellationToken cancellationToken)
         {
-            return await repo.AddAccountAsync(request.UserName, request.Password, request.FullName, request.Phone, Guid.Parse(request.RoleId));
+            return await repo.AddAccountAsync(request.UserName, request.Password, request.FullName, request.Phone, request.RoleName);
         }
     }
 }
