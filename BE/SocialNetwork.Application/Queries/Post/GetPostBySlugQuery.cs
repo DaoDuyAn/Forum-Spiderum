@@ -31,7 +31,7 @@ namespace SocialNetwork.Application.Queries.Post
         {
             var post = await postRepo.GetPostAsync(p => p.Slug == request.Slug);
             var cate = await dataContext.CategoryRepo.GetAsync(c => c.Id == post.CategoryId);
-            var user = await dataContext.UserRepo.GetAsync(u => u.Id == post.UserId);
+            var user = await dataContext.UserRepo.GetUserAsync(u => u.Id == post.UserId);
 
             var response = new GetPostBySlugResponseDTO
             {

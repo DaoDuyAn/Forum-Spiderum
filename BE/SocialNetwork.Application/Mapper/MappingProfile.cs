@@ -19,9 +19,8 @@ namespace SocialNetwork.Application.Mapper
         {
             CreateMap<CategoryResponseDTO, CategoryEntity>().ReverseMap();
             CreateMap<AuthResponseDTO, ApiResponse>().ReverseMap();
-            CreateMap<UserEntity, GetUserByIdResponseDTO>()
-                .ForMember(dest => dest.BirthDate,
-                           opt => opt.MapFrom(src => src.BirthDate.ToString("dd/MM/yyyy")));
+            CreateMap<UserEntity, UserResponseDTO>();
+               
             CreateMap<PostEntity, PostResponseDTO>()
                 .ForMember(dest => dest.PostInfo, opt => opt.MapFrom(src => new PostDetailInfo
                 {

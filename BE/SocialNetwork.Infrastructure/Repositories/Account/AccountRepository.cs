@@ -82,7 +82,7 @@ namespace SocialNetwork.Infrastructure.Repositories.Account
                     // ...
                 }),
 
-                Expires = DateTime.UtcNow.AddMinutes(1),    // Thời gian hết hạn - 1 phút
+                Expires = DateTime.UtcNow.AddMinutes(30),    // Thời gian hết hạn - 30 phút
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha512Signature)
             };
 
@@ -255,14 +255,14 @@ namespace SocialNetwork.Infrastructure.Repositories.Account
 
         public async Task<int> AddAccountAsync(string username, string pass, string fullname, string phone, string roleName)
         {
-            var role = _dataContext.RoleRepo.GetAsync(r => r.RoleName == roleName);
+            var role = await _dataContext.RoleRepo.GetAsync(r => r.RoleName == roleName);
 
             var parameters = new DynamicParameters();
 
             parameters.Add("@UserName", username);
             parameters.Add("@FullName", fullname);
             parameters.Add("@Phone", phone);
-            parameters.Add("@RoleId", role.Id);
+            parameters.Add("@RoleId", role.Id, DbType.Guid);
             parameters.Add("@Password", pass);
             parameters.Add("@Result", dbType: DbType.Int32, direction: ParameterDirection.Output);
 

@@ -21,10 +21,19 @@ namespace SocialNetwork.API.Controllers
         }
 
         [HttpGet("GetUserById/id/{Id}")]
-        [ProducesResponseType(typeof(GetUserByIdResponseDTO), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(UserResponseDTO), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetCategoryById(string Id)
         {
             var user = await _mediator.Send(new GetUserByIdQuery { Id = Id });
+            return Ok(user);
+        }
+
+
+        [HttpGet("GetUserByUserName/username/{UserName}")]
+        [ProducesResponseType(typeof(UserResponseDTO), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetUserByUserName(string UserName)
+        {
+            var user = await _mediator.Send(new GetUserByUserNameQuery { UserName = UserName });
             return Ok(user);
         }
 
