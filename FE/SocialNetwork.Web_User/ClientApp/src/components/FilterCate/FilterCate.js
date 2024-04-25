@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios'; 
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import Pagination from '@mui/material/Pagination';
@@ -18,12 +19,27 @@ const cx = classNames.bind(styles);
 
 function Filter() {
     const [filterActive, setFilterActive] = useState(0);
+    const [posts, setPosts] = useState([]);
     // const [page, setPage] = useState(12);
     // const [currentButton, setCurrentButton] = useState(1);
 
     // const handleSetPage = (pageNumber) => {
     //     setCurrentButton(pageNumber + 1);
     // };
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get('https://localhost:44379/api/v1/GetAllPosts');
+                setPosts(response.data); 
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        fetchPosts(); 
+    }, []); 
+
 
     const fitterList = [
         {
@@ -82,11 +98,9 @@ function Filter() {
                             <div className={cx('filter__content')}>
                                 <div className={cx('filter__content-details')}>
                                     <div className={cx('grid')}>
-                                        <PostItem key={1} />
-                                        <PostItem key={2} />
-                                        <PostItem key={3} />
-                                        <PostItem key={4} />
-                                        <PostItem key={5} />
+                                        {posts && posts.map((post) => (
+                                            <PostItem key={post._id} post={post} />
+                                        ))}  
                                     </div>
                                 </div>
                             </div>

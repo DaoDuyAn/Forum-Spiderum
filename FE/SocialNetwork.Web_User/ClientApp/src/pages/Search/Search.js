@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,7 +14,7 @@ import { styled } from '@mui/system';
 
 const StyledPagination = styled(Pagination)({
     '& .MuiPaginationItem-root': {
-        fontSize: '1.5rem', 
+        fontSize: '1.5rem',
     },
 });
 
@@ -28,6 +29,19 @@ function Search() {
 
     const query = searchParams.get('q');
     const type = searchParams.get('type');
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get('https://localhost:44379/api/v1/GetAllPosts');
+                setPosts(response.data);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        fetchPosts();
+    }, []);
 
     return (
         <div className={cx('search')}>
@@ -74,11 +88,7 @@ function Search() {
                         {/* Search result */}
                         <div className={cx('search__content-result')}>
                             {type === 'post' ? (
-                                <>
-                                    {/* posts.map((post) => <PostItem post={post} key={post._id} /> */}
-                                    <PostItem key={1} />
-                                    <PostItem key={2} />
-                                </>
+                                <>{posts && posts.map((post) => <PostItem key={post._id} post={post} />)}</>
                             ) : (
                                 <div className={cx('user-container')}>
                                     {/* posts.map((post) => <PostItem post={post} key={post._id} /> */}
@@ -94,7 +104,15 @@ function Search() {
                 </div>
 
                 <div className={cx('flex', 'justify-center', 'm-[30px]')}>
-                    <StyledPagination count={10} variant="outlined" color="primary" size="large" boundaryCount={2} showFirstButton showLastButton/>
+                    <StyledPagination
+                        count={10}
+                        variant="outlined"
+                        color="primary"
+                        size="large"
+                        boundaryCount={2}
+                        showFirstButton
+                        showLastButton
+                    />
                 </div>
             </div>
         </div>
