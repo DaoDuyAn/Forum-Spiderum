@@ -2,8 +2,8 @@
 using MediatR;
 using SocialNetwork.Application.DTOs.Category;
 using SocialNetwork.Application.DTOs.Post;
-using SocialNetwork.Application.DTOs.Post.;
 using SocialNetwork.Application.Queries.Category;
+using SocialNetwork.Domain.Entities;
 using SocialNetwork.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -13,26 +13,26 @@ using System.Threading.Tasks;
 
 namespace SocialNetwork.Application.Queries.Post
 {
-    public class GetPostsQuery : IRequest<List<PostResponseDTO>>
+    public class GetAllPostsQuery : IRequest<List<PostResponseDTO>>
     {
     }
 
-    public class GetPostsQueryHandler : IRequestHandler<GetPostsQuery, List<PostResponseDTO>>
+    public class GetAllPostsQueryHandler : IRequestHandler<GetAllPostsQuery, List<PostResponseDTO>>
     {
         private readonly IPostRepository postRepo;
         private readonly IMapper _mapper;
 
-        public GetPostsQueryHandler(IPostRepository postRepo, IMapper mapper)
+        public GetAllPostsQueryHandler(IPostRepository postRepo, IMapper mapper)
         {
             this.postRepo = postRepo;
             _mapper = mapper;
         }
 
-        public async Task<List<PostResponseDTO>> Handle(GetPostsQuery request, CancellationToken cancellationToken)
+        public async Task<List<PostResponseDTO>> Handle(GetAllPostsQuery request, CancellationToken cancellationToken)
         {
-          
-
-            return new List<PostResponseDTO>();
+            var lstPosts = await postRepo.GetAllPostsAsync();
+            var lstPostResponseDTO = _mapper.Map<List<PostResponseDTO>>(lstPosts);
+            return lstPostResponseDTO;
         }
     }
 }

@@ -15,7 +15,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 using MediatR;
-
+using SocialNetwork.Infrastructure.Dapper;
+using Dapper;
 
 namespace SocialNetwork.Infrastructure.Repositories.Post
 {
@@ -23,11 +24,13 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
     {
         SocialNetworkDbContext _dbContext;
         private static IWebHostEnvironment? _hostEnvironment;
+        private readonly DapperContext dapperContext;
 
-        public PostRepository(SocialNetworkDbContext dbContext, IWebHostEnvironment hostEnvironment) : base(dbContext)
+        public PostRepository(SocialNetworkDbContext dbContext, IWebHostEnvironment hostEnvironment, DapperContext dapperContext) : base(dbContext)
         {
             _dbContext = dbContext;
             _hostEnvironment = hostEnvironment;
+            this.dapperContext = dapperContext;
         }
 
         #region Handle image
@@ -233,6 +236,56 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
 
             var res = await AddAsync(entity);
             return res;
+        }
+
+        public async Task<List<PostEntity>> GetAllPostsAsync()
+        {
+            using (var connection = dapperContext.CreateConnection())
+            {
+                var sql = @"
+                select  p.Id,
+                        p.Title,
+                        p.Description,
+                        p.CreationDate,
+                        p.ThumbnailImagePath,
+                        p.Slug,
+                        p.LikesCount,
+                        p.CommentsCount,
+                        u.FullName AS FullName,
+                        u.UserName AS UserName,
+                        u.AvatarImagePath AS AvatarImagePath,
+                        c.CategoryName AS CategoryName,
+                        c.Slug
+                from    Posts p join Users u ON p.UserId = u.Id
+                                join Categories c ON p.CategoryId = c.Id";
+
+                var posts = await connection.QueryAsync<PostEntity, UserEntity, CategoryEntity, PostEntity>(sql, (post, user, category) =>
+                    {
+                         post.User = user;
+                         post.Category = category;
+                         return post;
+                    },
+                    splitOn: "FullName, CategoryName"
+                );
+
+                var postList = posts.AsList();
+
+
+                foreach (var post in postList)
+                {
+                    if (!string.IsNullOrEmpty(post.ThumbnailImagePath))
+                    {
+                        post.ThumbnailImagePath = HandleImage.ImageToBase64(post.ThumbnailImagePath);
+                    }
+
+                    if (!string.IsNullOrEmpty(post.User.AvatarImagePath))
+                    {
+                        post.User.AvatarImagePath = HandleImage.ImageToBase64(post.User.AvatarImagePath);
+                    }
+                }
+
+                return postList;
+            }
         }
     }
 }
