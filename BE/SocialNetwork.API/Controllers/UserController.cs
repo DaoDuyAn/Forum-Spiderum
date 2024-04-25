@@ -41,5 +41,47 @@ namespace SocialNetwork.API.Controllers
         {
             return await _mediator.Send(command);
         }
+
+        [HttpPost("AddSavedPost")]
+        [ProducesDefaultResponseType(typeof(int))]
+        public async Task<int> AddSavedPost([FromBody] AddSavedPostCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        [HttpPost("UnsavedPost")]
+        [ProducesDefaultResponseType(typeof(int))]
+        public async Task<int> UnsavedPost([FromBody] UnsavedPostCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        [HttpPost("AddFollowCategory")]
+        [ProducesDefaultResponseType(typeof(int))]
+        public async Task<int> AddFollowCategory([FromBody] AddFollowCategoryCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        [HttpPost("UnfollowCategory")]
+        [ProducesDefaultResponseType(typeof(int))]
+        public async Task<int> UnfollowCategory([FromBody] UnfollowCategoryCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        [HttpPost("AddFollowUser")]
+        [ProducesDefaultResponseType(typeof(int))]
+        public async Task<int> AddFollowUser([FromBody] AddFollowUserCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        [HttpPost("UnfollowUser")]
+        [ProducesDefaultResponseType(typeof(int))]
+        public async Task<int> UnfollowUser([FromBody] UnfollowUserCommand command)
+        {
+            return await _mediator.Send(command);
+        }
     }
 }

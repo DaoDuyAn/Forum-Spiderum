@@ -279,6 +279,27 @@ namespace SocialNetwork.Infrastructure.Repositories.Account
             return resultValue;
         }
 
+        public async Task<int> ChangePasswordAsync(string oldPass, string newPass, string confirmPass, Guid userId)
+        {
+            var parameters = new DynamicParameters();
 
+            parameters.Add("@OldPassword", oldPass);
+            parameters.Add("@NewPassword", newPass);
+            parameters.Add("@ConfirmPassword", confirmPass);
+            parameters.Add("@UserId", userId);
+            parameters.Add("@Result", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+            using (var connection = dapperContext.CreateConnection())
+            {
+                await connection.ExecuteAsync(
+                    "proc_Account_ChangePassword",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+            }
+
+            int resultValue = parameters.Get<int>("@Result");
+            return resultValue;
+        }
     }
 }

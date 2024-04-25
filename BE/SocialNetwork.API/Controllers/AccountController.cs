@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Application.Commands.Account;
 using SocialNetwork.Application.Commands.Account.Create;
+using SocialNetwork.Application.Commands.Account.Update;
 using SocialNetwork.Application.DTOs.Account;
 using SocialNetwork.Infrastructure.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
@@ -37,6 +38,13 @@ namespace SocialNetwork.API.Controllers
         [HttpPost("SignUp")]
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<IActionResult> CreateAccount([FromBody] CreatAccountCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
+
+        [HttpPut("ChangePassword")]
+        [ProducesDefaultResponseType(typeof(int))]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
         {
             return Ok(await _mediator.Send(command));
         }

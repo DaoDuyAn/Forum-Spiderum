@@ -14,5 +14,6 @@ namespace SocialNetwork.Domain.Interfaces
         Task<Guid> UpdateCategoryAsync(CategoryEntity request);
         Task<bool> DeleteCategoryAsync(Guid id);
         Task<CategoryEntity> GetCategoryAsync(Expression<Func<CategoryEntity, bool>> expression);
+
     }
 }

@@ -18,6 +18,9 @@ begin
 	if(not exists (select * from Users where Id = @UserId))
 		return;
 
+	if(@UserId = @PostId)
+		return;
+
 	-- Add like
 	declare @Id uniqueidentifier = NEWID();
 

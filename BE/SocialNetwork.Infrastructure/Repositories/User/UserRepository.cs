@@ -70,6 +70,132 @@ namespace SocialNetwork.Infrastructure.Repositories.User
             return resultValue;
         }
 
+        public async Task<int> AddSavedPostAsync(Guid UserId, Guid PostId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@UserId", UserId);
+            parameters.Add("@PostId", PostId);
+            parameters.Add("@Result", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+            using (var connection = dapperContext.CreateConnection())
+            {
+                await connection.ExecuteAsync(
+                    "proc_AddSavedPost",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+            }
+
+            int resultValue = parameters.Get<int>("@Result");
+            return resultValue;
+        }
+
+        public async Task<int> UnsavedPostAsync(Guid UserId, Guid PostId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@UserId", UserId);
+            parameters.Add("@PostId", PostId);
+            parameters.Add("@Result", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+            using (var connection = dapperContext.CreateConnection())
+            {
+                await connection.ExecuteAsync(
+                    "proc_UnsavedPost",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+            }
+
+            int resultValue = parameters.Get<int>("@Result");
+            return resultValue;
+        }
+
+        public async Task<int> AddFollowCategoryAsync(Guid UserId, Guid CategoryId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@UserId", UserId);
+            parameters.Add("@CategoryId", CategoryId);
+            parameters.Add("@Result", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+            using (var connection = dapperContext.CreateConnection())
+            {
+                await connection.ExecuteAsync(
+                    "proc_AddFollowCategory",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+            }
+
+            int resultValue = parameters.Get<int>("@Result");
+            return resultValue;
+        }
+
+        public async Task<int> UnfollowCategoryAsync(Guid UserId, Guid CategoryId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@UserId", UserId);
+            parameters.Add("@CategoryId", CategoryId);
+            parameters.Add("@Result", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+            using (var connection = dapperContext.CreateConnection())
+            {
+                await connection.ExecuteAsync(
+                    "proc_UnfollowCategory",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+            }
+
+            int resultValue = parameters.Get<int>("@Result");
+            return resultValue;
+        }
+
+        public async Task<int> AddFollowUserAsync(Guid UserId, Guid FollowerId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@UserId", UserId);
+            parameters.Add("@FollowerId", FollowerId);
+            parameters.Add("@Result", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+            using (var connection = dapperContext.CreateConnection())
+            {
+                await connection.ExecuteAsync(
+                    "proc_AddFollowUser",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+            }
+
+            int resultValue = parameters.Get<int>("@Result");
+            return resultValue;
+        }
+
+        public async Task<int> UnfollowUserAsync(Guid UserId, Guid FollowerId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@UserId", UserId);
+            parameters.Add("@FollowerId", FollowerId);
+            parameters.Add("@Result", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+            using (var connection = dapperContext.CreateConnection())
+            {
+                await connection.ExecuteAsync(
+                    "proc_UnfollowUser",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+            }
+
+            int resultValue = parameters.Get<int>("@Result");
+            return resultValue;
+        }
+
         public async Task<UserEntity> GetUserAsync(Expression<Func<UserEntity, bool>> expression)
         {
             var user = await GetAsync(expression);
@@ -85,16 +211,12 @@ namespace SocialNetwork.Infrastructure.Repositories.User
                     user.CoverImagePath = HandleImage.ImageToBase64(user.CoverImagePath);
                 }
 
-                user.Description ??= "";
-                user.Email ??= "";
-                user.Address ??= "";
-                user.AvatarImagePath ??= "";
-                user.CoverImagePath ??= "";
+                return user;
             }
 
-            return user;
+            return null;
         }
 
-      
+        
     }
 }

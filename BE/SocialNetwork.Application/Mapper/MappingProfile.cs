@@ -20,8 +20,7 @@ namespace SocialNetwork.Application.Mapper
             CreateMap<AuthResponseDTO, ApiResponse>().ReverseMap();
             CreateMap<UserEntity, GetUserByIdResponseDTO>()
                 .ForMember(dest => dest.BirthDate,
-                           opt => opt.MapFrom(src => src.BirthDate.ToString("dd/MM/yyyy")))
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                           opt => opt.MapFrom(src => src.BirthDate.ToString("dd/MM/yyyy")));
         }
     }
 }

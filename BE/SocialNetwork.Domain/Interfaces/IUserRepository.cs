@@ -11,7 +11,17 @@ namespace SocialNetwork.Domain.Interfaces
     public interface IUserRepository : IAsyncRepository<UserEntity>
     {
         Task<UserEntity> GetUserAsync(Expression<Func<UserEntity, bool>> expression);
+      
         Task<int> AddLikePostAsync(Guid UserId, Guid PostId);
         Task<int> UnlikePostAsync(Guid UserId, Guid PostId);
+
+        Task<int> AddSavedPostAsync(Guid UserId, Guid PostId);
+        Task<int> UnsavedPostAsync(Guid UserId, Guid PostId);
+
+        Task<int> AddFollowCategoryAsync(Guid UserId, Guid CategoryId);
+        Task<int> UnfollowCategoryAsync(Guid UserId, Guid CategoryId);
+
+        Task<int> AddFollowUserAsync(Guid UserId, Guid FollowerId);
+        Task<int> UnfollowUserAsync(Guid UserId, Guid FollowerId);
     }
 }

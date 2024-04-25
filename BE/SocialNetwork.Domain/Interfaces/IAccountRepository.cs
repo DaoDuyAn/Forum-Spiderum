@@ -15,6 +15,6 @@ namespace SocialNetwork.Domain.Interfaces
         Task<ApiResponse> RenewTokenAsync(Guid userId, string username, string accessToken, string refreshToken);
         Task<int> AddAccountAsync(string username, string pass, string fullname, string phone, string roleName);
 
-       
+        Task<int> ChangePasswordAsync(string oldPass, string newPass, string confirmPass, Guid userId);
     }
 }
