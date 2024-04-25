@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark as regularBookmark } from '@fortawesome/free-regular-svg-icons';
@@ -15,11 +16,28 @@ function User() {
     const [searchParams, setSearchParams] = useSearchParams();
     const { username } = useParams();
     const tab = searchParams.get('tab');
+    const userName = localStorage.getItem('userName') ?? null;
 
-    const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(localStorage.getItem('accessToken') ?? null);
+    const [dataUser, setDataUser] = useState({});
     const [posts, setPosts] = useState(null);
     const [postsSaved, setPostsSaved] = useState(null);
     const [visible, setVisible] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(
+                    `https://localhost:44379/api/v1/GetUserByUserName/username/${username}`,
+                );
+                setDataUser(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const getUser = () => {
         // call API
@@ -67,24 +85,26 @@ function User() {
                                                 <Link to="/" className={cx('user__profile-widget-avt-link')}>
                                                     <img
                                                         src={
-                                                            'https://www.gravatar.com/avatar/262cfa0997548c39953a9607a56f27da?d=wavatar&f=y'
+                                                            dataUser.avatarImagePath !== ''
+                                                                ? dataUser.avatarImagePath
+                                                                : 'https://www.gravatar.com/avatar/8f9a66cc24f92fb53bc4f112cf5a3fe2?d=wavatar&f=y'
                                                         }
                                                         alt=""
                                                     />
                                                 </Link>
                                             </div>
                                             <h1 className={cx('user__profile-widget-disname')}>
-                                                <Link to="/">Duy An </Link>
+                                                <Link to="/">{dataUser.fullName}</Link>
                                             </h1>
                                             <p className={cx('user__profile-widget-username')}>
-                                                <Link to="/">@daoduyan</Link>
+                                                <Link to="/">@{dataUser.userName}</Link>
                                             </p>
-                                            <div className={cx('user__profile-widget-bio')}>?</div>
-                                            <Link className={cx('user__edit')} to="/user/settings">
+                                            <div className={cx('user__profile-widget-bio')}>{dataUser.description}</div>
+                                            {/* <Link className={cx('user__edit')} to="/user/settings">
                                                 Chỉnh sửa trang cá nhân
-                                            </Link>
+                                            </Link> */}
 
-                                            <div className={cx('user__profile-widget-button')}>
+                                            {/* <div className={cx('user__profile-widget-button')}>
                                                 <div onClick={() => window.location.reload(false)}>
                                                     <button
                                                         className={cx('user__profile-widget-button-item')}
@@ -106,69 +126,84 @@ function User() {
                                                         <span className={cx('follow-text')}>Theo dõi</span>
                                                     </button>
                                                 </div>{' '}
-                                            </div>
-                                            {/* {currentUser._id === currentUser.user._id ? (
+                                            </div> */}
+                                            {dataUser.userName === userName ? (
                                                 <Link className={cx('user__edit')} to="/user/settings">
                                                     Chỉnh sửa trang cá nhân
                                                 </Link>
                                             ) : (
                                                 <div className={cx('user__profile-widget-button')}>
-                                                    {currentUser ? (
-                                                        currentUser.following.includes(currentUser.user._id) ? (
-                                                            <div onClick={() => window.location.reload(false)}>
-                                                                <button
-                                                                    className={cx(
-                                                                        'user__profile-widget-button-item follow',
-                                                                    )}
-                                                                    onClick={handelUnFollow}
-                                                                >
-                                                                    <span className={cx('follow-icon')}>
-                                                                        <i class="bx bxs-check-circle"></i>
-                                                                    </span>
-                                                                    <span className={cx('follow-text')}>
-                                                                        Đang Theo dõi
-                                                                    </span>
-                                                                </button>
-                                                            </div>
-                                                        ) : (
-                                                            <div onClick={() => window.location.reload(false)}>
-                                                                <button
-                                                                    className={cx('user__profile-widget-button-item')}
-                                                                    onClick={handelFollow}
-                                                                >
-                                                                    <span>Theo dõi</span>
-                                                                </button>
-                                                            </div>
-                                                        )
-                                                    ) : (
-                                                        <Link to="/login">
-                                                            <button className={cx('user__profile-widget-button-item')}>
-                                                                <span>Theo dõi</span>
-                                                            </button>
-                                                        </Link>
-                                                    )}
-                                                    <button
-                                                        className={cx('user__profile-widget-button-item')}
-                                                        // onClick={handelClickMes}
-                                                    >
-                                                        <span>Nhắn tin</span>
-                                                    </button>
+                                                    <div onClick={() => window.location.reload(false)}>
+                                                        <button
+                                                            className={cx('user__profile-widget-button-item')}
+                                                            onClick={handelUnFollow}
+                                                        >
+                                                            <FontAwesomeIcon
+                                                                className={cx('follow-icon')}
+                                                                icon={faCircleCheck}
+                                                            />
+
+                                                            <span className={cx('follow-text')}>Đang theo dõi</span>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            )} */}
+                                                // <div className={cx('user__profile-widget-button')}>
+                                                //      {currentUser ? (
+                                                //         dataUser.id !== userId ? (
+                                                //             <div onClick={() => window.location.reload(false)}>
+                                                //                 <button
+                                                //                     className={cx(
+                                                //                         'user__profile-widget-button-item follow',
+                                                //                     )}
+                                                //                     onClick={handelUnFollow}
+                                                //                 >
+                                                //                     <span className={cx('follow-icon')}>
+                                                //                         <i class="bx bxs-check-circle"></i>
+                                                //                     </span>
+                                                //                     <span className={cx('follow-text')}>
+                                                //                         Đang Theo dõi
+                                                //                     </span>
+                                                //                 </button>
+                                                //             </div>
+                                                //         ) : (
+                                                //             <div onClick={() => window.location.reload(false)}>
+                                                //                 <button
+                                                //                     className={cx('user__profile-widget-button-item')}
+                                                //                     onClick={handelFollow}
+                                                //                 >
+                                                //                     <span>Theo dõi</span>
+                                                //                 </button>
+                                                //             </div>
+                                                //         )
+                                                //     ) : (
+                                                //         <Link to="/login">
+                                                //             <button className={cx('user__profile-widget-button-item')}>
+                                                //                 <span>Theo dõi</span>
+                                                //             </button>
+                                                //         </Link>
+                                                //     )}
+                                                //     <button
+                                                //         className={cx('user__profile-widget-button-item')}
+                                                //         // onClick={handelClickMes}
+                                                //     >
+                                                //         <span>Nhắn tin</span>
+                                                //     </button>
+                                                // </div>
+                                            )}
                                             <div className={cx('user__profile-widget-stats')}>
                                                 <div>
                                                     <p className={cx('label')}>Người theo dõi</p>
                                                     <p className={cx('value')}>
-                                                        {currentUser?.user.followers
-                                                            ? currentUser?.user.followers.length
+                                                        {currentUser?.user?.followers
+                                                            ? currentUser?.user?.followers.length
                                                             : '0'}
                                                     </p>
                                                 </div>
                                                 <div>
                                                     <p className={cx('label')}>Đang theo dõi</p>
                                                     <p className={cx('value')}>
-                                                        {currentUser?.user.following
-                                                            ? currentUser?.user.following.length
+                                                        {currentUser?.user?.following
+                                                            ? currentUser?.user?.following.length
                                                             : '0'}
                                                     </p>
                                                 </div>
@@ -227,13 +262,13 @@ function User() {
                                         <div className={cx('user__profile-posts-all-body')}>
                                             <div className={cx('user__profile-posts-all-content')}>
                                                 <div className={cx('grid')}>
-                                                    {postsSaved
+                                                    {/* {postsSaved
                                                         ? postsSaved.length > 0
                                                             ? postsSaved.map((post) => (
                                                                   <PostItem post={post} key={post._id} />
                                                               ))
                                                             : 'Bạn chưa lưu bài viết nào'
-                                                        : ''}
+                                                        : ''} */}
                                                     <div className={cx('empty')}>Bạn chưa lưu bài viết nào</div>
                                                 </div>
                                             </div>
@@ -265,8 +300,8 @@ function User() {
                                                     {/* {posts.posts.map((post) => (
                                                         <PostItem post={post} key={post._id} />
                                                     ))} */}
-                                                    <PostItem key={1} />
-                                                    <PostItem key={2} />
+                                                    {/* <PostItem key={1} />
+                                                    <PostItem key={2} /> */}
                                                 </div>
                                             </div>
                                         </div>

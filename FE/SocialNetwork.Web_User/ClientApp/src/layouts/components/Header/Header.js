@@ -26,18 +26,31 @@ const CustomTab = styled(Tab)({
 const cx = classNames.bind(styles);
 
 function Header() {
-    const currentUser = true;
+    const [currentUser, setCurrentUser] = useState(localStorage.getItem('accessToken') ?? null);
+    const [userName, setUserName] = useState(localStorage.getItem('userName') ?? null);
     const [value, setValue] = useState(parseInt(localStorage.getItem('activeTab')) ?? -1);
     const [categories, setCategories] = useState([]);
+    const [userData, setUserData] = useState({});
 
-    
-    // useEffect(() => {
-    //     const storedValue = localStorage.getItem('activeTab');
-    //     console.log(storedValue);
-    //     if (storedValue !== null) {
-    //         setValue(parseInt(storedValue));
-    //     }
-    // }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const userId = localStorage.getItem('userId');
+                console.log('...', userId);
+                const response = await axios.get(`https://localhost:44379/api/v1/GetUserById/id/${userId}`);
+
+                setUserData(response.data);
+
+                console.log('User data:', userData);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        if (currentUser !== null) {
+            fetchData();
+        }
+    }, [currentUser]);
 
     useEffect(() => {
         localStorage.setItem('activeTab', JSON.stringify(value));
@@ -49,24 +62,36 @@ function Header() {
 
     // Handle logic
     const handleMenuChange = (menuItem) => {
-        // console.log(menuItem);
+        if (menuItem.title === 'Đăng xuất') {
+            handleLogout();
+        }
+    };
+
+    const handleLogout = () => {
+        // Xử lý đăng xuất
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userName');
+
+        setCurrentUser(false);
     };
 
     const userMenu = [
         {
             icon: <FontAwesomeIcon icon={faUser} />,
             title: 'Xem trang cá nhân',
-            to: '/user/an',
+            to: `/user/${userName}`,
         },
         {
             icon: <FontAwesomeIcon icon={faPenToSquare} />,
             title: 'Bài viết của tôi',
-            to: '/user/duyan?tab=createdPosts',
+            to: `/user/${userName}?tab=createdPosts`,
         },
         {
             icon: <FontAwesomeIcon icon={faBookmark} />,
             title: 'Đã lưu',
-            to: '/user/duyan?tab=savedPosts',
+            to: `/user/${userName}?tab=savedPosts`,
         },
         {
             icon: <FontAwesomeIcon icon={faGear} />,
@@ -76,7 +101,7 @@ function Header() {
         {
             icon: <FontAwesomeIcon icon={faSignOut} />,
             title: 'Đăng xuất',
-            to: '/login',
+            to: '/',
             separate: true,
         },
     ];
@@ -97,7 +122,7 @@ function Header() {
     }, []);
 
     return (
-        <header className={cx('wrapper', currentUser ? 'height1' : 'height2')}>
+        <header className={cx('wrapper', 'height1')}>
             <div className={cx('inner')}>
                 <Link to={config.routes.home} className={cx('logo-link')} onClick={() => setValue(-1)}>
                     <img src="https://spiderum.com/assets/icons/wideLogo.png" alt="spiderum" width="140" />
@@ -130,8 +155,14 @@ function Header() {
                     ) : (
                         <>
                             <Button text>Liên hệ</Button>
-                            <Button text>Đăng ký</Button>
-                            <Button primary>Đăng nhập</Button>
+                            <Link to={config.routes.register}>
+                                <Button text>Đăng ký</Button>
+                            </Link>
+                            <div className={cx('ml-[10px]')}>
+                                <Link to={config.routes.login}>
+                                    <Button primary>Đăng nhập</Button>
+                                </Link>
+                            </div>
                         </>
                     )}
 
@@ -139,7 +170,11 @@ function Header() {
                         {currentUser ? (
                             <Image
                                 className={cx('user-avatar')}
-                                src="https://www.gravatar.com/avatar/8f9a66cc24f92fb53bc4f112cf5a3fe2?d=wavatar&f=y"
+                                src={
+                                    userData.avatarImagePath !== ''
+                                        ? userData.avatarImagePath
+                                        : 'https://www.gravatar.com/avatar/8f9a66cc24f92fb53bc4f112cf5a3fe2?d=wavatar&f=y'
+                                }
                                 alt="Avatar"
                             />
                         ) : (
@@ -149,30 +184,30 @@ function Header() {
                 </div>
             </div>
 
-            {currentUser ? (
-                <div className={cx('header__menu')}>
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        variant="scrollable"
-                        scrollButtons
-                        aria-label="visible arrows tabs example"
-                        sx={{
-                            [`& .${tabsClasses.scrollButtons}`]: {
-                                '&.Mui-disabled': { opacity: 0.3 },
-                                '& .MuiSvgIcon-root': { fontSize: '2rem' },
-                            },
-                        }}
-                    >
-                        {categories.map((category, index) => (
-                              <CustomTab key={index} label={category.categoryName} component={Link} to={`/category/${category.slug}`} />
-                        ))}
-                        
-                    </Tabs>
-                </div>
-            ) : (
-                <></>
-            )}
+            <div className={cx('header__menu')}>
+                <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    variant="scrollable"
+                    scrollButtons
+                    aria-label="visible arrows tabs example"
+                    sx={{
+                        [`& .${tabsClasses.scrollButtons}`]: {
+                            '&.Mui-disabled': { opacity: 0.3 },
+                            '& .MuiSvgIcon-root': { fontSize: '2rem' },
+                        },
+                    }}
+                >
+                    {categories.map((category, index) => (
+                        <CustomTab
+                            key={index}
+                            label={category.categoryName}
+                            component={Link}
+                            to={`/category/${category.slug}`}
+                        />
+                    ))}
+                </Tabs>
+            </div>
         </header>
     );
 }

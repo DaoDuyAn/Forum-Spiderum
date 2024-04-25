@@ -98,7 +98,7 @@ function CreatePost() {
 
         const payload = {
             ...data,
-            userId: 'bf33c1a4-8330-4c60-ba0b-2a91f6fb95bb',
+            userId: localStorage.getItem('userId'),
         };
 
         console.log(payload.content);

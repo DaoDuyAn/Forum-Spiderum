@@ -22,6 +22,7 @@ function Post() {
 
     const inputCmtRef = useRef(null);
     const toast = useRef(null);
+    const userId = localStorage.getItem('userId') ?? null;
 
     const [isUser, setIsUser] = useState(true);
     const [active, setActive] = useState(true);
@@ -137,13 +138,13 @@ function Post() {
     const handleDelete = useCallback(
         async (e) => {
             e.preventDefault();
-            // const token = localStorage.getItem('token');
+            const accessToken = localStorage.getItem('accessToken');
             const option = {
                 method: 'delete',
                 url: `https://localhost:44379/api/v1/DeletePostById/id/${dataPost.id}`,
-                // headers: {
-                //     authorization: `Bearer ${token}`,
-                // },
+                headers: {
+                    authorization: `Bearer ${accessToken}`,
+                },
             };
             const res = await axios(option);
             setResponse(res.data);
@@ -185,10 +186,12 @@ function Post() {
                     <div className={cx('post__profile')}>
                         <div className={cx('flex')}>
                             <div className={cx('post-avt')}>
-                                <Link to={`/user/an`}>
+                                <Link to={`/user/${authPost.userName}`}>
                                     <img
                                         src={
-                                            'https://www.gravatar.com/avatar/262cfa0997548c39953a9607a56f27da?d=wavatar&f=y'
+                                            authPost.avatarImagePath !== ''
+                                                ? authPost.avatarImagePath
+                                                : 'https://www.gravatar.com/avatar/8f9a66cc24f92fb53bc4f112cf5a3fe2?d=wavatar&f=y'
                                         }
                                         alt=""
                                     />
@@ -203,7 +206,7 @@ function Post() {
                                 </div>
                             </div>
                         </div>
-                        {isUser ? (
+                        {userId === authPost.id ? (
                             <div className={cx('btn-user')}>
                                 <Link to={`/post/edit/${dataPost.slug}`}>
                                     <span className={cx('button-data', 'edit')}>Sửa</span>

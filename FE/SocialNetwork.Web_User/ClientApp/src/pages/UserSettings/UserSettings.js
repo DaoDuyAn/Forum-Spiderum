@@ -1,4 +1,5 @@
 import { useEffect, useCallback, useState, useRef } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
@@ -24,7 +25,23 @@ function UserSettings() {
     const [text, setText] = useState('');
 
     const [dataUser, setDataUser] = useState({});
-    const [checked, setChecked] = useState(dataUser.gender ?? 0);
+    const [checked, setChecked] = useState(1);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const userId = localStorage.getItem('userId');
+                console.log('...', userId);
+                const response = await axios.get(`https://localhost:44379/api/v1/GetUserById/id/${userId}`);
+                setDataUser(response.data); 
+                setChecked(parseInt(response.data.gender));
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+    
+        fetchData();
+    }, []);
 
     const [dataPassword, setDataPassword] = useState({
         oldPassword: '',
@@ -128,8 +145,8 @@ function UserSettings() {
 
             switch (name) {
                 case 'oldPassword':
-                    if (value.length < 9) {
-                        stateObj[name] = 'Mật khẩu phải có tối thiểu 9 kí tự và ít hơn 100 kí tự.';
+                    if (value.length < 6) {
+                        stateObj[name] = 'Mật khẩu phải có tối thiểu 6 kí tự và ít hơn 100 kí tự.';
                     }
                     break;
                 case 'password':
@@ -137,8 +154,8 @@ function UserSettings() {
                         stateObj['confirmPassword'] = 'Mật khẩu nhập lại không chính xác.';
                     } else if (dataPassword.oldPassword && value === dataPassword.oldPassword) {
                         stateObj[name] = 'Mật khẩu mới không được giống mật khẩu cũ';
-                    } else if (value.length < 9) {
-                        stateObj[name] = 'Mật khẩu phải có tối thiểu 9 kí tự và ít hơn 100 kí tự.';
+                    } else if (value.length < 6) {
+                        stateObj[name] = 'Mật khẩu phải có tối thiểu 6 kí tự và ít hơn 100 kí tự.';
                     }
                     break;
                 case 'confirmPassword':
@@ -160,7 +177,7 @@ function UserSettings() {
     };
 
     const handelChangeData = (e) => {
-        setDataUser({ ...dataUser, intro: e.target.value });
+        setDataUser({ ...dataUser, description: e.target.value });
     };
 
     const onSave = useCallback((e) => {
@@ -169,7 +186,31 @@ function UserSettings() {
         } catch (error) {}
     });
 
-    const onSubmitPassword = (e) => {};
+    const onSubmitPassword = async (e) => {
+        e.preventDefault();
+        try {
+            const userId = localStorage.getItem('userId');
+            const response = await axios.put('https://localhost:44379/api/v1/ChangePassword', {
+                oldPassword: dataPassword.oldPassword,
+                newPassword: dataPassword.password,
+                confirmPassword: dataPassword.confirmPassword,
+                userId: userId,
+            });
+
+            if (response.data === 1) {
+                setIsSuccess('Cập nhật mật khẩu thành công.');
+                setIsErr(null);
+            } else {
+                setIsErr('Có lỗi xảy ra khi cập nhật mật khẩu.');
+                setIsSuccess(null);
+            }
+        } catch (error) {
+            setIsErr('Có lỗi xảy ra khi cập nhật mật khẩu.');
+            setIsSuccess(null);
+            console.error('Error updating password:', error);
+        }
+    };
+    
 
     useEffect(() => {
         document.title = `Cài đặt người dùng`;
@@ -284,7 +325,7 @@ function UserSettings() {
                                                 <div className={cx('settings__flex-70')}>
                                                     <textarea
                                                         className={cx('settings__textarea')}
-                                                        value={dataUser.intro}
+                                                        value={dataUser.description}
                                                         onChange={(e) => {
                                                             handleDesc(e);
                                                             handelChangeData(e);
@@ -305,11 +346,11 @@ function UserSettings() {
                                                     <input
                                                         type="text"
                                                         className={cx('settings__input')}
-                                                        value={dataUser.displayName}
+                                                        value={dataUser.fullName}
                                                         onChange={(e) =>
                                                             setDataUser({
                                                                 ...dataUser,
-                                                                displayName: e.target.value,
+                                                                fullName: e.target.value,
                                                             })
                                                         }
                                                     />
@@ -322,7 +363,7 @@ function UserSettings() {
                                                                 type="text"
                                                                 readOnly
                                                                 className={cx('settings__input', 'input-field')}
-                                                                value={dataUser.mail}
+                                                                value={dataUser.email}
                                                                 onClick={() => setIsUpdate(true)}
                                                             />
                                                             <FontAwesomeIcon
@@ -340,11 +381,11 @@ function UserSettings() {
                                                     <input
                                                         type="date"
                                                         className={cx('settings__input')}
-                                                        value={dataUser.dateOfBirth}
+                                                        value={dataUser.birthDate ? new Date(dataUser.birthDate).toISOString().substr(0, 10) : ''}
                                                         onChange={(e) =>
                                                             setDataUser({
                                                                 ...dataUser,
-                                                                dateOfBirth: e.target.value,
+                                                                birthDate: e.target.value,
                                                             })
                                                         }
                                                     />
@@ -495,11 +536,11 @@ function UserSettings() {
                                                     <input
                                                         type="number"
                                                         className={cx('settings__input')}
-                                                        value={dataUser.mobile}
+                                                        value={dataUser.phone}
                                                         onChange={(e) =>
                                                             setDataUser({
                                                                 ...dataUser,
-                                                                mobile: e.target.value,
+                                                                phone: e.target.value,
                                                             })
                                                         }
                                                     />
