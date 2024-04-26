@@ -15,6 +15,6 @@ namespace SocialNetwork.Domain.Interfaces
         Task<bool> DeletePostAsync(Guid id);
         Task<PostEntity> GetPostAsync(Expression<Func<PostEntity, bool>> expression);
         Task<List<PostEntity>> GetAllPostsAsync();
-
+        Task<List<PostEntity>> GetPostsByUserIdAsync(Guid UserId);
     }
 }

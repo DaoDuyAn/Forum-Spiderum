@@ -54,6 +54,13 @@ namespace SocialNetwork.API.Controllers
             return Ok(post);
         }
 
+        [HttpGet("GetPostsByUserId/userId/{UserId}")]
+        public async Task<IActionResult> GetPostsByUserId(string UserId)
+        {
+            var post = await _mediator.Send(new GetPostsByUserIdQuery { UserId = UserId });
+            return Ok(post);
+        }
+
         [HttpDelete("DeletePostById/id/{Id}")]
         public async Task<bool> DeletePostById(string Id)
         {

@@ -287,5 +287,57 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
                 return postList;
             }
         }
+
+        public async Task<List<PostEntity>> GetPostsByUserIdAsync(Guid UserId)
+        {
+            using (var connection = dapperContext.CreateConnection())
+            {
+                var sql = @"
+                select  p.Id,
+                        p.Title,
+                        p.Description,
+                        p.CreationDate,
+                        p.ThumbnailImagePath,
+                        p.Slug,
+                        p.LikesCount,
+                        p.CommentsCount,
+                        u.FullName AS FullName,
+                        u.UserName AS UserName,
+                        u.AvatarImagePath AS AvatarImagePath,
+                        c.CategoryName AS CategoryName,
+                        c.Slug
+                from    Posts p join Users u ON p.UserId = u.Id
+                                join Categories c ON p.CategoryId = c.Id
+                where   u.Id = @UserId";
+
+                var posts = await connection.QueryAsync<PostEntity, UserEntity, CategoryEntity, PostEntity>(sql, (post, user, category) =>
+                {
+                    post.User = user;
+                    post.Category = category;
+                    return post;
+                },
+                new { UserId = UserId },
+                splitOn: "FullName, CategoryName"
+                );
+
+                var postList = posts.AsList();
+
+
+                foreach (var post in postList)
+                {
+                    if (!string.IsNullOrEmpty(post.ThumbnailImagePath))
+                    {
+                        post.ThumbnailImagePath = HandleImage.ImageToBase64(post.ThumbnailImagePath);
+                    }
+
+                    if (!string.IsNullOrEmpty(post.User.AvatarImagePath))
+                    {
+                        post.User.AvatarImagePath = HandleImage.ImageToBase64(post.User.AvatarImagePath);
+                    }
+                }
+
+                return postList;
+            }
+        }
     }
 }
