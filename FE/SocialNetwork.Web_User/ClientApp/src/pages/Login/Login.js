@@ -58,7 +58,7 @@ function Login() {
                         <img src="https://auth.spiderum.com/assets-auth/images/spiderum-logo.png" alt="" />
                     </Link>
 
-                    <form action="" method="POST" className={cx('login__form')}>
+                    <form onSubmit={onSubmit} className={cx('login__form')}>
                         <input
                             type="text"
                             placeholder="Tên đăng nhập hoặc email"
@@ -78,7 +78,7 @@ function Login() {
                             onChange={(e) => setData({ ...data, password: e.target.value })}
                         />
 
-                        <button className={cx('login__form-button', 'bg-button')} type="submit" onClick={onSubmit}>
+                        <button className={cx('login__form-button', 'bg-button')} type="submit">
                             Đăng nhập
                         </button>
                     </form>

@@ -26,6 +26,7 @@ function Register() {
         try {
             console.log(data);
             const response = await axios.post('https://localhost:44379/api/v1/SignUp', data);
+
             if (response.data === 1) {
                 setMessages('Đăng ký thành công.');
                 setErr(false);
@@ -65,7 +66,7 @@ function Register() {
                     <img src="https://auth.spiderum.com/assets-auth/images/spiderum-logo.png" alt="" />
                 </Link>
 
-                <form action="" className={cx('login__form')} method="POST">
+                <form onSubmit={onSubmit} className={cx('login__form')}>
                     <input
                         type="text"
                         placeholder="Tên đăng nhập"
@@ -109,12 +110,7 @@ function Register() {
                     <Link to={config.routes.auth_register}>
                         <p className={cx('login__text')}>Đăng ký bằng email</p>
                     </Link>
-                    <button
-                        className={cx('login__form-button', 'bg-button')}
-                        name="btnSubmit"
-                        type="submit"
-                        onClick={onSubmit}
-                    >
+                    <button className={cx('login__form-button', 'bg-button')} name="btnSubmit" type="submit">
                         Đăng ký
                     </button>
                     <div className={cx('auth__back')}>

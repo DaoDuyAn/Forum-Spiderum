@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios'; 
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Pagination from '@mui/material/Pagination';
 import { styled } from '@mui/system';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,6 +20,8 @@ const cx = classNames.bind(styles);
 function Filter() {
     const [filterActive, setFilterActive] = useState(0);
     const [posts, setPosts] = useState([]);
+
+    const { slug } = useParams();
     // const [page, setPage] = useState(12);
     // const [currentButton, setCurrentButton] = useState(1);
 
@@ -30,7 +32,7 @@ function Filter() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('https://localhost:44379/api/v1/GetAllPosts');
+                const response = await axios.get(`https://localhost:44379/api/v1/GetPostsByCategory/slug/${slug}`);
                 setPosts(response.data); 
             } catch (error) {
                 console.error('Error fetching posts:', error);
@@ -38,7 +40,9 @@ function Filter() {
         };
 
         fetchPosts(); 
-    }, []); 
+    }, [slug]); 
+
+
 
 
     const fitterList = [

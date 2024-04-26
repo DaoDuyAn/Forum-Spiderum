@@ -17,10 +17,11 @@ function User() {
     const { username } = useParams();
     const tab = searchParams.get('tab');
     const userName = localStorage.getItem('userName') ?? null;
+    const userId = localStorage.getItem('userId') ?? null;
 
     const [currentUser, setCurrentUser] = useState(localStorage.getItem('accessToken') ?? null);
     const [dataUser, setDataUser] = useState({});
-    const [posts, setPosts] = useState(null);
+    const [posts, setPosts] = useState([]);
     const [postsSaved, setPostsSaved] = useState(null);
     const [visible, setVisible] = useState(true);
 
@@ -38,6 +39,34 @@ function User() {
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get(`https://localhost:44379/api/v1/GetPostsByUserId/userId/${userId}`);
+                setPosts(response.data);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        fetchPosts();
+    }, []);
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await axios.get(
+    //                 `https://localhost:44379/api/v1/GetPostsByUserId/userId/${userId}`,
+    //             );
+    //             setPosts(response.data);
+    //         } catch (error) {
+    //             console.error('Error fetching data:', error);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, []);
 
     const getUser = () => {
         // call API
@@ -275,7 +304,7 @@ function User() {
                                         </div>
                                     </div>
                                 </div>
-                            ) : posts?.posts.length !== 0 ? (
+                            ) : posts?.length !== 0 ? (
                                 <div className={cx('user__profile-posts')}>
                                     {/* <div className={cx('user__profile-posts-top')}>
                                         <div className={cx('user__profile-posts-head')}>
@@ -297,11 +326,8 @@ function User() {
                                         <div className={cx('user__profile-posts-all-body')}>
                                             <div className={cx('user__profile-posts-all-content')}>
                                                 <div className={cx('grid')}>
-                                                    {/* {posts.posts.map((post) => (
-                                                        <PostItem post={post} key={post._id} />
-                                                    ))} */}
-                                                    {/* <PostItem key={1} />
-                                                    <PostItem key={2} /> */}
+                                                    {posts &&
+                                                        posts.map((post) => <PostItem key={post._id} post={post} />)}
                                                 </div>
                                             </div>
                                         </div>

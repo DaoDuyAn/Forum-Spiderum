@@ -16,11 +16,11 @@ const cx = classNames.bind(styles);
 
 function PostItem({ post }) {
 
-    const [isBookmark, setIsBookmark] = useState(true);
-    const [isLike, setLike] = useState(true);
+    const [isBookmark, setIsBookmark] = useState(false);
+    const [isLike, setLike] = useState(false);
 
     const handleSavePost = (e, id) => {
-        setIsBookmark(false);
+        setIsBookmark(!isBookmark);
     };
 
     const handleLike = (e, id) => {
@@ -94,7 +94,7 @@ function PostItem({ post }) {
                                 <Link to={`/user/{post.userInfo.userName}`}>
                                     <p className={cx('post-username')}>{post.userInfo.fullName}</p>
                                 </Link>
-                                <span className={cx('time-read')}>{post.postInfo.creationDate}</span>
+                                <span className={cx('time-read')}>- {post.postInfo.creationDate}</span>
                             </div>
                         </div>
                         <div className={cx('filter__content-interactive')}>

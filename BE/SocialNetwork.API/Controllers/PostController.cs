@@ -61,6 +61,13 @@ namespace SocialNetwork.API.Controllers
             return Ok(post);
         }
 
+        [HttpGet("GetPostsByCategory/slug/{slug}")]
+        public async Task<IActionResult> GetPostsByCategory(string slug)
+        {
+            var post = await _mediator.Send(new GetPostsByCategoryQuery { CategorySlug = slug });
+            return Ok(post);
+        }
+
         [HttpDelete("DeletePostById/id/{Id}")]
         public async Task<bool> DeletePostById(string Id)
         {

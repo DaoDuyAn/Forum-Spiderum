@@ -28,7 +28,7 @@ const cx = classNames.bind(styles);
 function Header() {
     const [currentUser, setCurrentUser] = useState(localStorage.getItem('accessToken') ?? null);
     const [userName, setUserName] = useState(localStorage.getItem('userName') ?? null);
-    const [value, setValue] = useState(parseInt(localStorage.getItem('activeTab')) ?? -1);
+    const [value, setValue] = useState(parseInt(localStorage.getItem('activeTab')) ?? null);
     const [categories, setCategories] = useState([]);
     const [userData, setUserData] = useState({});
 
@@ -124,7 +124,7 @@ function Header() {
     return (
         <header className={cx('wrapper', 'height1')}>
             <div className={cx('inner')}>
-                <Link to={config.routes.home} className={cx('logo-link')} onClick={() => setValue(-1)}>
+                <Link to={config.routes.home} className={cx('logo-link')} onClick={() => setValue(null)}>
                     <img src="https://spiderum.com/assets/icons/wideLogo.png" alt="spiderum" width="140" />
                 </Link>
 
