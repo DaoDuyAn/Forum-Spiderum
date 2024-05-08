@@ -34,7 +34,7 @@ namespace SocialNetwork.Infrastructure.Repositories.Account
         private readonly IDataContext _dataContext;
         private readonly DapperContext dapperContext;
 
-            public AccountRepository(SocialNetworkDbContext dbContext, IDataContext _dataContext, IOptionsMonitor<JwtSettings> optionsMonitor, DapperContext dapperContext) : base(dbContext)
+        public AccountRepository(SocialNetworkDbContext dbContext, IDataContext _dataContext, IOptionsMonitor<JwtSettings> optionsMonitor, DapperContext dapperContext) : base(dbContext)
         {
             _dbContext = dbContext;
             _jwtSettings = optionsMonitor.CurrentValue;

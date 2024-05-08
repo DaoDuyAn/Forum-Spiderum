@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 namespace SocialNetwork.Domain.Entities
 {
     [Table("Categories")]
-
     public class CategoryEntity : BaseEntity
     {
         [Required]

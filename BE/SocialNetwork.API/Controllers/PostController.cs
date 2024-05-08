@@ -54,6 +54,7 @@ namespace SocialNetwork.API.Controllers
             return Ok(post);
         }
 
+
         [HttpGet("GetPostsByUserId/userId/{UserId}")]
         public async Task<IActionResult> GetPostsByUserId(string UserId)
         {
@@ -72,6 +73,13 @@ namespace SocialNetwork.API.Controllers
         public async Task<bool> DeletePostById(string Id)
         {
             return await _mediator.Send(new DeletePostByIdCommand { Id = Id });
+        }
+
+        [HttpGet("GetPosts")]
+        public async Task<IActionResult> GetPosts([FromQuery(Name = "sort")] string sort, [FromQuery(Name = "page_idx")] int page_idx, [FromQuery(Name = "userId")] string userId)
+        {
+            var posts = await _mediator.Send(new GetPostsQuery { Sort = sort, PageIndex = page_idx, UserId = userId });
+            return Ok(posts);
         }
     }
 }

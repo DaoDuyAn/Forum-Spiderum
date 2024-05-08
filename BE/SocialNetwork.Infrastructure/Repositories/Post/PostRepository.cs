@@ -17,6 +17,8 @@ using System.Linq.Expressions;
 using MediatR;
 using SocialNetwork.Infrastructure.Dapper;
 using Dapper;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Data;
 
 namespace SocialNetwork.Infrastructure.Repositories.Post
 {
@@ -261,9 +263,9 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
 
                 var posts = await connection.QueryAsync<PostEntity, UserEntity, CategoryEntity, PostEntity>(sql, (post, user, category) =>
                     {
-                         post.User = user;
-                         post.Category = category;
-                         return post;
+                        post.User = user;
+                        post.Category = category;
+                        return post;
                     },
                     splitOn: "FullName, CategoryName"
                 );
@@ -391,6 +393,54 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
                 return postList;
             }
 
+        }
+
+        public async Task<(List<PostEntity>, int, int)> GetPostsAsync(string sort, int pageIndex, Guid userId)
+        {
+            using (var connection = dapperContext.CreateConnection())
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@sort", sort);
+                parameters.Add("@page", pageIndex);
+                parameters.Add("@pageSize", 5);
+                parameters.Add("@userId", userId);
+                parameters.Add("@rowCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                parameters.Add("@pageCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                var posts = await connection.QueryAsync<PostEntity, UserEntity, CategoryEntity, PostEntity>(
+                     sql: "proc_Post_List",
+                     map: (post, user, category) =>
+                     {
+                         post.User = user;
+                         post.Category = category;
+                         return post;
+                     },
+                     param: parameters,
+                     commandType: CommandType.StoredProcedure,
+                     splitOn: "FullName, CategoryName"
+                 );
+
+                var rowCount = parameters.Get<int>("@rowCount");
+                var pageCount = parameters.Get<int>("@pageCount");
+
+                var postList = posts.AsList();
+
+
+                foreach (var post in postList)
+                {
+                    if (!string.IsNullOrEmpty(post.ThumbnailImagePath))
+                    {
+                        post.ThumbnailImagePath = HandleImage.ImageToBase64(post.ThumbnailImagePath);
+                    }
+
+                    if (!string.IsNullOrEmpty(post.User.AvatarImagePath))
+                    {
+                        post.User.AvatarImagePath = HandleImage.ImageToBase64(post.User.AvatarImagePath);
+                    }
+                }
+
+                return (postList, rowCount, pageCount);
+            }
         }
     }
 }
