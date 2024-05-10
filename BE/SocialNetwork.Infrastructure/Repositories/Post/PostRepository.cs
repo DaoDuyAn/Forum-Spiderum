@@ -342,37 +342,86 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
             }
         }
 
-        public async Task<List<PostEntity>> GetPostsByCategorySlugAsync(string categorySlug)
+        //public async Task<List<PostEntity>> GetPostsByCategorySlugAsync(string categorySlug)
+        //{
+        //    using (var connection = dapperContext.CreateConnection())
+        //    {
+        //        var sql = @"
+        //        select  p.Id,
+        //                p.Title,
+        //                p.Description,
+        //                p.CreationDate,
+        //                p.ThumbnailImagePath,
+        //                p.Slug,
+        //                p.LikesCount,
+        //                p.CommentsCount,
+        //                u.FullName AS FullName,
+        //                u.UserName AS UserName,
+        //                u.AvatarImagePath AS AvatarImagePath,
+        //                c.CategoryName AS CategoryName,
+        //                c.Slug
+        //        from    Posts p join Users u ON p.UserId = u.Id
+        //                        join Categories c ON p.CategoryId = c.Id
+        //        where   c.Slug = @CategorySlug";
+
+        //        var posts = await connection.QueryAsync<PostEntity, UserEntity, CategoryEntity, PostEntity>(sql, (post, user, category) =>
+        //        {
+        //            post.User = user;
+        //            post.Category = category;
+        //            return post;
+        //        },
+        //        new { CategorySlug = categorySlug },
+        //        splitOn: "FullName, CategoryName"
+        //        );
+
+        //        var postList = posts.AsList();
+
+
+        //        foreach (var post in postList)
+        //        {
+        //            if (!string.IsNullOrEmpty(post.ThumbnailImagePath))
+        //            {
+        //                post.ThumbnailImagePath = HandleImage.ImageToBase64(post.ThumbnailImagePath);
+        //            }
+
+        //            if (!string.IsNullOrEmpty(post.User.AvatarImagePath))
+        //            {
+        //                post.User.AvatarImagePath = HandleImage.ImageToBase64(post.User.AvatarImagePath);
+        //            }
+        //        }
+
+        //        return postList;
+        //    }
+
+        //}
+
+        public async Task<(List<PostEntity>, int, int)> GetPostsAsync(string sort, int pageIndex, Guid userId)
         {
             using (var connection = dapperContext.CreateConnection())
             {
-                var sql = @"
-                select  p.Id,
-                        p.Title,
-                        p.Description,
-                        p.CreationDate,
-                        p.ThumbnailImagePath,
-                        p.Slug,
-                        p.LikesCount,
-                        p.CommentsCount,
-                        u.FullName AS FullName,
-                        u.UserName AS UserName,
-                        u.AvatarImagePath AS AvatarImagePath,
-                        c.CategoryName AS CategoryName,
-                        c.Slug
-                from    Posts p join Users u ON p.UserId = u.Id
-                                join Categories c ON p.CategoryId = c.Id
-                where   c.Slug = @CategorySlug";
+                var parameters = new DynamicParameters();
+                parameters.Add("@sort", sort);
+                parameters.Add("@page", pageIndex);
+                parameters.Add("@pageSize", 5);
+                parameters.Add("@userId", userId);
+                parameters.Add("@rowCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                parameters.Add("@pageCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                var posts = await connection.QueryAsync<PostEntity, UserEntity, CategoryEntity, PostEntity>(sql, (post, user, category) =>
-                {
-                    post.User = user;
-                    post.Category = category;
-                    return post;
-                },
-                new { CategorySlug = categorySlug },
-                splitOn: "FullName, CategoryName"
-                );
+                var posts = await connection.QueryAsync<PostEntity, UserEntity, CategoryEntity, PostEntity>(
+                     sql: "proc_Post_List",
+                     map: (post, user, category) =>
+                     {
+                         post.User = user;
+                         post.Category = category;
+                         return post;
+                     },
+                     param: parameters,
+                     commandType: CommandType.StoredProcedure,
+                     splitOn: "FullName, CategoryName"
+                 );
+
+                var rowCount = parameters.Get<int>("@rowCount");
+                var pageCount = parameters.Get<int>("@pageCount");
 
                 var postList = posts.AsList();
 
@@ -390,12 +439,11 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
                     }
                 }
 
-                return postList;
+                return (postList, rowCount, pageCount);
             }
-
         }
 
-        public async Task<(List<PostEntity>, int, int)> GetPostsAsync(string sort, int pageIndex, Guid userId)
+        public async Task<(List<PostEntity>, int, int)> GetPostsByCategorySlugAsync(string sort, int pageIndex, string categorySlug)
         {
             using (var connection = dapperContext.CreateConnection())
             {
@@ -403,12 +451,12 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
                 parameters.Add("@sort", sort);
                 parameters.Add("@page", pageIndex);
                 parameters.Add("@pageSize", 5);
-                parameters.Add("@userId", userId);
+                parameters.Add("@@categorySlug", categorySlug);
                 parameters.Add("@rowCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 parameters.Add("@pageCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
                 var posts = await connection.QueryAsync<PostEntity, UserEntity, CategoryEntity, PostEntity>(
-                     sql: "proc_Post_List",
+                     sql: "proc_Post_List_ByCategory",
                      map: (post, user, category) =>
                      {
                          post.User = user;

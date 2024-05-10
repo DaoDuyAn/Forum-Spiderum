@@ -81,5 +81,12 @@ namespace SocialNetwork.API.Controllers
             var posts = await _mediator.Send(new GetPostsQuery { Sort = sort, PageIndex = page_idx, UserId = userId });
             return Ok(posts);
         }
+
+        [HttpGet("GetPostsByCategory")]
+        public async Task<IActionResult> GetPostsByCategory([FromQuery(Name = "sort")] string sort, [FromQuery(Name = "page_idx")] int page_idx, [FromQuery(Name = "slug")] string slug)
+        {
+            var post = await _mediator.Send(new GetPostsByCategoryQuery { Sort = sort, PageIndex = page_idx, CategorySlug = slug });
+            return Ok(post);
+        }
     }
 }

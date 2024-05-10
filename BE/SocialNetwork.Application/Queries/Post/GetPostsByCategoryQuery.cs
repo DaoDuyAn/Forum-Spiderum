@@ -10,13 +10,16 @@ using System.Threading.Tasks;
 
 namespace SocialNetwork.Application.Queries.Post
 {
-    public class GetPostsByCategoryQuery : IRequest<List<PostResponseDTO>>
+    public class GetPostsByCategoryQuery : IRequest<PostPaginationDTO>
     {
+        public string Sort { get; set; }
+        // hot, new, controversial, top
+        public int PageIndex { get; set; }
         public string CategorySlug { get; set; }
     }
 
 
-    public class GetPostsByCategoryQueryHandler : IRequestHandler<GetPostsByCategoryQuery, List<PostResponseDTO>>
+    public class GetPostsByCategoryQueryHandler : IRequestHandler<GetPostsByCategoryQuery, PostPaginationDTO>
     {
         private readonly IPostRepository postRepo;
         private readonly IMapper _mapper;
@@ -27,11 +30,16 @@ namespace SocialNetwork.Application.Queries.Post
             _mapper = mapper;
         }
 
-        public async Task<List<PostResponseDTO>> Handle(GetPostsByCategoryQuery request, CancellationToken cancellationToken)
+        public async Task<PostPaginationDTO> Handle(GetPostsByCategoryQuery request, CancellationToken cancellationToken)
         {
-            var lstPosts = await postRepo.GetPostsByCategorySlugAsync(request.CategorySlug);
-            var lstPostResponseDTO = _mapper.Map<List<PostResponseDTO>>(lstPosts);
-            return lstPostResponseDTO;
+            var (posts, rowCount, pageCount) = await postRepo.GetPostsByCategorySlugAsync(request.Sort, request.PageIndex, request.CategorySlug);
+            var lstPostResponseDTO = _mapper.Map<List<PostResponseDTO>>(posts);
+            return new PostPaginationDTO
+            {
+                postResponse = lstPostResponseDTO,
+                RowCount = rowCount,
+                PageCount = pageCount
+            };
         }
     }
 }

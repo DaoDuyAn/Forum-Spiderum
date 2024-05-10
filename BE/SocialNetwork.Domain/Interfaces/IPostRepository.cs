@@ -16,7 +16,7 @@ namespace SocialNetwork.Domain.Interfaces
         Task<PostEntity> GetPostAsync(Expression<Func<PostEntity, bool>> expression);
         Task<List<PostEntity>> GetAllPostsAsync();
         Task<List<PostEntity>> GetPostsByUserIdAsync(Guid UserId);
-        Task<List<PostEntity>> GetPostsByCategorySlugAsync(string categorySlug);
+        Task<(List<PostEntity>, int, int)> GetPostsByCategorySlugAsync(string sort, int pageIndex, string categorySlug);
         Task<(List<PostEntity>, int, int)> GetPostsAsync(string sort, int pageIndex, Guid userId);
     }
 }
