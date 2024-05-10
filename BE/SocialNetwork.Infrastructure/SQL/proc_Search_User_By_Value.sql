@@ -1,8 +1,8 @@
-﻿if (exists(select * from sys.objects where name = 'proc_Search_Post_By_Value'))
-	drop procedure proc_Search_Post_By_Value
+﻿if (exists(select * from sys.objects where name = 'proc_Search_User_By_Value'))
+	drop procedure proc_Search_User_By_Value
 go
 
-create procedure proc_Search_Post_By_Value
+create procedure proc_Search_User_By_Value
 	@page int = 1,					--Trang cần hiển thị
 	@pageSize int = 5,				--Số dòng trên mỗi trang
 	@rowCount int output,			--Tổng số dòng tìm đc
@@ -20,10 +20,9 @@ begin
 
 	--Đếm số dòng.
 	select	@rowCount = count(*)
-	from	Posts as p
+	from	Users as u
 	where	(@searchValue = N'') 
-		or	(p.Title like @searchValue) 
-		or	(p.Description like @searchValue);
+		or	(u.UserName like @searchValue);
 	
 	--Tính số trang.
 	set @pageCount = @rowCount / @pageSize;
@@ -31,31 +30,17 @@ begin
 		set @pageCount += 1;
 
 	--Truy vấn dữ liệu.
-	select  p.Id,
-            p.Title,
-            p.Description,
-            p.CreationDate,
-            p.ThumbnailImagePath,
-            p.Slug,
-            p.LikesCount,
-            p.CommentsCount,
-            u.FullName AS FullName,
-            u.UserName AS UserName,
-            u.AvatarImagePath AS AvatarImagePath,
-            c.CategoryName AS CategoryName,
-            c.Slug
+	select  u.UserName as UserName,
+            u.AvatarImagePath as AvatarImagePath
 	from (
 		select  *,
-			ROW_NUMBER() over(order by CreationDate desc) as RowNumber
-		from Posts
+				ROW_NUMBER() over(order by UserName desc) as RowNumber
+		from Users
 		where	(@searchValue = N'') 
-			or	(Title like @searchValue) 
-			or	(Description like @searchValue)
-		) as p
-			join Users u ON p.UserId = u.Id
-			join Categories c ON p.CategoryId = c.Id
-	where (p.RowNumber between (@page - 1) * @pageSize + 1 and @page * @pageSize)
-	order by p.RowNumber
+			or	(UserName like @searchValue) 
+		) as u	
+	where (u.RowNumber between (@page - 1) * @pageSize + 1 and @page * @pageSize)
+	order by u.RowNumber
 
 end
 go
@@ -66,11 +51,11 @@ declare @page int = 1,
 	@rowCount int,
 	@pageCount int,
 	@searchValue nvarchar(255) = N'';
-execute proc_Search_Post_By_Value
+execute proc_Search_User_By_Value
 	@page = @page,
 	@pageSize = @pageSize,
 	@rowCount = @rowCount out,
 	@pageCount = @pageCount out,
-	@searchValue = N'test'
+	@searchValue = N'an'
 select @rowCount as [RowCount], @pageCount as [PageCount];
 go

@@ -26,9 +26,9 @@ begin
 	where slug = @categorySlug;
 
 	--Đếm số dòng.
-	select @rowCount = count(*)
-	from Posts as p
-	where p.CategoryId = @categoryId
+	select	@rowCount = count(*)
+	from	Posts as p
+	where	p.CategoryId = @categoryId
 	
 	--Tính số trang.
 	set @pageCount = @rowCount / @pageSize;
@@ -80,7 +80,7 @@ begin
                     c.Slug
 			from (
 				select  *,
-					ROW_NUMBER() over(order by CreationDate desc) as RowNumber
+						ROW_NUMBER() over(order by CreationDate desc) as RowNumber
 				from Posts
 				where CategoryId = @categoryId
 				) as p

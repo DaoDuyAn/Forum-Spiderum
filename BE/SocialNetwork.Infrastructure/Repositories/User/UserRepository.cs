@@ -217,6 +217,40 @@ namespace SocialNetwork.Infrastructure.Repositories.User
             return null;
         }
 
-        
+        public async Task<(List<UserEntity>, int, int)> SearchUserByValueAsync(string searchValue, int page)
+        {
+            using (var connection = dapperContext.CreateConnection())
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@page", page);
+                parameters.Add("@pageSize", 5);
+                parameters.Add("@searchValue", searchValue);
+                parameters.Add("@rowCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                parameters.Add("@pageCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                var users = await connection.QueryAsync<UserEntity>(
+                     sql: "proc_Search_User_By_Value",
+                     param: parameters,
+                     commandType: CommandType.StoredProcedure
+                 );
+
+                var rowCount = parameters.Get<int>("@rowCount");
+                var pageCount = parameters.Get<int>("@pageCount");
+
+                var userList = users.AsList();
+
+
+                foreach (var user in userList)
+                {
+                    if (!string.IsNullOrEmpty(user.AvatarImagePath))
+                    {
+                        user.AvatarImagePath = HandleImage.ImageToBase64(user.AvatarImagePath);
+                    }
+                }
+
+                return (userList, rowCount, pageCount);
+            }
+        }
+
     }
 }

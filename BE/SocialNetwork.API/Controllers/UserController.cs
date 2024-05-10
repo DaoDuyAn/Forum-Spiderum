@@ -38,6 +38,13 @@ namespace SocialNetwork.API.Controllers
             return Ok(user);
         }
 
+        [HttpGet("SearchUserByValue")]
+        public async Task<IActionResult> SearchUserByValue([FromQuery(Name = "q")] string q, [FromQuery(Name = "page")] int page)
+        {
+            var users = await _mediator.Send(new SearchUserByValueQuery { SearchValue = q, Page = page });
+            return Ok(users);
+        }
+
         [HttpPost("AddLikePost")]
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<int> AddLikePost([FromBody] AddLikePostCommand command)

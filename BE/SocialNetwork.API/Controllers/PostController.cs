@@ -63,13 +63,6 @@ namespace SocialNetwork.API.Controllers
             return Ok(post);
         }
 
-        [HttpGet("GetPostsByCategory/slug/{slug}")]
-        public async Task<IActionResult> GetPostsByCategory(string slug)
-        {
-            var post = await _mediator.Send(new GetPostsByCategoryQuery { CategorySlug = slug });
-            return Ok(post);
-        }
-
         [HttpGet("GetPosts")]
         public async Task<IActionResult> GetPosts([FromQuery(Name = "sort")] string sort, [FromQuery(Name = "page_idx")] int page_idx, [FromQuery(Name = "userId")] string userId)
         {
@@ -80,15 +73,15 @@ namespace SocialNetwork.API.Controllers
         [HttpGet("GetPostsByCategory")]
         public async Task<IActionResult> GetPostsByCategory([FromQuery(Name = "sort")] string sort, [FromQuery(Name = "page_idx")] int page_idx, [FromQuery(Name = "slug")] string slug)
         {
-            var post = await _mediator.Send(new GetPostsByCategoryQuery { Sort = sort, PageIndex = page_idx, CategorySlug = slug });
-            return Ok(post);
+            var posts = await _mediator.Send(new GetPostsByCategoryQuery { Sort = sort, PageIndex = page_idx, CategorySlug = slug });
+            return Ok(posts);
         }
 
         [HttpGet("SearchPostByValue")]
         public async Task<IActionResult> SearchPostByValue([FromQuery(Name = "q")] string q, [FromQuery(Name = "page")] int page)
         {
-            var post = await _mediator.Send(new SearchPostByValueQuery { SearchValue = q, Page = page });
-            return Ok(post);
+            var posts = await _mediator.Send(new SearchPostByValueQuery { SearchValue = q, Page = page });
+            return Ok(posts);
         }
 
         [HttpDelete("DeletePostById/id/{Id}")]

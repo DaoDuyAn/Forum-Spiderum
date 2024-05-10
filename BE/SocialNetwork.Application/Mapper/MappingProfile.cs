@@ -20,7 +20,8 @@ namespace SocialNetwork.Application.Mapper
             CreateMap<CategoryResponseDTO, CategoryEntity>().ReverseMap();
             CreateMap<AuthResponseDTO, ApiResponse>().ReverseMap();
             CreateMap<UserEntity, UserResponseDTO>();
-               
+            CreateMap<UserEntity, UserSearchResponseDTO>();
+
             CreateMap<PostEntity, PostResponseDTO>()
                 .ForMember(dest => dest.PostInfo, opt => opt.MapFrom(src => new PostDetailInfo
                 {
