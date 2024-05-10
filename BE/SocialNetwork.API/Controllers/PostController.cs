@@ -6,6 +6,7 @@ using SocialNetwork.Application.Queries.Post;
 using SocialNetwork.Application.Commands.Post.Update;
 using SocialNetwork.Application.Commands.Post.Create;
 using SocialNetwork.Application.DTOs.Post;
+using SocialNetwork.Application.Queries.User;
 
 namespace SocialNetwork.API.Controllers
 {
@@ -69,12 +70,6 @@ namespace SocialNetwork.API.Controllers
             return Ok(post);
         }
 
-        [HttpDelete("DeletePostById/id/{Id}")]
-        public async Task<bool> DeletePostById(string Id)
-        {
-            return await _mediator.Send(new DeletePostByIdCommand { Id = Id });
-        }
-
         [HttpGet("GetPosts")]
         public async Task<IActionResult> GetPosts([FromQuery(Name = "sort")] string sort, [FromQuery(Name = "page_idx")] int page_idx, [FromQuery(Name = "userId")] string userId)
         {
@@ -87,6 +82,19 @@ namespace SocialNetwork.API.Controllers
         {
             var post = await _mediator.Send(new GetPostsByCategoryQuery { Sort = sort, PageIndex = page_idx, CategorySlug = slug });
             return Ok(post);
+        }
+
+        [HttpGet("SearchPostByValue")]
+        public async Task<IActionResult> SearchPostByValue([FromQuery(Name = "q")] string q, [FromQuery(Name = "page")] int page)
+        {
+            var post = await _mediator.Send(new SearchPostByValueQuery { SearchValue = q, Page = page });
+            return Ok(post);
+        }
+
+        [HttpDelete("DeletePostById/id/{Id}")]
+        public async Task<bool> DeletePostById(string Id)
+        {
+            return await _mediator.Send(new DeletePostByIdCommand { Id = Id });
         }
     }
 }

@@ -18,6 +18,7 @@ const cx = classNames.bind(styles);
 function Filter() {
     const [filterActive, setFilterActive] = useState(0);
     const [posts, setPosts] = useState([]);
+    const userId = localStorage.getItem('userId') ?? null;
     // const [page, setPage] = useState(12);
     // const [currentButton, setCurrentButton] = useState(1);
 

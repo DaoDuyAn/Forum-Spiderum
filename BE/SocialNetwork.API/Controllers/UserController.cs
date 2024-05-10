@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Application.Commands.User.Create;
 using SocialNetwork.Application.Commands.User.Delete;
 using SocialNetwork.Application.DTOs.User;
+using SocialNetwork.Application.Queries.Post;
 using SocialNetwork.Application.Queries.User;
 using System.Net;
 
@@ -22,7 +23,7 @@ namespace SocialNetwork.API.Controllers
 
         [HttpGet("GetUserById/id/{Id}")]
         [ProducesResponseType(typeof(UserResponseDTO), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetCategoryById(string Id)
+        public async Task<IActionResult> GetUserById(string Id)
         {
             var user = await _mediator.Send(new GetUserByIdQuery { Id = Id });
             return Ok(user);
@@ -92,5 +93,6 @@ namespace SocialNetwork.API.Controllers
         {
             return await _mediator.Send(command);
         }
+
     }
 }

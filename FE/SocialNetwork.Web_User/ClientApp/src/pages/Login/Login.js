@@ -30,6 +30,7 @@ function Login() {
                 localStorage.setItem('userName', responseData.userName);
                 localStorage.setItem('accessToken', responseData.accessToken);
                 localStorage.setItem('refreshToken', responseData.refreshToken);
+                localStorage.setItem('activeTab', JSON.stringify(null))
 
                 navigate(config.routes.home);
             } else {

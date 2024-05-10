@@ -73,6 +73,7 @@ function Header() {
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('userId');
         localStorage.removeItem('userName');
+        localStorage.setItem('activeTab', JSON.stringify(null));
 
         setCurrentUser(false);
     };
