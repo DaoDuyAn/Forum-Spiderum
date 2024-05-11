@@ -77,6 +77,13 @@ namespace SocialNetwork.API.Controllers
             return Ok(posts);
         }
 
+        [HttpGet("GetPostsByUserName")]
+        public async Task<IActionResult> GetPostsByUserName([FromQuery(Name = "tab")] string tab, [FromQuery(Name = "page")] int page, [FromQuery(Name = "userName")] string userName)
+        {
+            var posts = await _mediator.Send(new GetPostsByUserNameQuery { Tab = tab, Page = page, UserName = userName });
+            return Ok(posts);
+        }
+
         [HttpGet("SearchPostByValue")]
         public async Task<IActionResult> SearchPostByValue([FromQuery(Name = "q")] string q, [FromQuery(Name = "page")] int page)
         {

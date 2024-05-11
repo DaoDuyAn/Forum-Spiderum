@@ -1,4 +1,4 @@
-﻿if (exists(select * from sys.objects where name = 'proc_Post_List_ByCategory'))
+﻿if (exists(select * from sys.objects where name = 'proc_Post_List_By_Category'))
 	drop procedure proc_Post_List_ByCategory
 go
 
@@ -21,9 +21,9 @@ begin
 
 	--Tìm categoryId theo categorySlug
 	declare @categoryId uniqueidentifier;
-	select @categoryId = Id
-	from categories
-	where slug = @categorySlug;
+	select	@categoryId = Id
+	from	Categories
+	where	slug = @categorySlug;
 
 	--Đếm số dòng.
 	select	@rowCount = count(*)

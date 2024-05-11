@@ -18,6 +18,7 @@ namespace SocialNetwork.Domain.Interfaces
         Task<List<PostEntity>> GetPostsByUserIdAsync(Guid UserId);
         Task<(List<PostEntity>, int, int)> GetPostsByCategorySlugAsync(string sort, int pageIndex, string categorySlug);
         Task<(List<PostEntity>, int, int)> GetPostsAsync(string sort, int pageIndex, Guid userId); 
-        Task<(List<PostEntity>, int, int)> SearchPostByValueAsync(string searchValue, int page);
+        Task<(List<PostEntity>, int, int)> SearchPostByValueAsync(string searchValue, int page); 
+        Task<(List<PostEntity>, int, int)> GetPostsByUserNameAsync(string tab, int page, string userName);
     }
 }
