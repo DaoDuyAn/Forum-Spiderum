@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SocialNetwork.Domain.Entities;
 using SocialNetwork.Domain.Interfaces;
 
 namespace SocialNetwork.Application.Commands.Category.Update
@@ -22,13 +23,14 @@ namespace SocialNetwork.Application.Commands.Category.Update
         }
         public async Task<Guid> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var cate = await repo.GetAsync(c => c.Id == Guid.Parse(request.Id));
+            var newCategory = new CategoryEntity
+            {
+                CategoryName = request.CategoryName,
+                ContentAllowed = request.ContentAllowed,
+                CoverImagePath = request.Base64Image
+            };
 
-            cate.CategoryName = request.CategoryName;
-            cate.CoverImagePath = request.Base64Image;
-            cate.ContentAllowed = request.ContentAllowed;
-
-            return await repo.UpdateCategoryAsync(cate);
+            return await repo.UpdateCategoryAsync(newCategory, Guid.Parse(request.Id));
 
         }
     }

@@ -1,4 +1,7 @@
 ﻿using Dapper;
+using MediatR;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Domain.Entities;
 using SocialNetwork.Domain.Interfaces;
@@ -20,13 +23,77 @@ namespace SocialNetwork.Infrastructure.Repositories.User
     public class UserRepository : RepositoryBase<UserEntity>, IUserRepository
     {
         SocialNetworkDbContext _dbContext;
+        private static IWebHostEnvironment? _hostEnvironment;
         private readonly DapperContext dapperContext;
 
-        public UserRepository(SocialNetworkDbContext dbContext, DapperContext dapperContext) : base(dbContext)
+        public UserRepository(SocialNetworkDbContext dbContext, IWebHostEnvironment hostEnvironment, DapperContext dapperContext) : base(dbContext)
         {
             _dbContext = dbContext;
+            _hostEnvironment = hostEnvironment;
             this.dapperContext = dapperContext;
         }
+
+        #region Handle image
+
+        public static string CreateFolder(string folderName)
+        {
+            string path = _hostEnvironment.WebRootPath + "\\images\\" + "\\users\\" + folderName + "\\";
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            return path;
+        }
+
+
+
+        public async Task<string> UploadImage(IFormFile file, string userName)
+        {
+            if (file == null || file.Length == 0)
+            {
+                throw new ArgumentNullException("file", "No file or empty file provided.");
+            }
+
+            if (file.Length > 0)
+            {
+                try
+                {
+                    DirectoryInfo directoryInfo;
+                    string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images", "users", userName);
+
+
+                    if (!Directory.Exists(_hostEnvironment.WebRootPath + "\\images\\"))
+                    {
+                        directoryInfo = Directory.CreateDirectory(_hostEnvironment.WebRootPath + "\\images\\");
+                    }
+
+                    // Tạo tên file duy nhất
+                    string uniqueFileName = $"{file.FileName}";
+
+                    // Tạo đường dẫn lưu trữ file
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    // Lưu file vào thư mục
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+
+                    return filePath.Replace("\\", "/");
+
+                }
+                catch (Exception ex)
+                {
+                    return ex.ToString();
+                }
+
+            }
+
+            return "Not success";
+        }
+        #endregion
 
         public async Task<int> AddLikePostAsync(Guid UserId, Guid PostId)
         {
@@ -252,5 +319,75 @@ namespace SocialNetwork.Infrastructure.Repositories.User
             }
         }
 
+        public async Task<string> UpdateProfileAsync(UserEntity newProfile, Guid id)
+        {
+            var user = await GetAsync(u => u.Id == id);
+            if (newProfile.Email != "")
+            {
+                if (AppUtilities.IsValidEmail(newProfile.Email))
+                {
+                    var _user = await GetAsync(u => u.Email == newProfile.Email);
+                    if (_user != null)
+                    {
+                        if (_user.Id != id)
+                        {
+                            return "Trùng email";
+                        }
+                    }
+                }
+                else
+                {
+                    return "Email sai định dạng";
+                }
+            }
+
+            user.FullName = newProfile.FullName;
+            user.Description = newProfile.Description;
+            user.Email = newProfile.Email;
+            user.Phone = newProfile.Phone;
+            user.Address = newProfile.Address;
+            user.Gender = newProfile.Gender;
+            user.BirthDate = newProfile.BirthDate;
+
+            if (newProfile.AvatarImagePath != "" || newProfile.CoverImagePath != "")
+            {
+                // Tạo thư mục để lưu ảnh cho user nếu chưa có
+                string imagePath = Path.Combine(_hostEnvironment.WebRootPath, "images", "users", user.UserName);
+                if (!Directory.Exists(imagePath))
+                {
+                    string folderPath = CreateFolder(user.UserName);
+                }
+                else
+                {
+                    // Thư mục đang chứa các ảnh cũ, thực hiện xóa để bổ sung ảnh mới vào
+                    // Lấy danh sách ảnh trong thư mục
+                    string[] files = Directory.GetFiles(imagePath);
+
+                    // Xóa tất cả các ảnh trong danh sách
+                    foreach (string file in files)
+                    {
+                        File.Delete(file);
+                    }
+                }
+
+
+                if (newProfile.AvatarImagePath != "")
+                {
+                    IFormFile formFile = HandleImage.Base64ToImage(newProfile.AvatarImagePath, user.UserName + "_avatar");
+                    string avatarPath = await UploadImage(formFile, user.UserName);
+                    user.AvatarImagePath = avatarPath;
+                }
+
+                if (newProfile.CoverImagePath != "")
+                {
+                    IFormFile formFile = HandleImage.Base64ToImage(newProfile.AvatarImagePath, user.UserName + "_cover");
+                    string coverPath = await UploadImage(formFile, user.UserName);
+                    user.CoverImagePath = coverPath;
+                }
+            }
+
+            var res = await UpdateAsync(user);
+            return res.Id.ToString();
+        }
     }
 }

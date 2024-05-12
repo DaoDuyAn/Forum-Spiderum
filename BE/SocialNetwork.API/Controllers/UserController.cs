@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SocialNetwork.Application.Commands.Category.Update;
 using SocialNetwork.Application.Commands.User.Create;
 using SocialNetwork.Application.Commands.User.Delete;
+using SocialNetwork.Application.Commands.User.Update;
 using SocialNetwork.Application.DTOs.User;
 using SocialNetwork.Application.Queries.Post;
 using SocialNetwork.Application.Queries.User;
@@ -101,5 +103,13 @@ namespace SocialNetwork.API.Controllers
             return await _mediator.Send(command);
         }
 
+
+        [HttpPut("UpdateProfile")]
+        [ProducesDefaultResponseType(typeof(string))]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
     }
 }

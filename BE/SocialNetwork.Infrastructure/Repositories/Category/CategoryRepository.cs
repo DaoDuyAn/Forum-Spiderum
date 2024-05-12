@@ -112,10 +112,10 @@ namespace SocialNetwork.Infrastructure.Repositories.Category
             return categoryCreate.Id.ToString();
         }
 
-        public async Task<Guid> UpdateCategoryAsync(CategoryEntity newCategory)
+        public async Task<Guid> UpdateCategoryAsync(CategoryEntity newCategory, Guid id)
         {
-            var oldCategory = await GetAsync(c => c.Id == newCategory.Id);
-            if(oldCategory.CategoryName != oldCategory.CategoryName)
+            var oldCategory = await GetAsync(c => c.Id == id);
+            if(oldCategory.CategoryName != newCategory.CategoryName)
             {
                 string slug = AppUtilities.GenerateSlug(newCategory.CategoryName);
                 oldCategory.Slug = slug;

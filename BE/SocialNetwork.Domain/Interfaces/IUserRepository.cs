@@ -23,5 +23,6 @@ namespace SocialNetwork.Domain.Interfaces
 
         Task<int> AddFollowUserAsync(Guid UserId, Guid FollowerId);
         Task<int> UnfollowUserAsync(Guid UserId, Guid FollowerId);
+        Task<string> UpdateProfileAsync(UserEntity request, Guid id);
     }
 }
