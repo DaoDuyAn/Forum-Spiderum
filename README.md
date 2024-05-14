@@ -52,6 +52,10 @@
 ## 10. GD Tạo bài viết.
 
 ![image](https://github.com/DaoDuyAn/Forum-Spiderum/assets/84566480/23f52f7a-37f0-4838-baef-9315426b5f15)
+![image](https://github.com/DaoDuyAn/Forum-Spiderum/assets/84566480/b3723d55-80c0-47e9-9fcf-fe8b0f5d22e0)
+
+<br/>
+
 ![image](https://github.com/DaoDuyAn/Forum-Spiderum/assets/84566480/c1038cae-9948-41f6-b485-3dfea6eb0858)
 ![image](https://github.com/DaoDuyAn/Forum-Spiderum/assets/84566480/72ba326a-41da-4370-86cb-4af70da0ec97)
 
