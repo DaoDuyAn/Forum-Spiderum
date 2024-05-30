@@ -38,6 +38,20 @@ namespace SocialNetwork.Infrastructure.Repositories
 
             return await Task.FromResult(true);
         }
+
+        public async Task<bool> DeleteAsync(Expression<Func<T, bool>> expression)
+        {
+            var entity = await _dbSet.FirstOrDefaultAsync(expression);
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
+
         public async Task<List<T>> ListAsync(Expression<Func<T, bool>> expression)
         {
             return await _dbSet.Where(expression).ToListAsync();

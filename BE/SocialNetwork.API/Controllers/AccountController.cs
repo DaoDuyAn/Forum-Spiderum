@@ -28,6 +28,14 @@ namespace SocialNetwork.API.Controllers
             return Ok(await _mediator.Send(command));
         }
 
+
+        [HttpPost("Logout")]
+        [ProducesDefaultResponseType(typeof(bool))]
+        public async Task<IActionResult> LogoutAsync([FromBody] LogoutCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
+
         [HttpPost("RenewToken")]
         [ProducesDefaultResponseType(typeof(AuthResponseDTO))]
         public async Task<IActionResult> RenewToken([FromBody] RenewTokenCommand command)
