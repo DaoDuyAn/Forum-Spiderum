@@ -18,6 +18,13 @@ function CategoryItem() {
     const { slug } = useParams();
 
     useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+        });
+    }, [slug]);
+
+    useEffect(() => {
         const fetchCategories = async () => {
             try {
                 const response = await axios.get(`https://localhost:44379/api/v1/GetCategoryBySlug/slug/${slug}`);

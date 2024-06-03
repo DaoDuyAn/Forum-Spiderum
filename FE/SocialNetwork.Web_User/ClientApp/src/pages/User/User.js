@@ -15,7 +15,9 @@ function User() {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const { username } = useParams();
-    const tab = searchParams.get('tab');
+    const initialTab = searchParams.get('tab') || 'createdPosts';
+    const initialPage = parseInt(searchParams.get('page')) || 1;
+
     const userName = localStorage.getItem('userName') ?? null;
     const userId = localStorage.getItem('userId') ?? null;
 
@@ -24,6 +26,9 @@ function User() {
     const [posts, setPosts] = useState([]);
     const [postsSaved, setPostsSaved] = useState(null);
     const [visible, setVisible] = useState(true);
+
+    const [tab, setTab] = useState(initialTab);
+    const [page, setPage] = useState(initialPage);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,20 +43,39 @@ function User() {
         };
 
         fetchData();
-    }, []);
+    }, [username]);
 
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get(`https://localhost:44379/api/v1/GetPostsByUserId/userId/${userId}`);
-                setPosts(response.data);
+                const response = await axios.get(`https://localhost:44379/api/v1/GetPostsByUserName`, {
+                    params: {
+                        tab: tab,
+                        page: page,
+                        userName: username,
+                    },
+                });
+                setPosts(response.data.postResponse);
             } catch (error) {
                 console.error('Error fetching posts:', error);
             }
         };
 
         fetchPosts();
-    }, []);
+    }, [tab, page, username]);
+
+    // useEffect(() => {
+    //     const fetchPosts = async () => {
+    //         try {
+    //             const response = await axios.get(`https://localhost:44379/api/v1/GetPostsByUserId/userId/${userId}`);
+    //             setPosts(response.data);
+    //         } catch (error) {
+    //             console.error('Error fetching posts:', error);
+    //         }
+    //     };
+
+    //     fetchPosts();
+    // }, []);
 
     // useEffect(() => {
     //     const fetchData = async () => {

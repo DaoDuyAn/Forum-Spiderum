@@ -30,6 +30,13 @@ function CreatePost() {
     });
 
     useEffect(() => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            navigate('/');
+        }
+    }, []);
+
+    useEffect(() => {
         window.scrollTo({
             top: 0,
             left: 0,

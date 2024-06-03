@@ -67,15 +67,31 @@ function Header() {
         }
     };
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         // Xử lý đăng xuất
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('userId');
-        localStorage.removeItem('userName');
-        localStorage.setItem('activeTab', JSON.stringify(null));
+        const accessToken = localStorage.getItem('accessToken');
+        const refreshToken = localStorage.getItem('refreshToken');
 
-        setCurrentUser(false);
+        try {
+            const response = await axios.post(
+                'https://localhost:44379/api/v1/Logout',
+                { refreshToken: refreshToken },
+                
+            );
+
+            if (response.data) {
+                // Remove local storage items
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('userId');
+                localStorage.removeItem('userName');
+                localStorage.setItem('activeTab', JSON.stringify(null));
+
+                setCurrentUser(false);
+            }
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
     };
 
     const userMenu = [
@@ -122,10 +138,17 @@ function Header() {
         fetchCategories();
     }, []);
 
+    const handleLogoClick = () => {
+        setValue(null);
+        localStorage.setItem('sort', 'hot');
+        localStorage.setItem('page_idx', '1');
+        localStorage.setItem('filterActive', '0');
+    };
+
     return (
         <header className={cx('wrapper', 'height1')}>
             <div className={cx('inner')}>
-                <Link to={config.routes.home} className={cx('logo-link')} onClick={() => setValue(null)}>
+                <Link to={config.routes.home} className={cx('logo-link')} onClick={handleLogoClick}>
                     <img src="https://spiderum.com/assets/icons/wideLogo.png" alt="spiderum" width="140" />
                 </Link>
 

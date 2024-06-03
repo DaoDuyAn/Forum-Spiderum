@@ -26,22 +26,58 @@ function Search() {
 
     const [posts, setPosts] = useState([]);
     const [users, setUsers] = useState([]);
+ 
+    const [pageIdx, setPageIdx] = useState(1);
+    const [pageCount, setPageCount] = useState(1);
 
     const query = searchParams.get('q');
-    const type = searchParams.get('type');
+    const type = searchParams.get('type') || 'post';
+
+    // useEffect(() => {
+    //     const fetchPosts = async () => {
+    //         try {
+    //             const response = await axios.get('https://localhost:44379/api/v1/GetAllPosts');
+    //             setPosts(response.data);
+    //         } catch (error) {
+    //             console.error('Error fetching posts:', error);
+    //         }
+    //     };
+
+    //     fetchPosts();
+    // }, []);
 
     useEffect(() => {
-        const fetchPosts = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get('https://localhost:44379/api/v1/GetAllPosts');
-                setPosts(response.data);
+                if (type === 'post') {
+                    const response = await axios.get(
+                        `https://localhost:44379/api/v1/SearchPostByValue?q=${query}&page=${pageIdx}`,
+                    );
+                    setPosts(response.data.postResponse);
+                    setPageCount(response.data.pageCount);
+                } else if (type === 'user') {
+                    const response = await axios.get(
+                        `https://localhost:44379/api/v1/SearchUserByValue?q=${query}&page=${pageIdx}`,
+                    );
+                    setUsers(response.data.userResponse);
+                    setPageCount(response.data.pageCount);
+                }
             } catch (error) {
-                console.error('Error fetching posts:', error);
+                console.error('Error fetching data:', error);
             }
         };
 
-        fetchPosts();
-    }, []);
+        fetchData();
+    }, [query, type, pageIdx]);
+
+
+    useEffect(() => {
+        setPageIdx(1);
+    }, [type]);
+
+    const handlePageIdxChange = (newPageIdx) => {
+        setPageIdx(newPageIdx);
+    };
 
     return (
         <div className={cx('search')}>
@@ -91,12 +127,7 @@ function Search() {
                                 <>{posts && posts.map((post) => <PostItem key={post._id} post={post} />)}</>
                             ) : (
                                 <div className={cx('user-container')}>
-                                    {/* posts.map((post) => <PostItem post={post} key={post._id} /> */}
-                                    <UsersSearch key={1} />
-                                    <UsersSearch key={2} />
-                                    <UsersSearch key={3} />
-                                    <UsersSearch key={4} />
-                                    <UsersSearch key={5} />
+                                    <>{users && users.map((user, idx) => <UsersSearch key={idx} user={user} />)}</>
                                 </div>
                             )}
                         </div>
@@ -105,7 +136,9 @@ function Search() {
 
                 <div className={cx('flex', 'justify-center', 'm-[30px]')}>
                     <StyledPagination
-                        count={10}
+                        count={pageCount}
+                        page={pageIdx} // Trang hiện tại
+                        onChange={(event, page) => handlePageIdxChange(page)}
                         variant="outlined"
                         color="primary"
                         size="large"
