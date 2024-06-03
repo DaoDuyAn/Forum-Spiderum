@@ -99,7 +99,7 @@ begin
 			order by p.RowNumber
 		end
 
-	if(@sort = 'new')
+	if(@sort = 'news')
 		begin
 			select  p.Id,
                     p.Title,
@@ -194,6 +194,6 @@ execute proc_Post_List
 	@rowCount = @rowCount out,
 	@pageCount = @pageCount out,
 	@userId = @userId,
-	@sort = 'new'; 
+	@sort = @sort; 
 select @rowCount as [RowCount], @pageCount as [PageCount];
 go

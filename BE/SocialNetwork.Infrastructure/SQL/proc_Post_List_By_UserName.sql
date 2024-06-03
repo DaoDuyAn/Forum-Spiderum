@@ -125,7 +125,7 @@ execute proc_Post_List_By_UserName
 	@pageSize = @pageSize,
 	@rowCount = @rowCount out,
 	@pageCount = @pageCount out,
-	@userName = 'duyan',
-	@tab = 'createdPosts'; 
+	@userName = @userName,
+	@tab = @tab; 
 select @rowCount as [RowCount], @pageCount as [PageCount];
 go

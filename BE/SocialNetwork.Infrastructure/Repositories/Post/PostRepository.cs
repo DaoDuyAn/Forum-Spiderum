@@ -450,7 +450,7 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
                 var parameters = new DynamicParameters();
                 parameters.Add("@sort", sort);
                 parameters.Add("@page", pageIndex);
-                parameters.Add("@pageSize", 5);
+                parameters.Add("@pageSize", 2);
                 parameters.Add("@categorySlug", categorySlug);
                 parameters.Add("@rowCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 parameters.Add("@pageCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
@@ -497,7 +497,7 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@page", page);
-                parameters.Add("@pageSize", 5);
+                parameters.Add("@pageSize", 3);
                 parameters.Add("@searchValue", searchValue);
                 parameters.Add("@rowCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 parameters.Add("@pageCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
@@ -544,7 +544,7 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@page", page);
-                parameters.Add("@pageSize", 5);
+                parameters.Add("@pageSize", 10);
                 parameters.Add("@tab", tab);
                 parameters.Add("@userName", userName);
                 parameters.Add("@rowCount", dbType: DbType.Int32, direction: ParameterDirection.Output);

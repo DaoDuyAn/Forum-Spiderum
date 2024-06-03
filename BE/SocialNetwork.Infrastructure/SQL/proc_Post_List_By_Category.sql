@@ -1,8 +1,8 @@
 ﻿if (exists(select * from sys.objects where name = 'proc_Post_List_By_Category'))
-	drop procedure proc_Post_List_ByCategory
+	drop procedure proc_Post_List_By_Category
 go
 
-create procedure proc_Post_List_ByCategory
+create procedure proc_Post_List_By_Category
 	@page int = 1,					--Trang cần hiển thị
 	@pageSize int = 5,				--Số dòng trên mỗi trang
 	@rowCount int output,			--Tổng số dòng tìm đc
@@ -63,7 +63,7 @@ begin
 			order by p.RowNumber
 		end
 
-	if(@sort = 'new')
+	if(@sort = 'news')
 		begin
 			select  p.Id,
                     p.Title,
@@ -155,12 +155,12 @@ declare @page int = 1,
 	@pageCount int,
 	@categorySlug nvarchar(max),
 	@sort nvarchar(50);
-execute proc_Post_List_ByCategory
+execute proc_Post_List_By_Category
 	@page = @page,
 	@pageSize = @pageSize,
 	@rowCount = @rowCount out,
 	@pageCount = @pageCount out,
-	@categorySlug = 'quan-diem-tranh-luan',
-	@sort = 'top'; 
+	@categorySlug = @categorySlug,
+	@sort = @sort; 
 select @rowCount as [RowCount], @pageCount as [PageCount];
 go

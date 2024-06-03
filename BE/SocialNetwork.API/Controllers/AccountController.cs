@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Application.Commands.Account;
@@ -22,6 +23,7 @@ namespace SocialNetwork.API.Controllers
         }
 
         [HttpPost("Login")]
+        [AllowAnonymous]
         [ProducesDefaultResponseType(typeof(AuthResponseDTO))]
         public async Task<IActionResult> LoginAsync([FromBody] LoginCommand command)
         {
@@ -30,7 +32,6 @@ namespace SocialNetwork.API.Controllers
 
 
         [HttpPost("Logout")]
-        [ProducesDefaultResponseType(typeof(bool))]
         public async Task<IActionResult> LogoutAsync([FromBody] LogoutCommand command)
         {
             return Ok(await _mediator.Send(command));

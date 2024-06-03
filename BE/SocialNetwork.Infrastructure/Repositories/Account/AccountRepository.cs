@@ -77,6 +77,8 @@ namespace SocialNetwork.Infrastructure.Repositories.Account
                     new Claim(ClaimTypes.Name, account.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim("UserId", account.UserId.ToString()),
+                    new Claim("AccountId", account.Id.ToString()),
+
 
                     // roles
                     // ...

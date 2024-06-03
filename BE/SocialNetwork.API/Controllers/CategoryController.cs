@@ -6,6 +6,7 @@ using System.Net;
 using SocialNetwork.Application.Commands.Category.Delete;
 using SocialNetwork.Application.Commands.Category.Create;
 using SocialNetwork.Application.Commands.Category.Update;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SocialNetwork.API.Controllers
 {
