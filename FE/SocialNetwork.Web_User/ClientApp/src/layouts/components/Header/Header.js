@@ -79,9 +79,8 @@ function Header() {
                 {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
                     },
-                },
+                }
             );
 
             if (response.data) {

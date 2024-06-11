@@ -100,6 +100,12 @@ function User() {
         // call API
     };
 
+    useEffect(() => {
+        // Cập nhật state `tab` khi URL thay đổi
+        const currentTab = searchParams.get('tab') || 'createdPosts';
+        setTab(currentTab);
+    }, [searchParams]);
+
     const handelUnFollow = (e) => {};
 
     const handelFollow = (e) => {};
@@ -275,7 +281,7 @@ function User() {
                                                 className={cx('user__profile-tabs-link', {
                                                     active: tab === 'createdPosts',
                                                 })}
-                                                to={`/user/duyan?tab=createdPosts`}
+                                                to={`/user/${username}?tab=createdPosts`}
                                             >
                                                 <FontAwesomeIcon
                                                     className={cx('user__profile-tabs-icon')}
@@ -293,23 +299,38 @@ function User() {
                                                     <span>Bài viết đã lưu</span>
                                                 </Link>
                                             ) : null} */}
-                                            <Link
+                                            {/* <Link
                                                 className={cx('user__profile-tabs-link', {
                                                     active: tab === 'savedPosts',
                                                 })}
-                                                to={`/user/duyan?tab=savedPosts`}
+                                                to={`/user/${username}?tab=savedPosts`}
                                             >
                                                 <FontAwesomeIcon
                                                     className={cx('user__profile-tabs-icon')}
                                                     icon={regularBookmark}
                                                 />
                                                 <span>Đã lưu</span>
-                                            </Link>
+                                            </Link> */}
+
+                                            {username === userName && (
+                                                <Link
+                                                    className={cx('user__profile-tabs-link', {
+                                                        active: tab === 'savedPosts',
+                                                    })}
+                                                    to={`/user/${username}?tab=savedPosts`}
+                                                >
+                                                    <FontAwesomeIcon
+                                                        className={cx('user__profile-tabs-icon')}
+                                                        icon={regularBookmark}
+                                                    />
+                                                    <span>Đã lưu</span>
+                                                </Link>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            {tab === 'savedPosts' ? (
+                            {tab === 'savedPosts' && username === userName ? (
                                 <div className={cx('user__profile-posts')}>
                                     <div className={cx('user__profile-posts-top')}>
                                         <div className={cx('user__profile-posts-all-body')}>

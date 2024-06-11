@@ -91,7 +91,7 @@ function PostItem({ post }) {
                                 </Link>
                             </div>
                             <div className={cx('post-author')}>
-                                <Link to={`/user/{post.userInfo.userName}`}>
+                                <Link to={`/user/${post.userInfo.userName}`}>
                                     <p className={cx('post-username')}>{post.userInfo.fullName}</p>
                                 </Link>
                                 <span className={cx('time-read')}>- {post.postInfo.creationDate}</span>

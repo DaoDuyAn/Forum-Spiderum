@@ -89,7 +89,9 @@ function Post() {
             const editorContainer = document.getElementById('editorjs');
 
             if (editorContainer && editorContainer.children.length >= 2) {
-                editorContainer.removeChild(editorContainer.children[0]);
+                while (editorContainer.children.length !== 1) {
+                    editorContainer.removeChild(editorContainer.children[1]);
+                }
             }
         }
     }, [isEditorInitialized]);
@@ -174,7 +176,7 @@ function Post() {
 
                 <div className={cx('post__details-auth')}>
                     <div className={cx('post__details-category')}>
-                        <Link to={`/category/a`}>
+                        <Link to={`/category/${categoryPost.slug}`}>
                             <span className={cx('post__details-category-name')}>{categoryPost.categoryName}</span>
                         </Link>
                     </div>
@@ -199,7 +201,7 @@ function Post() {
                                 </Link>
                             </div>
                             <div className={cx('post-info')}>
-                                <Link to={`/user/an`}>
+                                <Link to={`/user/${authPost.userName}`}>
                                     <p className={cx('post-username')}>{authPost.userName}</p>
                                 </Link>
                                 <div>
