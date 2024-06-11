@@ -108,10 +108,16 @@ function CreatePost() {
             userId: localStorage.getItem('userId'),
         };
 
+        const accessToken = localStorage.getItem('accessToken');
+
         console.log(payload.content);
 
         axios
-            .post('https://localhost:44379/api/v1/CreatePost', payload)
+            .post('https://localhost:44379/api/v1/CreatePost', payload, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            })
             .then((response) => {
                 console.log(response.data);
                 navigate(`/post/${response.data}`);

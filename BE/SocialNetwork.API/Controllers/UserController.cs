@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Application.Commands.Category.Update;
@@ -47,6 +48,7 @@ namespace SocialNetwork.API.Controllers
             return Ok(users);
         }
 
+        [Authorize]
         [HttpPost("AddLikePost")]
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<int> AddLikePost([FromBody] AddLikePostCommand command)
@@ -54,6 +56,7 @@ namespace SocialNetwork.API.Controllers
             return await _mediator.Send(command);
         }
 
+        [Authorize]
         [HttpPost("UnlikePost")]
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<int> UnlikePost([FromBody] UnlikePostCommand command)
@@ -61,6 +64,7 @@ namespace SocialNetwork.API.Controllers
             return await _mediator.Send(command);
         }
 
+        [Authorize]
         [HttpPost("AddSavedPost")]
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<int> AddSavedPost([FromBody] AddSavedPostCommand command)
@@ -68,6 +72,7 @@ namespace SocialNetwork.API.Controllers
             return await _mediator.Send(command);
         }
 
+        [Authorize]
         [HttpPost("UnsavedPost")]
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<int> UnsavedPost([FromBody] UnsavedPostCommand command)
@@ -75,6 +80,7 @@ namespace SocialNetwork.API.Controllers
             return await _mediator.Send(command);
         }
 
+        [Authorize]
         [HttpPost("AddFollowCategory")]
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<int> AddFollowCategory([FromBody] AddFollowCategoryCommand command)
@@ -82,6 +88,7 @@ namespace SocialNetwork.API.Controllers
             return await _mediator.Send(command);
         }
 
+        [Authorize]
         [HttpPost("UnfollowCategory")]
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<int> UnfollowCategory([FromBody] UnfollowCategoryCommand command)
@@ -89,6 +96,7 @@ namespace SocialNetwork.API.Controllers
             return await _mediator.Send(command);
         }
 
+        [Authorize]
         [HttpPost("AddFollowUser")]
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<int> AddFollowUser([FromBody] AddFollowUserCommand command)
@@ -96,6 +104,7 @@ namespace SocialNetwork.API.Controllers
             return await _mediator.Send(command);
         }
 
+        [Authorize]
         [HttpPost("UnfollowUser")]
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<int> UnfollowUser([FromBody] UnfollowUserCommand command)
@@ -103,7 +112,7 @@ namespace SocialNetwork.API.Controllers
             return await _mediator.Send(command);
         }
 
-
+        [Authorize]
         [HttpPut("UpdateProfile")]
         [ProducesDefaultResponseType(typeof(string))]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileCommand command)

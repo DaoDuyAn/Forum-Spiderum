@@ -139,11 +139,12 @@ function Post() {
         async (e) => {
             e.preventDefault();
             const accessToken = localStorage.getItem('accessToken');
+            
             const option = {
                 method: 'delete',
                 url: `https://localhost:44379/api/v1/DeletePostById/id/${dataPost.id}`,
                 headers: {
-                    authorization: `Bearer ${accessToken}`,
+                    Authorization: `Bearer ${accessToken}`,
                 },
             };
             const res = await axios(option);

@@ -76,7 +76,12 @@ function Header() {
             const response = await axios.post(
                 'https://localhost:44379/api/v1/Logout',
                 { refreshToken: refreshToken },
-                
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                },
             );
 
             if (response.data) {

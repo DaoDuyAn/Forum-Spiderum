@@ -84,7 +84,9 @@ namespace SocialNetwork.Infrastructure.Repositories.Account
                     // ...
                 }),
 
-                Expires = DateTime.UtcNow.AddMinutes(30),    // Thời gian hết hạn - 30 phút
+                Expires = DateTime.UtcNow.AddMinutes(30),    // Thời gian hết hạn - 30 phút,
+                Issuer = "ForumSpiderum",
+                Audience = "ForumSpiderumUser",
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha512Signature)
             };
 

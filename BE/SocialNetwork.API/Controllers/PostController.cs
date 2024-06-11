@@ -7,6 +7,7 @@ using SocialNetwork.Application.Commands.Post.Update;
 using SocialNetwork.Application.Commands.Post.Create;
 using SocialNetwork.Application.DTOs.Post;
 using SocialNetwork.Application.Queries.User;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SocialNetwork.API.Controllers
 {
@@ -24,6 +25,7 @@ namespace SocialNetwork.API.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpPost("CreatePost")]
         [ProducesDefaultResponseType(typeof(string))]
         public async Task<IActionResult> CreatePost([FromBody] CreatePostCommand command)
@@ -32,6 +34,7 @@ namespace SocialNetwork.API.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpPut("UpdatePost")]
         [ProducesDefaultResponseType(typeof(string))]
         public async Task<IActionResult> UpdatePost([FromBody] UpdatePostCommand command)
@@ -91,6 +94,7 @@ namespace SocialNetwork.API.Controllers
             return Ok(posts);
         }
 
+        [Authorize]
         [HttpDelete("DeletePostById/id/{Id}")]
         public async Task<bool> DeletePostById(string Id)
         {

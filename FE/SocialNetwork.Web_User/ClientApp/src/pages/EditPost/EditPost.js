@@ -45,7 +45,7 @@ function EditPost() {
                     description: data.postInfo.description,
                     id: data.postInfo.id,
                     userId: data.userInfo.id,
-                    categoryId: data.postCategoryInfo.id
+                    categoryId: data.postCategoryInfo.id,
                 });
                 setContent(JSON.parse(data.postInfo.content));
             } catch (error) {
@@ -185,12 +185,15 @@ function EditPost() {
         const payload = {
             ...data,
         };
-
+        const accessToken = localStorage.getItem('accessToken');
         console.log(payload.content);
 
-        
         axios
-            .put('https://localhost:44379/api/v1/UpdatePost', payload)
+            .put('https://localhost:44379/api/v1/UpdatePost', payload, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            })
             .then((response) => {
                 console.log(response.data);
                 navigate(`/post/${response.data}`);

@@ -30,13 +30,14 @@ namespace SocialNetwork.API.Controllers
             return Ok(await _mediator.Send(command));
         }
 
-
+        [Authorize]
         [HttpPost("Logout")]
         public async Task<IActionResult> LogoutAsync([FromBody] LogoutCommand command)
         {
             return Ok(await _mediator.Send(command));
         }
 
+        [Authorize]
         [HttpPost("RenewToken")]
         [ProducesDefaultResponseType(typeof(AuthResponseDTO))]
         public async Task<IActionResult> RenewToken([FromBody] RenewTokenCommand command)
@@ -51,6 +52,7 @@ namespace SocialNetwork.API.Controllers
             return Ok(await _mediator.Send(command));
         }
 
+        [Authorize]
         [HttpPut("ChangePassword")]
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)

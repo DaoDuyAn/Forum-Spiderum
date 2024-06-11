@@ -33,13 +33,13 @@ function UserSettings() {
                 const userId = localStorage.getItem('userId');
                 console.log('...', userId);
                 const response = await axios.get(`https://localhost:44379/api/v1/GetUserById/id/${userId}`);
-                setDataUser(response.data); 
+                setDataUser(response.data);
                 setChecked(parseInt(response.data.gender));
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
-    
+
         fetchData();
     }, []);
 
@@ -48,6 +48,7 @@ function UserSettings() {
         password: '',
         confirmPassword: '',
     });
+    
     const [error, setError] = useState({
         password: '',
         confirmPassword: '',
@@ -190,12 +191,21 @@ function UserSettings() {
         e.preventDefault();
         try {
             const userId = localStorage.getItem('userId');
-            const response = await axios.put('https://localhost:44379/api/v1/ChangePassword', {
-                oldPassword: dataPassword.oldPassword,
-                newPassword: dataPassword.password,
-                confirmPassword: dataPassword.confirmPassword,
-                userId: userId,
-            });
+            const accessToken = localStorage.getItem('accessToken');
+            const response = await axios.put(
+                'https://localhost:44379/api/v1/ChangePassword',
+                {
+                    oldPassword: dataPassword.oldPassword,
+                    newPassword: dataPassword.password,
+                    confirmPassword: dataPassword.confirmPassword,
+                    userId: userId,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                },
+            );
 
             if (response.data === 1) {
                 setIsSuccess('Cập nhật mật khẩu thành công.');
@@ -210,7 +220,6 @@ function UserSettings() {
             console.error('Error updating password:', error);
         }
     };
-    
 
     useEffect(() => {
         document.title = `Cài đặt người dùng`;
@@ -381,7 +390,13 @@ function UserSettings() {
                                                     <input
                                                         type="date"
                                                         className={cx('settings__input')}
-                                                        value={dataUser.birthDate ? new Date(dataUser.birthDate).toISOString().substr(0, 10) : ''}
+                                                        value={
+                                                            dataUser.birthDate
+                                                                ? new Date(dataUser.birthDate)
+                                                                      .toISOString()
+                                                                      .substr(0, 10)
+                                                                : ''
+                                                        }
                                                         onChange={(e) =>
                                                             setDataUser({
                                                                 ...dataUser,
