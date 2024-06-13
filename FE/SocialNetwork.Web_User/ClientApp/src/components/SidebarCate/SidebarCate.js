@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHandHoldingHeart, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,8 +11,30 @@ import styles from './SidebarCate.module.scss';
 const cx = classNames.bind(styles);
 
 function Sidebar({category}) {
-    const d = new Date();
+    const { slug } = useParams();
+
     const [isFollow, setIsFollow] = useState(false);
+    const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get('https://localhost:44379/api/v1/GetPostsByCategory', {
+                    params: {
+                        sort: 'top',
+                        page_idx: 1,
+                        slug: slug,
+                    },
+                });
+
+                setPosts(response.data.postResponse);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        fetchPosts();
+    }, [slug]);
 
     return (
         <div className={cx('adv')}>
@@ -65,102 +88,33 @@ function Sidebar({category}) {
             <div className={cx('adv__widget', 'box-shadow')}>
                 <p className={cx('adv__widget-title')}>CÓ THỂ BẠN QUAN TÂM</p>
                 <div className={cx('adv__widget-content')}>
-                    {/* {posts.data.slice(0, 5).map((post) => (
+                    {posts.slice(0, 5).map((post) => (
                         <div className={cx('adv__widget-content-details')}>
                             <div className={cx('adv__widget-avt')}>
                                 <Link to={`/user/an{post.author.userName}`}>
                                     <img
                                         src={
-                                            post.author.avatar
-                                                ? post.author.avatar
-                                                : 'https://www.gravatar.com/avatar/262cfa0997548c39953a9607a56f27da?d=wavatar&f=y'
+                                            post.postInfo.thumbnailImagePath !== ''
+                                                ? post.postInfo.thumbnailImagePath
+                                                : 'https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-thumbnails/defaultthumbnail.png'
                                         }
-                                        alt=""
+                                        alt="Ảnh của bài viết"
                                     />
                                 </Link>
                             </div>
                             <div className={cx('adv__widget-user')}>
-                                <Link to={`/post/baiviet${post.slug} `}>
-                                    <p className={cx('post-title')}>{post.title}</p>
+                                <Link to={`/post/${post.postInfo.slug}`}>
+                                    <p className={cx('post-title')}>{post.postInfo.title}</p>
                                 </Link>
-                                <Link to={`/user/an${post.author.userName} `}>
+                                <Link to={`/user/${post.userInfo.userName}`}>
                                     <span className={cx('username')}>
-                                        {post.author.displayName ? post.author.displayName : post.author.userName}{' '}
+                                        {post.userInfo.fullName}
                                     </span>
                                 </Link>
-                                <DatePost date={post.createdAt}></DatePost>
+                                <DatePost date={post.postInfo.creationDate}></DatePost>
                             </div>
                         </div>
-                    ))} */}
-                    <div className={cx('adv__widget-content-details')}>
-                        <div className={cx('adv__widget-avt')}>
-                            <Link to={`/user/an`}>
-                                <img
-                                    src={
-                                        'https://www.gravatar.com/avatar/262cfa0997548c39953a9607a56f27da?d=wavatar&f=y'
-                                    }
-                                    alt=""
-                                />
-                            </Link>
-                        </div>
-                        <div className={cx('adv__widget-user')}>
-                            <Link to={`/post/baiviet`}>
-                                <div className={cx('post-title')}>
-                                    Sự nghiệp Sơn Tùng trong 10 bài hát Sự nghiệp Sơn Tùng trong 10 bài hát
-                                </div>
-                            </Link>
-                            <Link to={`/user/an`}>
-                                <span className={cx('username')}>Duy An</span>
-                            </Link>
-                            <DatePost date={d}></DatePost>
-                        </div>
-                    </div>
-                    <div className={cx('adv__widget-content-details')}>
-                        <div className={cx('adv__widget-avt')}>
-                            <Link to={`/user/ann`}>
-                                <img
-                                    src={
-                                        'https://www.gravatar.com/avatar/262cfa0997548c39953a9607a56f27da?d=wavatar&f=y'
-                                    }
-                                    alt=""
-                                />
-                            </Link>
-                        </div>
-                        <div className={cx('adv__widget-user')}>
-                            <Link to={`/post/baiviet`}>
-                                <div className={cx('post-title')}>
-                                    Sự nghiệp Sơn Tùng trong 10 bài hát Sự nghiệp Sơn Tùng trong 10 bài hát
-                                </div>
-                            </Link>
-                            <Link to={`/user/an`}>
-                                <span className={cx('username')}>Duy An</span>
-                            </Link>
-                            <DatePost date={d}></DatePost>
-                        </div>
-                    </div>
-                    <div className={cx('adv__widget-content-details')}>
-                        <div className={cx('adv__widget-avt')}>
-                            <Link to={`/user/ann`}>
-                                <img
-                                    src={
-                                        'https://www.gravatar.com/avatar/262cfa0997548c39953a9607a56f27da?d=wavatar&f=y'
-                                    }
-                                    alt=""
-                                />
-                            </Link>
-                        </div>
-                        <div className={cx('adv__widget-user')}>
-                            <Link to={`/post/baiviet`}>
-                                <div className={cx('post-title')}>
-                                    Sự nghiệp Sơn Tùng trong 10 bài hát Sự nghiệp Sơn Tùng trong 10 bài hát
-                                </div>
-                            </Link>
-                            <Link to={`/user/an`}>
-                                <span className={cx('username')}>Duy An</span>
-                            </Link>
-                            <DatePost date={d}></DatePost>
-                        </div>
-                    </div>
+                    ))}       
                 </div>
             </div>
 

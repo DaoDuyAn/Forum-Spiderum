@@ -82,7 +82,7 @@ function PostItem({ post }) {
                     <div className={cx('filter__content-author')}>
                         <div className={cx('filter__content-author-user')}>
                             <div className={cx('post-avt')}>
-                                <Link to={`/user/{post.userInfo.userName}`}>
+                                <Link to={`/user/${post.userInfo.userName}`}>
                                     <img
                                         className={cx('post-avt')}
                                         src={post.userInfo.avatarImagePath !== "" ? post.userInfo.avatarImagePath : 'https://www.gravatar.com/avatar/262cfa0997548c39953a9607a56f27da?d=wavatar&f=y'}
