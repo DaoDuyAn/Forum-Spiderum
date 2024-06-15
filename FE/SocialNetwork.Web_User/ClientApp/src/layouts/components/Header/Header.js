@@ -199,7 +199,7 @@ function Header() {
                             <Image
                                 className={cx('user-avatar')}
                                 src={
-                                    userData.avatarImagePath !== ''
+                                    userData.avatarImagePath !== ""
                                         ? userData.avatarImagePath
                                         : 'https://www.gravatar.com/avatar/8f9a66cc24f92fb53bc4f112cf5a3fe2?d=wavatar&f=y'
                                 }

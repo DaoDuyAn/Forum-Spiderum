@@ -278,6 +278,8 @@ namespace SocialNetwork.Infrastructure.Repositories.User
                     user.CoverImagePath = HandleImage.ImageToBase64(user.CoverImagePath);
                 }
 
+                user.BirthDate = user.BirthDate.AddDays(1);
+
                 return user;
             }
 
@@ -380,7 +382,7 @@ namespace SocialNetwork.Infrastructure.Repositories.User
 
                 if (newProfile.CoverImagePath != "")
                 {
-                    IFormFile formFile = HandleImage.Base64ToImage(newProfile.AvatarImagePath, user.UserName + "_cover");
+                    IFormFile formFile = HandleImage.Base64ToImage(newProfile.CoverImagePath, user.UserName + "_cover");
                     string coverPath = await UploadImage(formFile, user.UserName);
                     user.CoverImagePath = coverPath;
                 }

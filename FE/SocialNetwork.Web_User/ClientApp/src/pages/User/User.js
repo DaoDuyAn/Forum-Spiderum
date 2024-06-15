@@ -121,7 +121,13 @@ function User() {
         <div className={cx('main')}>
             <div className={cx('user')}>
                 <div className={cx('user__cover')}>
-                    <img src={'https://images.spiderum.com/sp-cover/27dc3ea0ea5111eebf8b5ffe6a1c5c77.jpeg'} alt="" />
+                    <img
+                    src={
+                        dataUser.coverImagePath !== ''
+                            ? dataUser.coverImagePath
+                            : 'https://images.spiderum.com/sp-cover/27dc3ea0ea5111eebf8b5ffe6a1c5c77.jpeg'
+                    }
+                    alt="" />
                 </div>
                 <div className={cx('user__profile')}>
                     <div className={cx('user__profile-content')}>

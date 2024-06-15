@@ -59,23 +59,52 @@ function UserSettings() {
         e.preventDefault();
     }, []);
 
+    // useEffect(() => {
+    //     if (!selectedFileCover) {
+    //         setPreviewCover(undefined);
+    //         return;
+    //     }
+
+    //     const objectUrl = URL.createObjectURL(selectedFileCover);
+    //     setPreviewCover(objectUrl);
+
+    //     return () => URL.revokeObjectURL(objectUrl);
+    // }, [selectedFileCover]);
+
+    const fileToBase64 = async (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+        });
+    };
+
     useEffect(() => {
         if (!selectedFileCover) {
             setPreviewCover(undefined);
             return;
         }
-
-        const objectUrl = URL.createObjectURL(selectedFileCover);
-        setPreviewCover(objectUrl);
-
-        return () => URL.revokeObjectURL(objectUrl);
+    
+        const getBase64 = async () => {
+            try {
+                const base64 = await fileToBase64(selectedFileCover);
+                setPreviewCover(base64);
+            } catch (error) {
+                console.error('Error converting file to base64:', error);
+            }
+        };
+    
+        getBase64();
+    
+        return () => {
+            // Cleanup function
+        };
     }, [selectedFileCover]);
+    
 
     const onSelectFileCover = useCallback(
         async (e) => {
-            // const data = new FormData();
-            // data.append('file', e.target.files[0]);
-            // data.append('name', 'file');
 
             if (!e.target.files || e.target.files.length === 0) {
                 setSelectedFileCover(undefined);
@@ -86,17 +115,40 @@ function UserSettings() {
         [dataUser],
     );
 
+    // useEffect(() => {
+    //     if (!selectedFile) {
+    //         setPreview(undefined);
+    //         return;
+    //     }
+
+    //     const objectUrl = URL.createObjectURL(selectedFile);
+    //     setPreview(objectUrl);
+
+    //     return () => URL.revokeObjectURL(objectUrl);
+    // }, [selectedFile]);
+
     useEffect(() => {
         if (!selectedFile) {
             setPreview(undefined);
             return;
         }
-
-        const objectUrl = URL.createObjectURL(selectedFile);
-        setPreview(objectUrl);
-
-        return () => URL.revokeObjectURL(objectUrl);
+    
+        const getBase64 = async () => {
+            try {
+                const base64 = await fileToBase64(selectedFile);
+                setPreview(base64);
+            } catch (error) {
+                console.error('Error converting file to base64:', error);
+            }
+        };
+    
+        getBase64();
+    
+        return () => {
+            // Cleanup function
+        };
     }, [selectedFile]);
+    
 
     const onSelectFile = useCallback(
         async (e) => {
@@ -109,7 +161,6 @@ function UserSettings() {
                 return;
             }
             setSelectedFile(e.target.files[0]);
-            //   setDataUser({ ...dataUser, avatar: res.data.file.url });
         },
         [dataUser],
     );
@@ -181,12 +232,58 @@ function UserSettings() {
         setDataUser({ ...dataUser, description: e.target.value });
     };
 
-    const onSave = useCallback((e) => {
-        try {
-            e.preventDefault();
-        } catch (error) {}
-    });
+    const formatDate = (isoDate) => {
+        if (!isoDate) return '';
+        const date = new Date(isoDate);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
 
+    const onSave = async (e) => {
+        e.preventDefault();
+        try {
+            const userId = localStorage.getItem('userId');
+            const accessToken = localStorage.getItem('accessToken');
+  
+            const payload = {
+                Id: userId,
+                FullName: dataUser.fullName,
+                BirthDate: formatDate(dataUser.birthDate),
+                Description: dataUser.description,
+                Email: dataUser.email,
+                Phone: dataUser.phone,
+                Address: dataUser.address,
+                Gender: checked,
+                AvatarImagePath: preview ? preview : dataUser.avatarImagePath,
+                CoverImagePath: previewCover ? previewCover : dataUser.coverImagePath
+            };
+    
+            const response = await axios.put(
+                'https://localhost:44379/api/v1/UpdateProfile',
+                payload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+    
+            if (response.status === 200) {
+                setIsSuccess('Cập nhật thông tin thành công.');
+                setIsErr(null);
+            } else {
+                setIsErr('Có lỗi xảy ra khi cập nhật thông tin.');
+                setIsSuccess(null);
+            }
+        } catch (error) {
+            setIsErr('Có lỗi xảy ra khi cập nhật thông tin.');
+            setIsSuccess(null);
+            console.error('Error updating profile:', error);
+        }
+    };
+    
     const onSubmitPassword = async (e) => {
         e.preventDefault();
         try {
@@ -261,7 +358,7 @@ function UserSettings() {
                                                     />
                                                 ) : (
                                                     <img
-                                                        src={dataUser.cover}
+                                                        src={dataUser.coverImagePath}
                                                         alt=""
                                                         className={cx('settings__avt-img', 'cover')}
                                                     />
@@ -304,7 +401,7 @@ function UserSettings() {
                                                         <img src={preview} alt="" className={cx('settings__avt-img')} />
                                                     ) : (
                                                         <img
-                                                            src={dataUser.avatar}
+                                                            src={dataUser.avatarImagePath}
                                                             alt=""
                                                             className={cx('settings__avt-img')}
                                                         />
