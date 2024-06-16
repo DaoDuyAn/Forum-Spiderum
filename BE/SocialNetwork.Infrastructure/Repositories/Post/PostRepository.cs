@@ -585,5 +585,52 @@ namespace SocialNetwork.Infrastructure.Repositories.Post
                 return (postList, rowCount, pageCount);
             }
         }
+
+        public async Task<(List<PostEntity>, int, int)> GetPostsSuggestionAsync(string postSlug)
+        {
+            using (var connection = dapperContext.CreateConnection())
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@page", 1);
+                parameters.Add("@pageSize", 9);
+                parameters.Add("@postSlug", postSlug);
+                parameters.Add("@rowCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                parameters.Add("@pageCount", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                var posts = await connection.QueryAsync<PostEntity, UserEntity, CategoryEntity, PostEntity>(
+                     sql: "proc_Post_Suggestion_List",
+                     map: (post, user, category) =>
+                     {
+                         post.User = user;
+                         post.Category = category;
+                         return post;
+                     },
+                     param: parameters,
+                     commandType: CommandType.StoredProcedure,
+                     splitOn: "FullName, CategoryName"
+                 );
+
+                var rowCount = parameters.Get<int>("@rowCount");
+                var pageCount = parameters.Get<int>("@pageCount");
+
+                var postList = posts.AsList();
+
+
+                foreach (var post in postList)
+                {
+                    if (!string.IsNullOrEmpty(post.ThumbnailImagePath))
+                    {
+                        post.ThumbnailImagePath = HandleImage.ImageToBase64(post.ThumbnailImagePath);
+                    }
+
+                    if (!string.IsNullOrEmpty(post.User.AvatarImagePath))
+                    {
+                        post.User.AvatarImagePath = HandleImage.ImageToBase64(post.User.AvatarImagePath);
+                    }
+                }
+
+                return (postList, rowCount, pageCount);
+            }
+        }
     }
 }
