@@ -70,163 +70,36 @@ function TrendingPosts({ posts, slidesToShow, slice }) {
             <div className={cx('user__profile-posts-trending-wrapper')}>
                 <div className={cx('slider-container')}>
                     <Slider {...sliderSettings}>
-                        {/* {posts.slice(0, slice).map((post) => (
-                        <div key={post.id}>
-                            <div className={cx('pom__content-details')}>
-                                <Link to="/post/b">
-                                    <div className={cx('mt-[10px]')}>
-                                        <img
-                                            className={cx('border-img', 'trending-img')}
-                                            src={'https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-thumbnails/defaultthumbnail.png'
-                                            }
-                                            alt="img"
-                                        />
-                                    </div>
-                                </Link>
-                                <Link to={`/category/${post.category.slug}`}>
-                                    <p className={cx('title-category', 'mt-[10px]')}>QUAN ĐIỂM - TRANH LUẬN</p>
-                                </Link>
-                                <Link to={`/post/${post.slug}`}>
-                                    <p className={cx('title-post-sm', 'mt-[10px]')}>Xưng hô trong tiếng Việt - lắm nghịch lý và kỳ thị</p>
-                                </Link>
-                                <Link to={`/user/${post.author.userName}`}>
-                                    <p className={cx('post-username', 'mt-[10px]')}>
-                                        Anh Liêm
-                                    </p>
-                                </Link>
+                        {posts.map((post) => (
+                            <div key={post.postInfo.id}>
+                                <div className={cx('pom__content-details')}>
+                                    <Link to={`/post/${post.postInfo.slug}`}>
+                                        <div className={cx('mt-[10px]')}>
+                                            <img
+                                                className={cx('border-img', 'trending-img')}
+                                                src={
+                                                    post.postInfo.thumbnailImagePath !== ''
+                                                        ? post.postInfo.thumbnailImagePath
+                                                        : 'https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-thumbnails/defaultthumbnail.png'
+                                                }
+                                                alt="img"
+                                            />
+                                        </div>
+                                    </Link>
+                                    <Link to={`/category/${post.postCategoryInfo.slug}`}>
+                                        <p className={cx('title-category', 'mt-[10px]')}>
+                                            {post.postCategoryInfo.categoryName}
+                                        </p>
+                                    </Link>
+                                    <Link to={`/post/${post.postInfo.slug}`}>
+                                        <p className={cx('title-post-sm', 'mt-[10px]')}> {post.postInfo.title}</p>
+                                    </Link>
+                                    <Link to={`/user/${post.userInfo.userName}`}>
+                                        <p className={cx('post-username', 'mt-[10px]')}>{post.userInfo.fullName}</p>
+                                    </Link>
+                                </div>
                             </div>
-                        </div>
-                    ))} */}
-                        <div key={1}>
-                            <div className={cx('pom__content-details')}>
-                                <Link to="/post/baiviet3">
-                                    <div className={cx('mt-[10px]')}>
-                                        <img
-                                            className={cx('border-img', 'trending-img')}
-                                            src={
-                                                'https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-thumbnails/defaultthumbnail.png'
-                                            }
-                                            alt="img"
-                                        />
-                                    </div>
-                                </Link>
-                                <Link to={`/category/quan-diem-tranh-luan`}>
-                                    <p className={cx('title-category', 'mt-[10px]')}>QUAN ĐIỂM - TRANH LUẬN</p>
-                                </Link>
-                                <Link to={`/post/xung-ho`}>
-                                    <p className={cx('title-post', 'mt-[10px]')}>
-                                        Xưng hô trong tiếng Việt - lắm nghịch lý và kỳ thị Xưng hô trong tiếng Việt - lắm nghịch lý và kỳ thị
-                                    </p>
-                                </Link>
-                                <Link to={`/user/liemkhiet`}>
-                                    <p className={cx('post-username', 'mt-[10px]')}>Anh Liêm</p>
-                                </Link>
-                            </div>
-                        </div>
-                        <div key={2}>
-                            <div className={cx('pom__content-details')}>
-                                <Link to="/post/b">
-                                    <div className={cx('mt-[10px]')}>
-                                        <img
-                                            className={cx('border-img', 'trending-img')}
-                                            src={
-                                                'https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-thumbnails/defaultthumbnail.png'
-                                            }
-                                            alt="img"
-                                        />
-                                    </div>
-                                </Link>
-                                <Link to={`/category/quan-diem`}>
-                                    <p className={cx('title-category', 'mt-[10px]')}>QUAN ĐIỂM - TRANH LUẬN</p>
-                                </Link>
-                                <Link to={`/post/xung-ho`}>
-                                    <p className={cx('title-post', 'mt-[10px]')}>
-                                        Xưng hô trong tiếng Việt - lắm nghịch lý và kỳ thị
-                                    </p>
-                                </Link>
-                                <Link to={`/user/liemkhiet`}>
-                                    <p className={cx('post-username', 'mt-[10px]')}>Anh Liêm</p>
-                                </Link>
-                            </div>
-                        </div>
-                        <div key={3}>
-                            <div className={cx('pom__content-details')}>
-                                <Link to="/post/b">
-                                    <div className={cx('mt-[10px]')}>
-                                        <img
-                                            className={cx('border-img', 'trending-img')}
-                                            src={
-                                                'https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-thumbnails/defaultthumbnail.png'
-                                            }
-                                            alt="img"
-                                        />
-                                    </div>
-                                </Link>
-                                <Link to={`/category/quan-diem`}>
-                                    <p className={cx('title-category', 'mt-[10px]')}>QUAN ĐIỂM - TRANH LUẬN</p>
-                                </Link>
-                                <Link to={`/post/xung-ho`}>
-                                    <p className={cx('title-post', 'mt-[10px]')}>
-                                        Xưng hô trong tiếng Việt - lắm nghịch lý và kỳ thị
-                                    </p>
-                                </Link>
-                                <Link to={`/user/liemkhiet`}>
-                                    <p className={cx('post-username', 'mt-[10px]')}>Anh Liêm</p>
-                                </Link>
-                            </div>
-                        </div>
-                        <div key={4}>
-                            <div className={cx('pom__content-details')}>
-                                <Link to="/post/b">
-                                    <div className={cx('mt-[10px]')}>
-                                        <img
-                                            className={cx('border-img', 'trending-img')}
-                                            src={
-                                                'https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-thumbnails/defaultthumbnail.png'
-                                            }
-                                            alt="img"
-                                        />
-                                    </div>
-                                </Link>
-                                <Link to={`/category/quan-diem`}>
-                                    <p className={cx('title-category', 'mt-[10px]')}>QUAN ĐIỂM - TRANH LUẬN</p>
-                                </Link>
-                                <Link to={`/post/xung-ho`}>
-                                    <p className={cx('title-post', 'mt-[10px]')}>
-                                        Xưng hô trong tiếng Việt - lắm nghịch lý và kỳ thị
-                                    </p>
-                                </Link>
-                                <Link to={`/user/liemkhiet`}>
-                                    <p className={cx('post-username', 'mt-[10px]')}>Anh Liêm</p>
-                                </Link>
-                            </div>
-                        </div>
-                        <div key={5}>
-                            <div className={cx('pom__content-details')}>
-                                <Link to="/post/b">
-                                    <div className={cx('mt-[10px]')}>
-                                        <img
-                                            className={cx('border-img', 'trending-img')}
-                                            src={
-                                                'https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-thumbnails/defaultthumbnail.png'
-                                            }
-                                            alt="img"
-                                        />
-                                    </div>
-                                </Link>
-                                <Link to={`/category/quan-diem`}>
-                                    <p className={cx('title-category', 'mt-[10px]')}>QUAN ĐIỂM - TRANH LUẬN</p>
-                                </Link>
-                                <Link to={`/post/xung-ho`}>
-                                    <p className={cx('title-post', 'mt-[10px]')}>
-                                        Xưng hô trong tiếng Việt - lắm nghịch lý và kỳ thị
-                                    </p>
-                                </Link>
-                                <Link to={`/user/liemkhiet`}>
-                                    <p className={cx('post-username', 'mt-[10px]')}>Anh Liêm</p>
-                                </Link>
-                            </div>
-                        </div>
+                        ))}
                     </Slider>
                 </div>
             </div>

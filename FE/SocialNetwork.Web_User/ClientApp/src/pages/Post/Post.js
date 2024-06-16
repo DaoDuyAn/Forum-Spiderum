@@ -37,7 +37,7 @@ function Post() {
     const [isLike, setLike] = useState(true);
     const [likeCount, setLikeCount] = useState(100);
 
-    const [posts, setPosts] = useState(null);
+    const [postsSuggestion, setPostsSuggestion] = useState([]);
     const [dataPost, setDataPost] = useState({});
     const [content, setContent] = useState('');
     const [authPost, setAuthPost] = useState({});
@@ -62,6 +62,24 @@ function Post() {
         };
 
         fetchPost();
+    }, []);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get('https://localhost:44379/api/v1/GetPostsSuggestion', {
+                    params: {
+                        postSlug: slug,
+                    },
+                });
+
+                setPostsSuggestion(response.data.postResponse);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        fetchPosts();
     }, []);
 
     useEffect(() => {
@@ -326,7 +344,7 @@ function Post() {
                                 </div>
                             </div>
                             <div className={cx('p-[8px]')}>
-                                <TrendingPosts posts={posts?.posts} slice={5} slidesToShow={3} />
+                                <TrendingPosts posts={postsSuggestion} slice={5} slidesToShow={3} />
                             </div>
                         </div>
                     </div>
